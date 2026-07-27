@@ -4,7 +4,7 @@
 - Python: `3.9.13`
 - ROS distro: `not active`
 - Xacro executable: `not found`
-- Entry candidates: 26
+- Entry candidates: 24
 
 ## Candidate entries
 
@@ -32,5 +32,3 @@
 - `models/robotis_hand/robotis_hand_description/ros2_control/hx5_d20_rev2/hx5_d20_left.ros2_control.xacro` — xacro, medium (0.55)
 - `models/robotis_hand/robotis_hand_description/ros2_control/hx5_d20_rev2/hx5_d20_right.joints.xacro` — xacro, medium (0.55)
 - `models/robotis_hand/robotis_hand_description/ros2_control/hx5_d20_rev2/hx5_d20_right.ros2_control.xacro` — xacro, medium (0.55)
-- `models/robotis_hand/robotis_hand_moveit_config/config/hx5_d20_left/hx5_d20_left.srdf` — urdf, medium (0.55)
-- `models/robotis_hand/robotis_hand_moveit_config/config/hx5_d20_right/hx5_d20_right.srdf` — urdf, medium (0.55)
