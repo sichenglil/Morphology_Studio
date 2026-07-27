@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "morphology-toolkit"
+version = "0.1.0"
+description = "Generic robot model import, assembly, validation and conversion toolkit"
+requires-python = ">=3.9"
+dependencies = ["PyYAML>=6.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "ruff>=0.5"]
+web = ["fastapi>=0.110", "uvicorn>=0.27"]
+mesh = ["trimesh>=4"]
+
+[project.scripts]
+morphology-tool = "morphology_toolkit.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
