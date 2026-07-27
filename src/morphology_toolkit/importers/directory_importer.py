@@ -53,8 +53,8 @@ class DirectoryImporter(Importer):
             entry = analysis.entry_candidates[0].path
         else:
             raise ValueError("Entry confirmation required; pass selection={'entry': <path>}")
-        from .xacro_importer import XacroImporter
         from .urdf_importer import UrdfImporter
+        from .xacro_importer import XacroImporter
         fmt = detect_format(entry)
         if fmt == "urdf":
             return UrdfImporter().execute(entry, mode, selection)

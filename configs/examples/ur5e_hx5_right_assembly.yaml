@@ -1,0 +1,23 @@
+assembly:
+  name: ur5e_hx5_right
+models:
+  - id: arm
+    source: ../../build/real_models/ur5e/ur5e.urdf
+    prefix: ur5e_
+  - id: hand
+    source: ../../build/real_models/hx5_d20_rev2_right/hx5_d20_rev2_right.urdf
+    prefix: hx5_
+connections:
+  - name: ur5e_to_hx5_test_mount
+    type: fixed
+    parent:
+      model: arm
+      link: tool0
+    child:
+      model: hand
+      link: world
+    origin:
+      xyz: [0.0, 0.0, 0.0]
+      rpy: [0.0, 0.0, 0.0]
+notes:
+  - TEST_MOUNT_TRANSFORM_NOT_PHYSICALLY_CALIBRATED

@@ -16,8 +16,12 @@ def test_generic_assemble_export_reimport_validate(fixture_models, tmp_path: Pat
     urdf = UrdfExporter().export(result.model, tmp_path / "combined.urdf")
     reloaded = importer.execute(urdf)
     assert validate_model(reloaded).errors == 0
-    assert detect_format(MjcfExporter().export(reloaded, tmp_path / "combined.xml")) == "mjcf"
+    mjcf = MjcfExporter().export(reloaded, tmp_path / "combined.xml")
+    assert detect_format(mjcf) == "mjcf"
+    import xml.etree.ElementTree as ET
+    root = ET.parse(mjcf).getroot()
+    assert len(root.findall(".//body")) == len(reloaded.links)
+    assert root.find(".//joint").get("range") == "-1.0 1.0"
     morphology = generate_morphology(reloaded)
     assert morphology["root_links"] == ["one_base"]
     assert {item["link"] for item in morphology["end_effectors"]} == {"two_mount"}
-

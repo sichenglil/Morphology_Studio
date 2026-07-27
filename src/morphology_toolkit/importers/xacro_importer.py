@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import os
 import re
 import shutil
 import subprocess
-import sys
 import tempfile
 from contextlib import redirect_stderr, redirect_stdout
 from dataclasses import dataclass, field
@@ -87,6 +85,10 @@ class XacroImporter(Importer):
                 with redirect_stdout(stdout), redirect_stderr(stderr):
                     document = xacro.process_file(str(Path(path).resolve()), mappings=arguments)
                 xml = document.toprettyxml(indent="  ")
+                for package_name, trace in resolver._traces.items():
+                    if trace.selected:
+                        for spelling in {str(trace.selected), trace.selected.as_posix()}:
+                            xml = xml.replace(spelling, f"package://{package_name}")
                 resolutions = {name: trace.selected.as_posix() if trace.selected else None for name, trace in resolver._traces.items()}
                 return XacroExpansion(xml, "python_api", 0, stdout.getvalue(), stderr.getvalue(), resolutions)
             except Exception as exc:

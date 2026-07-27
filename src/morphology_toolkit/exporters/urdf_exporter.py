@@ -59,9 +59,10 @@ class UrdfExporter:
                 ET.SubElement(node, "limit", **{key: str(value) for key, value in joint.limit.items()})
             if joint.mimic:
                 ET.SubElement(node, "mimic", joint=joint.mimic)
+        for raw in model.extension_elements:
+            robot.append(ET.fromstring(raw))
         ET.indent(robot, space="  ")
         output = Path(output)
         output.parent.mkdir(parents=True, exist_ok=True)
         ET.ElementTree(robot).write(output, encoding="utf-8", xml_declaration=True)
         return output
-

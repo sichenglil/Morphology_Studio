@@ -1,4 +1,4 @@
-from morphology_toolkit.importers import XacroImporter, UrdfImporter, detect_format
+from morphology_toolkit.importers import UrdfImporter, XacroImporter, detect_format
 from morphology_toolkit.resources import PackageResolver
 
 
@@ -21,6 +21,8 @@ def test_python_api_xacro_with_package_find_and_space_path(tmp_path):
     result = XacroImporter().expand(entry, {"prefix": "p_"}, resolver)
     assert result.returncode == 0, result.stderr
     assert result.method == "python_api"
+    assert str(package) not in result.xml
+    assert "package://sample_description/part.xacro" not in result.xml
     generated = tmp_path / "generated.urdf"; generated.write_text(result.xml, encoding="utf-8")
     assert "p_base" in UrdfImporter().execute(generated).links
 

@@ -12,11 +12,15 @@ from morphology_toolkit.core.model import AssemblyConnection, ProcessingMode, Tr
 from morphology_toolkit.exporters.mjcf_exporter import MjcfExporter
 from morphology_toolkit.exporters.portable_package_exporter import PortablePackageExporter
 from morphology_toolkit.exporters.urdf_exporter import UrdfExporter
-from morphology_toolkit.importers import DirectoryImporter, UrdfImporter, XacroImporter, detect_format
+from morphology_toolkit.importers import (
+    DirectoryImporter,
+    UrdfImporter,
+    XacroImporter,
+    detect_format,
+)
 from morphology_toolkit.morphology import generate_morphology
 from morphology_toolkit.reports import audit_repository
-from morphology_toolkit.resources import ResourceResolver
-from morphology_toolkit.resources import PackageResolver, load_package_map
+from morphology_toolkit.resources import PackageResolver, ResourceResolver, load_package_map
 from morphology_toolkit.validation import validate_model
 from morphology_toolkit.workspace import Workspace
 
@@ -55,10 +59,10 @@ def build_parser() -> argparse.ArgumentParser:
     imp = sub.add_parser("import"); imp.add_argument("--path", type=Path, required=True); imp.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED); imp.add_argument("--entry"); imp.add_argument("--workspace", type=Path); imp.add_argument("--package-map", type=Path); imp.add_argument("--package-root", type=Path, action="append", default=[])
     package_map_parser = sub.add_parser("inspect-package-map"); package_map_parser.add_argument("--package-map", type=Path, required=True); package_map_parser.add_argument("--package", action="append", default=[])
     inspect = sub.add_parser("inspect"); inspect.add_argument("--path", type=Path, required=True); inspect.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED)
-    validate = sub.add_parser("validate"); validate.add_argument("--input", type=Path, required=True); validate.add_argument("--output", type=Path, default=Path("build/reports"))
+    validate = sub.add_parser("validate"); validate.add_argument("--input", type=Path, required=True); validate.add_argument("--output", type=Path, default=Path("build/reports")); validate.add_argument("--package-map", type=Path)
     morphology = sub.add_parser("morphology"); morphology.add_argument("--input", type=Path, required=True); morphology.add_argument("--output", type=Path, default=Path("build/morphology/morphology.json"))
-    assemble = sub.add_parser("assemble"); assemble.add_argument("--config", type=Path, required=True); assemble.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED); assemble.add_argument("--output", type=Path)
-    package = sub.add_parser("package"); package.add_argument("--input", type=Path, required=True); package.add_argument("--output", type=Path, required=True); package.add_argument("--resource-root", type=Path)
+    assemble = sub.add_parser("assemble"); assemble.add_argument("--config", type=Path, required=True); assemble.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED); assemble.add_argument("--output", type=Path); assemble.add_argument("--report-json", type=Path); assemble.add_argument("--report-md", type=Path)
+    package = sub.add_parser("package"); package.add_argument("--input", type=Path, required=True); package.add_argument("--output", type=Path, required=True); package.add_argument("--resource-root", type=Path); package.add_argument("--package-map", type=Path)
     convert = sub.add_parser("convert"); convert.add_argument("--input", type=Path, required=True); convert.add_argument("--format", choices=("urdf", "mjcf", "usd"), required=True); convert.add_argument("--output", type=Path, required=True); convert.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED); convert.add_argument("--isaac-python", type=Path)
     sub.add_parser("web").add_argument("--port", type=int, default=8000)
     return parser
@@ -91,7 +95,7 @@ def main(argv=None) -> int:
         if args.command == "inspect":
             model = _load(args.path, args.mode); print(json.dumps(model.to_dict(), indent=2)); return 0
         if args.command == "validate":
-            model = UrdfImporter().execute(args.input); resolver = ResourceResolver(args.input.parent)
+            model = UrdfImporter().execute(args.input); package_map = load_package_map(args.package_map, Path.cwd()) if args.package_map else {}; resolver = ResourceResolver(args.input.parent, package_map=package_map)
             report = validate_model(model, resolver); report.write(args.output / "validation.json", args.output / "validation.md")
             print(json.dumps({"errors": report.errors, "warnings": report.warnings, "export_ready": report.export_ready})); return 0 if report.export_ready else 2
         if args.command == "morphology":
@@ -101,9 +105,13 @@ def main(argv=None) -> int:
             for spec in config["models"]:
                 models[spec["id"]] = _load((args.config.parent / spec["source"]).resolve() if not Path(spec["source"]).is_absolute() else Path(spec["source"]), args.mode, spec.get("entry"), spec.get("arguments")); prefixes[spec["id"]] = spec.get("prefix", "")
             connections = [AssemblyConnection(item["name"], item.get("type", "fixed"), item["parent"]["model"], item["parent"]["link"], item["child"]["model"], item["child"]["link"], Transform(tuple(item.get("origin", {}).get("xyz", (0,0,0))), tuple(item.get("origin", {}).get("rpy", (0,0,0))))) for item in config["connections"]]
-            result = assemble_models(models, connections, prefixes, config["assembly"]["name"], args.mode); output = args.output or Path("build/urdf") / f"{result.model.robot_id}.urdf"; UrdfExporter().export(result.model, output); print(output); return 0
+            result = assemble_models(models, connections, prefixes, config["assembly"]["name"], args.mode); output = args.output or Path("build/urdf") / f"{result.model.robot_id}.urdf"; UrdfExporter().export(result.model, output)
+            report = {"assembly": result.model.robot_id, "models": list(models), "connections": [item.name for item in connections], "roots": result.model.root_links, "links": len(result.model.links), "joints": len(result.model.joints), "source_map": result.source_map, "notes": config.get("notes", [])}
+            if args.report_json: args.report_json.parent.mkdir(parents=True, exist_ok=True); args.report_json.write_text(json.dumps(report, indent=2), encoding="utf-8")
+            if args.report_md: args.report_md.parent.mkdir(parents=True, exist_ok=True); args.report_md.write_text("# Assembly report\n\n" + "\n".join(f"- {key}: `{value}`" for key, value in report.items() if key != "source_map") + "\n", encoding="utf-8")
+            print(output); return 0
         if args.command == "package":
-            model = UrdfImporter().execute(args.input); root = args.resource_root or args.input.parent; print(PortablePackageExporter().export(model, args.output, ResourceResolver(root))); return 0
+            model = UrdfImporter().execute(args.input); root = args.resource_root or args.input.parent; package_map = load_package_map(args.package_map, Path.cwd()) if args.package_map else {}; print(PortablePackageExporter().export(model, args.output, ResourceResolver(root, package_map=package_map))); return 0
         if args.command == "convert":
             if args.format == "usd":
                 from morphology_toolkit.exporters.usd_exporter import launch_usd_conversion

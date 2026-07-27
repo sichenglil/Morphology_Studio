@@ -1,4 +1,3 @@
-import json
 
 from morphology_toolkit.cli import main
 

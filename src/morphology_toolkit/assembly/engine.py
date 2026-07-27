@@ -4,6 +4,7 @@ import copy
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List
+from xml.etree import ElementTree as ET
 
 from morphology_toolkit.core.model import (
     AssemblyConnection,
@@ -61,6 +62,17 @@ def _prefixed(model: RobotModel, prefix: str) -> tuple:
     for name, actuator in result.actuators.items():
         actuator.name = name
         actuator.joint = joint_map.get(actuator.joint, actuator.joint) if actuator.joint else None
+    replacements = {**link_map, **joint_map, **material_map}
+    rewritten_extensions = []
+    for raw in result.extension_elements:
+        element = ET.fromstring(raw)
+        for node in element.iter():
+            for key, value in list(node.attrib.items()):
+                if value in replacements: node.set(key, replacements[value])
+            if node.text and node.text.strip() in replacements:
+                node.text = node.text.replace(node.text.strip(), replacements[node.text.strip()])
+        rewritten_extensions.append(ET.tostring(element, encoding="unicode"))
+    result.extension_elements = rewritten_extensions
     return result, link_map, joint_map
 
 
@@ -108,6 +120,7 @@ def assemble_models(models: Dict[str, RobotModel], connections: List[AssemblyCon
                 raise ValueError(f"Conflicting {collection}: {sorted(overlap)}")
             target.update(values)
         combined.resources.extend(transformed.resources)
+        combined.extension_elements.extend(transformed.extension_elements)
     for connection in connections:
         if connection.name in combined.joints:
             raise ValueError(f"Connection joint conflicts with existing joint: {connection.name}")
@@ -142,4 +155,3 @@ def _has_cycle(model: RobotModel) -> bool:
         visited.add(node)
         return False
     return any(visit(node) for node in graph)
-

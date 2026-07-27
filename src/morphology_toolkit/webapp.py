@@ -30,7 +30,8 @@ def create_app():
 
 
 def run(port: int = 8000):
-    try: import uvicorn
-    except ImportError as exc: raise RuntimeError("Web UI requires 'pip install morphology-toolkit[web]'") from exc
+    try:
+        import uvicorn
+    except ImportError as exc:
+        raise RuntimeError("Web UI requires 'pip install morphology-toolkit[web]'") from exc
     uvicorn.run(create_app(), host="127.0.0.1", port=port)
-

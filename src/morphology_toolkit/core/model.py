@@ -130,6 +130,7 @@ class RobotModel:
     semantic_tags: SemanticMetadata = field(default_factory=SemanticMetadata)
     metadata: Dict[str, Any] = field(default_factory=dict)
     diagnostics: List[Diagnostic] = field(default_factory=list)
+    extension_elements: List[str] = field(default_factory=list)
 
     @property
     def root_links(self) -> List[str]:
@@ -167,4 +168,3 @@ class AssemblyConnection:
     child_model: str
     child_link: str
     origin: Transform = field(default_factory=Transform)
-

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import re
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 from xml.etree import ElementTree as ET
@@ -111,6 +110,16 @@ class UrdfImporter(Importer):
                 limit={key: float(value) for key, value in (limit.attrib.items() if limit is not None else []) if key in {"lower", "upper", "effort", "velocity"}},
                 mimic=mimic.get("joint") if mimic is not None else None,
             )
+        known = {"link", "joint", "material"}
+        model.extension_elements = [ET.tostring(child, encoding="unicode") for child in root if child.tag.rsplit("}", 1)[-1] not in known]
+        known_uris = {resource.uri for resource in model.resources}
+        for child in root:
+            if child.tag.rsplit("}", 1)[-1] in known: continue
+            for node in child.iter():
+                values = list(node.attrib.values()) + ([node.text.strip()] if node.text and node.text.strip() else [])
+                for value in values:
+                    if value.startswith("package://") and value not in known_uris:
+                        model.resources.append(ResourceReference(value, kind="extension")); known_uris.add(value)
         return model
 
     @staticmethod
