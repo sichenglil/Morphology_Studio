@@ -57,6 +57,9 @@ class UrdfImporter(Importer):
     def execute(self, path: Path, mode: ProcessingMode = ProcessingMode.ASSISTED, selection: Optional[Dict[str, Any]] = None) -> RobotModel:
         del mode, selection
         path = Path(path).resolve()
+        from .registry import detect_format
+        if detect_format(path) == "srdf":
+            raise ValueError(f"SRDF is semantic metadata, not a URDF geometry model: {path}")
         root = ET.parse(path).getroot()
         if root.tag.rsplit("}", 1)[-1] != "robot":
             raise ValueError(f"Expected URDF <robot> root: {path}")
@@ -127,4 +130,3 @@ class UrdfImporter(Importer):
             values = tuple(float(shape.get(key)) for key in ("radius", "length") if shape.get(key) is not None)
             return GeometryModel(kind, size=values)
         return GeometryModel(kind)
-

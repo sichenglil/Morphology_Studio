@@ -10,7 +10,7 @@ from .registry import detect_format
 
 
 class DirectoryImporter(Importer):
-    ENTRY_FORMATS = {"urdf", "xacro", "mjcf", "step"}
+    ENTRY_FORMATS = {"urdf", "xacro", "mjcf", "step", "srdf"}
 
     def analyze(self, path: Path) -> ImportAnalysis:
         path = Path(path).resolve()
@@ -21,6 +21,9 @@ class DirectoryImporter(Importer):
         for candidate_path in sorted(p for p in path.rglob("*") if p.is_file()):
             fmt = detect_format(candidate_path)
             if fmt not in self.ENTRY_FORMATS:
+                continue
+            if fmt == "srdf":
+                analysis.format_candidates.append(Candidate(candidate_path, fmt, 1.0, "Semantic Robot Description detected; excluded as a geometry entry"))
                 continue
             name = candidate_path.name.lower()
             score = 0.45
@@ -66,4 +69,3 @@ class DirectoryImporter(Importer):
             return ET.parse(path).getroot().findtext("name", default=path.parent.name)
         except ET.ParseError:
             return path.parent.name
-

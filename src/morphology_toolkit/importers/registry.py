@@ -16,6 +16,9 @@ def detect_format(path: Path) -> str:
     head = path.read_bytes()[:4096]
     text = head.decode("utf-8", errors="ignore")
     upper = text.upper()
+    srdf_tags = ("<group", "<group_state", "<end_effector", "<virtual_joint", "<disable_collisions", "<passive_joint", "<link_sphere_approximation")
+    if path.suffix.lower() == ".srdf" or any(tag in text for tag in srdf_tags):
+        return "srdf"
     if "ISO-10303-21" in upper or path.suffix.lower() in {".step", ".stp"}:
         return "step"
     if "xmlns:xacro" in text or "<xacro:" in text:
@@ -45,4 +48,3 @@ class ImporterRegistry:
         if format_name not in self._importers:
             raise ValueError(f"No importer registered for {format_name!r}")
         return self._importers[format_name]()
-
