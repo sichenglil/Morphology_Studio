@@ -16,6 +16,7 @@ from morphology_toolkit.importers import DirectoryImporter, UrdfImporter, XacroI
 from morphology_toolkit.morphology import generate_morphology
 from morphology_toolkit.reports import audit_repository
 from morphology_toolkit.resources import ResourceResolver
+from morphology_toolkit.resources import PackageResolver, load_package_map
 from morphology_toolkit.validation import validate_model
 from morphology_toolkit.workspace import Workspace
 
@@ -24,14 +25,15 @@ def _mode(value: str) -> ProcessingMode:
     return ProcessingMode(value)
 
 
-def _load(path: Path, mode: ProcessingMode, entry: str = None, arguments=None):
+def _load(path: Path, mode: ProcessingMode, entry: str = None, arguments=None, package_map=None, package_roots=None):
     fmt = detect_format(path)
     if fmt in {"directory", "ros_package"}:
-        return DirectoryImporter().execute(path, mode, {"entry": entry} if entry else None)
+        selection = {"entry": entry, "arguments": arguments or {}, "package_map": package_map or {}, "package_paths": package_roots or []}
+        return DirectoryImporter().execute(path, mode, selection)
     if fmt == "urdf":
         return UrdfImporter().execute(path, mode)
     if fmt == "xacro":
-        return XacroImporter().execute(path, mode, {"arguments": arguments or {}})
+        return XacroImporter().execute(path, mode, {"arguments": arguments or {}, "package_map": package_map or {}, "package_paths": package_roots or []})
     raise ValueError(f"Unsupported input format: {fmt}")
 
 
@@ -50,7 +52,8 @@ def build_parser() -> argparse.ArgumentParser:
     workspace = sub.add_parser("workspace"); ws = workspace.add_subparsers(dest="action", required=True)
     for action in ("create", "open"):
         item = ws.add_parser(action); item.add_argument("--path", type=Path, required=True); item.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED)
-    imp = sub.add_parser("import"); imp.add_argument("--path", type=Path, required=True); imp.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED); imp.add_argument("--entry"); imp.add_argument("--workspace", type=Path)
+    imp = sub.add_parser("import"); imp.add_argument("--path", type=Path, required=True); imp.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED); imp.add_argument("--entry"); imp.add_argument("--workspace", type=Path); imp.add_argument("--package-map", type=Path); imp.add_argument("--package-root", type=Path, action="append", default=[])
+    package_map_parser = sub.add_parser("inspect-package-map"); package_map_parser.add_argument("--package-map", type=Path, required=True); package_map_parser.add_argument("--package", action="append", default=[])
     inspect = sub.add_parser("inspect"); inspect.add_argument("--path", type=Path, required=True); inspect.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED)
     validate = sub.add_parser("validate"); validate.add_argument("--input", type=Path, required=True); validate.add_argument("--output", type=Path, default=Path("build/reports"))
     morphology = sub.add_parser("morphology"); morphology.add_argument("--input", type=Path, required=True); morphology.add_argument("--output", type=Path, default=Path("build/morphology/morphology.json"))
@@ -69,13 +72,21 @@ def main(argv=None) -> int:
         if args.command == "workspace":
             workspace = Workspace.create(args.path, args.mode) if args.action == "create" else Workspace.open(args.path)
             print(workspace.root); return 0
+        if args.command == "inspect-package-map":
+            mapping = load_package_map(args.package_map, Path.cwd()); resolver = PackageResolver(mapping)
+            names = args.package or sorted(mapping); payload = {}
+            for name in names:
+                resolved = resolver.resolve(name); trace = resolver.explain(name)
+                payload[name] = {"resolved": resolved.as_posix() if resolved else None, "source": trace.candidates[0].source if trace.candidates else None, "error": trace.error}
+            print(json.dumps(payload, indent=2)); return 0
         if args.command == "import":
             analysis = _analysis(args.path)
+            package_map = load_package_map(args.package_map, Path.cwd()) if args.package_map else {}
             payload = {"detected_format": detect_format(args.path), "entries": [{"path": str(item.path), "format": item.detected_format, "score": item.score, "confidence": item.confidence, "reason": item.reason, "requires_confirmation": item.requires_confirmation} for item in analysis.entry_candidates], "parameters": analysis.parameter_candidates, "diagnostics": analysis.diagnostics}
             if args.entry or detect_format(args.path) not in {"directory", "ros_package"}:
-                model = _load(args.path, args.mode, args.entry); payload["model"] = {"robot_id": model.robot_id, "links": len(model.links), "joints": len(model.joints), "roots": model.root_links}
+                model = _load(args.path, args.mode, args.entry, package_map=package_map, package_roots=args.package_root); payload["model"] = {"robot_id": model.robot_id, "links": len(model.links), "joints": len(model.joints), "roots": model.root_links}
             if args.workspace:
-                ws = Workspace.open(args.workspace); ws.imported_models.append({"source": args.path.as_posix(), "entry": args.entry, "mode": args.mode.value}); ws.save(); ws.log("model_import", payload)
+                ws = Workspace.open(args.workspace); ws.imported_models.append({"source": args.path.as_posix(), "entry": args.entry, "mode": args.mode.value, "package_map": args.package_map.as_posix() if args.package_map else None, "package_roots": [p.as_posix() for p in args.package_root]}); ws.save(); ws.log("model_import", payload)
             print(json.dumps(payload, indent=2)); return 0
         if args.command == "inspect":
             model = _load(args.path, args.mode); print(json.dumps(model.to_dict(), indent=2)); return 0
@@ -110,4 +121,3 @@ def main(argv=None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
