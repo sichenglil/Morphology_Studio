@@ -178,8 +178,14 @@ def test_batch_joint_commit_revision_limits_and_single_history(tmp_path):
     session = app.state.editor_session
     assert session.joint_values == {"a": 0.4, "b": 0.2}
     assert len(session.changes) == 1
+    undone = client.post("/api/workspaces/current/history/undo")
+    assert undone.status_code == 200
+    assert {item["id"]: item["value"] for item in undone.json()["joints"]} == {"a": 0.0, "b": 0.0}
+    redone = client.post("/api/workspaces/current/history/redo")
+    assert redone.status_code == 200
+    assert {item["id"]: item["value"] for item in redone.json()["joints"]} == {"a": 0.4, "b": 0.2}
     workspace = tmp_path / "joint-workspace.yaml"
     assert client.post("/api/workspaces/current/save", json={"path": str(workspace)}).status_code == 200
     assert client.post("/api/workspaces/open", json={"path": str(workspace)}).json()["joints"][0]["value"] == 0.4
     assert client.post("/api/workspaces/current/joint-states/commit", json={"values": {"a": 0.5}, "expectedRevision": 0}).status_code == 409
-    assert client.post("/api/workspaces/current/joint-states/commit", json={"values": {"b": 2}, "expectedRevision": 1}).status_code == 422
+    assert client.post("/api/workspaces/current/joint-states/commit", json={"values": {"b": 2}, "expectedRevision": 3}).status_code == 422

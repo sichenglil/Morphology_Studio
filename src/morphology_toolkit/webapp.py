@@ -391,7 +391,10 @@ def create_app():
             edit = session.transform_history[session.history_cursor]
             session.history_cursor += 1
             state = edit["after"]
-        _apply_target_state(session, edit["targetType"], edit["entityId"], state)
+        if edit.get("action") == "joint_state_batch":
+            session.joint_values.update(state)
+        else:
+            _apply_target_state(session, edit["targetType"], edit["entityId"], state)
         session.revision += 1
         return _scene_manifest(session)
 
@@ -447,7 +450,10 @@ def create_app():
                 if name in model.joints and math.isfinite(float(value)):
                     session.joint_values[name] = float(value)
             for edit in document.get("transform_edits", []):
-                _apply_target_state(session, edit["targetType"], edit["entityId"], edit["after"])
+                if edit.get("action") == "joint_state_batch":
+                    session.joint_values.update(edit["after"])
+                else:
+                    _apply_target_state(session, edit["targetType"], edit["entityId"], edit["after"])
                 session.transform_history.append(edit)
             session.history_cursor = len(session.transform_history)
             session.revision = int(document.get("revision", session.history_cursor))
@@ -517,6 +523,9 @@ def create_app():
         before = {name: session.joint_values.get(name, 0.0) for name in normalized}
         session.joint_values.update(normalized)
         session.changes.append({"action": "joint_state_batch", "before": before, "after": normalized})
+        session.transform_history[session.history_cursor :] = []
+        session.transform_history.append({"action": "joint_state_batch", "before": before, "after": normalized})
+        session.history_cursor += 1
         session.revision += 1
         LOGGER.info("Committed %d joint state(s)", len(normalized))
         return {"values": normalized, "revision": session.revision, "saved": False, "validation": "lightweight"}
