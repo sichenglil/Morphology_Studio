@@ -1,5 +1,7 @@
 # Morphology Studio
 
+桌面编辑器现提供可用的文件/编辑/视图/工具菜单和 Link 精确变换编辑。非根 Link 的数值修改会写入父 Joint origin；详见 [应用菜单](docs/application_menus.md) 与 [精确数值编辑](docs/link_numeric_editing.md)。
+
 面向 URDF、Xacro 与 MJCF 的通用机器人模型导入、三维检查、装配、验证和转换工具。Python
 `RobotModel` 是唯一事实来源；UR5e 与 HX5 仅用于示例和本地验收。
 

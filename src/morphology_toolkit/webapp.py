@@ -133,7 +133,7 @@ def _pick_path(kind: str) -> str:
     root.withdraw()
     root.attributes("-topmost", True)
     try:
-        value = filedialog.askdirectory() if kind == "directory" else filedialog.askopenfilename()
+        value = filedialog.askdirectory() if kind == "directory" else filedialog.asksaveasfilename(defaultextension=".yaml") if kind == "save" else filedialog.askopenfilename()
         return value or ""
     finally:
         root.destroy()
@@ -173,7 +173,7 @@ def _resource_url(session: EditorSession, path: Path) -> str:
 def _scene_manifest(session: EditorSession) -> dict[str, Any]:
     model = session.model
     if model is None:
-        return {"robotId": None, "rootLinks": [], "links": [], "joints": [], "resources": []}
+        return {"robotId": None, "rootLinks": [], "links": [], "joints": [], "resources": [], "revision": session.revision, "rootTransform": _transform_dict(session.root_transform), "assemblyJoints": [], "history": {"canUndo": False, "canRedo": False}}
     base = session.source.parent if session.source and session.source.is_file() else session.source
     resolver = ResourceResolver(base or Path.cwd(), package_map=session.package_map)
     resource_urls: dict[str, str] = {}
@@ -292,8 +292,8 @@ def create_app():
 
     @app.get("/api/pick")
     def pick(kind: str = "file"):
-        if kind not in {"file", "directory"}:
-            raise HTTPException(400, "kind must be file or directory")
+        if kind not in {"file", "directory", "save"}:
+            raise HTTPException(400, "kind must be file, directory or save")
         return {"path": _pick_path(kind)}
 
     @app.get("/api/models/analyze")
@@ -422,6 +422,11 @@ def create_app():
         }
         destination.write_text(yaml.safe_dump(document, sort_keys=False, allow_unicode=True), encoding="utf-8")
         return {"ok": True, "path": destination.as_posix()}
+
+    @app.post("/api/workspaces/current/new")
+    def new_workspace():
+        session.clear()
+        return _scene_manifest(session)
 
     @app.post("/api/workspaces/open")
     def open_workspace(request: dict[str, Any] = required_body):

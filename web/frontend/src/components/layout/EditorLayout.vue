@@ -1,22 +1,7 @@
-<template>
-  <main class="studio" data-testid="editor-layout">
-    <AppToolbar @import="importOpen=true" @validate="store.validate()" @assemble="assemblyOpen=true" @export="exportOpen=true" />
-    <section class="workbench">
-      <LeftSidebar />
-      <RobotViewport />
-      <RightInspector />
-    </section>
-    <BottomDock />
-    <StatusBar />
-    <ImportWizard v-model="importOpen" />
-    <AssemblyWizard v-model="assemblyOpen" />
-    <ExportDialog v-model="exportOpen" />
-  </main>
-</template>
+<template><main class="studio" data-testid="editor-layout"><AppToolbar @import="run('file.importModel')" @validate="run('tools.validate')" @assemble="run('tools.assemble')" @export="run('file.export')" @command="run"/><section class="workbench"><LeftSidebar/><RobotViewport/><RightInspector/></section><BottomDock/><StatusBar/><ImportWizard v-model="importOpen"/><AssemblyWizard v-model="assemblyOpen"/><ExportDialog v-model="exportOpen"/></main></template>
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useEditorStore } from '@/stores/editor'
-import AppToolbar from './AppToolbar.vue'; import LeftSidebar from './LeftSidebar.vue'; import RightInspector from './RightInspector.vue'; import BottomDock from './BottomDock.vue'; import StatusBar from './StatusBar.vue'
-import RobotViewport from '@/components/viewport/RobotViewport.vue'; import ImportWizard from '@/components/dialogs/ImportWizard.vue'; import AssemblyWizard from '@/components/dialogs/AssemblyWizard.vue'; import ExportDialog from '@/components/dialogs/ExportDialog.vue'
-const store=useEditorStore(); const importOpen=ref(false); const assemblyOpen=ref(false); const exportOpen=ref(false)
+import {ref} from 'vue';import {ElMessage,ElMessageBox} from 'element-plus';import {useEditorStore} from '@/stores/editor';import AppToolbar from './AppToolbar.vue';import LeftSidebar from './LeftSidebar.vue';import RightInspector from './RightInspector.vue';import BottomDock from './BottomDock.vue';import StatusBar from './StatusBar.vue';import RobotViewport from '@/components/viewport/RobotViewport.vue';import ImportWizard from '@/components/dialogs/ImportWizard.vue';import AssemblyWizard from '@/components/dialogs/AssemblyWizard.vue';import ExportDialog from '@/components/dialogs/ExportDialog.vue';import type {CommandId} from '@/config/menuCommands';import {pickPath} from '@/api/models';import {clearWorkspace,openWorkspace,saveWorkspace} from '@/api/workspace'
+const store=useEditorStore(),importOpen=ref(false),assemblyOpen=ref(false),exportOpen=ref(false)
+function dispatch(id:CommandId){window.dispatchEvent(new CustomEvent('morphology-command',{detail:id}))}
+async function run(id:CommandId){try{if(id==='file.importModel'){importOpen.value=true;return}if(id==='file.export'||id==='tools.exportUrdf'){exportOpen.value=true;return}if(id==='tools.assemble'){assemblyOpen.value=true;return}if(id==='tools.validate'){await store.validate();ElMessage.success('模型验证完成');return}if(id==='edit.undo'){await store.undo();return}if(id==='edit.redo'){await store.redo();return}if(id==='file.newWorkspace'){if(store.scene.robotId)await ElMessageBox.confirm('将清空当前工作区，是否继续？','新建工作区');store.scene=await clearWorkspace();store.clearSelection();return}if(id==='file.openWorkspace'){const path=(await pickPath('file')).path;if(path){store.scene=await openWorkspace(path);store.sceneGeneration++}return}if(id==='file.saveWorkspace'){const path=(await pickPath('save')).path;if(path){await saveWorkspace(path,{translation_unit:'mm',rotation_unit:'deg',coordinate_space:'parent'});ElMessage.success('工作区已保存')}return}dispatch(id)}catch(error){ElMessage.error(String(error))}}
 </script>

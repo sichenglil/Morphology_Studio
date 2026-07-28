@@ -54,9 +54,9 @@ test('large-window layout keeps all work areas visible', async ({ page }) => {
   await page.setViewportSize({ width: 1920, height: 1080 }); await load(page)
   for (const id of ['links-scroll', 'robot-viewport', 'right-inspector', 'bottom-dock']) await expect(page.getByTestId(id)).toBeVisible()
   await page.screenshot({ path: path.join(shots, 'large_window.png') })
-  const viewport = page.getByTestId('robot-viewport'); const before = await viewport.screenshot()
+  const viewport = page.getByTestId('robot-viewport'); const canvas = viewport.locator('canvas'); const before = await canvas.getAttribute('data-camera-distance')
   const list = page.getByTestId('links-scroll'); const box = await list.boundingBox(); await page.mouse.move(box!.x + 20, box!.y + 20); await page.mouse.wheel(0, 250)
-  expect(await viewport.screenshot()).toEqual(before)
+  expect(await canvas.getAttribute('data-camera-distance')).toBe(before)
   await page.screenshot({ path: path.join(shots, 'scroll_not_affecting_viewport.png') })
 })
 

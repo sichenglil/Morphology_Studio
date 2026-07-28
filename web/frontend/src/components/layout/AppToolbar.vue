@@ -1,7 +1,7 @@
 <template>
   <header class="toolbar" data-testid="toolbar">
     <div class="brand"><span class="brand-mark">M</span><span>Morphology Studio</span></div>
-    <nav class="menus"><span>文件</span><span>编辑</span><span>视图</span><span>工具</span></nav>
+    <AppMenuBar @command="$emit('command',$event)" />
     <div class="tool-actions">
       <el-button type="primary" @click="$emit('import')">导入模型</el-button>
       <el-button @click="$emit('assemble')">装配</el-button>
@@ -14,4 +14,4 @@
     </div>
   </header>
 </template>
-<script setup lang="ts">import { useEditorStore } from '@/stores/editor'; defineEmits(['import','assemble','validate','export']); const store=useEditorStore(); const modeOptions=[{label:'自动',value:'auto'},{label:'辅助',value:'assisted'},{label:'手动',value:'manual'}]</script>
+<script setup lang="ts">import { useEditorStore } from '@/stores/editor';import AppMenuBar from './AppMenuBar.vue'; defineEmits(['import','assemble','validate','export','command']); const store=useEditorStore(); const modeOptions=[{label:'自动',value:'auto'},{label:'辅助',value:'assisted'},{label:'手动',value:'manual'}]</script>

@@ -147,6 +147,17 @@ def test_transform_rejects_non_finite_and_saves_workspace(tmp_path):
     assert reopened.json()["robotId"] == "root"
 
 
+def test_new_workspace_clears_scene_with_complete_manifest(tmp_path):
+    model = tmp_path / "clear.urdf"
+    model.write_text('<robot name="clear"><link name="base"/></robot>', encoding="utf-8")
+    client = TestClient(create_app())
+    assert client.post("/api/models/load", json={"path": str(model)}).json()["robotId"] == "clear"
+    scene = client.post("/api/workspaces/current/new", json={}).json()
+    assert scene["robotId"] is None
+    assert scene["rootTransform"] == {"xyz": [0.0, 0.0, 0.0], "rpy": [0.0, 0.0, 0.0]}
+    assert scene["history"] == {"canUndo": False, "canRedo": False}
+
+
 def test_batch_joint_commit_revision_limits_and_single_history(tmp_path):
     model = tmp_path / "joints.urdf"
     model.write_text(
