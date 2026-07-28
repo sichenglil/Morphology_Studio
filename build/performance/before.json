@@ -1,0 +1,13 @@
+{
+  "stage": "before",
+  "event_count": 1000,
+  "measurement": "reproduced call-chain counters from the pre snapshot",
+  "backend_requests": 1000,
+  "scene_rebuilds": 1000,
+  "mesh_loader_passes": 1000,
+  "render_loop": "continuous even when idle",
+  "workspace_saves": 0,
+  "full_validations": 0,
+  "timing_ms": null,
+  "timing_note": "The pre build had no instrumentation; no timing value was fabricated."
+}

@@ -145,3 +145,30 @@ def test_transform_rejects_non_finite_and_saves_workspace(tmp_path):
     reopened = client.post("/api/workspaces/open", json={"path": str(workspace)})
     assert reopened.status_code == 200
     assert reopened.json()["robotId"] == "root"
+
+
+def test_batch_joint_commit_revision_limits_and_single_history(tmp_path):
+    model = tmp_path / "joints.urdf"
+    model.write_text(
+        '<robot name="joints"><link name="base"/><link name="one"/><link name="two"/>'
+        '<joint name="a" type="revolute"><parent link="base"/><child link="one"/>'
+        '<limit lower="-1" upper="1" effort="1" velocity="1"/></joint>'
+        '<joint name="b" type="prismatic"><parent link="one"/><child link="two"/>'
+        '<limit lower="0" upper="0.5" effort="1" velocity="1"/></joint></robot>', encoding="utf-8"
+    )
+    app = create_app()
+    client = TestClient(app)
+    client.post("/api/models/load", json={"path": str(model)})
+    response = client.post("/api/workspaces/current/joint-states/commit", json={
+        "values": {"a": 0.4, "b": 0.2}, "expectedRevision": 0,
+    })
+    assert response.status_code == 200
+    assert response.json() == {"values": {"a": 0.4, "b": 0.2}, "revision": 1, "saved": False, "validation": "lightweight"}
+    session = app.state.editor_session
+    assert session.joint_values == {"a": 0.4, "b": 0.2}
+    assert len(session.changes) == 1
+    workspace = tmp_path / "joint-workspace.yaml"
+    assert client.post("/api/workspaces/current/save", json={"path": str(workspace)}).status_code == 200
+    assert client.post("/api/workspaces/open", json={"path": str(workspace)}).json()["joints"][0]["value"] == 0.4
+    assert client.post("/api/workspaces/current/joint-states/commit", json={"values": {"a": 0.5}, "expectedRevision": 0}).status_code == 409
+    assert client.post("/api/workspaces/current/joint-states/commit", json={"values": {"b": 2}, "expectedRevision": 1}).status_code == 422

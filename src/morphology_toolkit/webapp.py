@@ -416,6 +416,7 @@ def create_app():
             "source": session.source.as_posix() if session.source else None,
             "revision": session.revision,
             "root_transform": _transform_dict(session.root_transform),
+            "joint_values": dict(session.joint_values),
             "transform_edits": session.transform_history[: session.history_cursor],
             "settings": request.get("settings", {}),
         }
@@ -437,6 +438,9 @@ def create_app():
             session.model, session.source = model, source
             root, _ = _parse_transform(document.get("root_transform", {}))
             session.root_transform = root
+            for name, value in document.get("joint_values", {}).items():
+                if name in model.joints and math.isfinite(float(value)):
+                    session.joint_values[name] = float(value)
             for edit in document.get("transform_edits", []):
                 _apply_target_state(session, edit["targetType"], edit["entityId"], edit["after"])
                 session.transform_history.append(edit)
@@ -477,6 +481,40 @@ def create_app():
         )
         LOGGER.info("Joint %s changed from %s to %s", joint_name, previous, value)
         return {"joint": joint_name, "value": value, "undoDepth": len(session.changes)}
+
+    @app.post("/api/workspaces/current/joint-states/commit")
+    def commit_joint_states(request: dict[str, Any] = required_body):
+        if session.model is None:
+            raise HTTPException(409, "No model is loaded")
+        if request.get("expectedRevision") != session.revision:
+            raise HTTPException(409, f"Workspace revision changed to {session.revision}")
+        values = request.get("values")
+        if not isinstance(values, dict) or not values:
+            raise HTTPException(422, "values must be a non-empty object")
+        normalized: dict[str, float] = {}
+        for name, raw in values.items():
+            joint = session.model.joints.get(name)
+            if joint is None:
+                raise HTTPException(404, f"Joint not found: {name}")
+            if joint.joint_type == "fixed":
+                raise HTTPException(422, f"Fixed joint cannot move: {name}")
+            try:
+                value = float(raw)
+            except (TypeError, ValueError) as exc:
+                raise HTTPException(422, f"Joint value must be numeric: {name}") from exc
+            if not math.isfinite(value):
+                raise HTTPException(422, f"Joint value must be finite: {name}")
+            lower = float(joint.limit.get("lower", -math.inf))
+            upper = float(joint.limit.get("upper", math.inf))
+            if not lower <= value <= upper:
+                raise HTTPException(422, f"Joint {name} must be between {lower} and {upper}")
+            normalized[name] = value
+        before = {name: session.joint_values.get(name, 0.0) for name in normalized}
+        session.joint_values.update(normalized)
+        session.changes.append({"action": "joint_state_batch", "before": before, "after": normalized})
+        session.revision += 1
+        LOGGER.info("Committed %d joint state(s)", len(normalized))
+        return {"values": normalized, "revision": session.revision, "saved": False, "validation": "lightweight"}
 
     @app.post("/api/validation")
     def validation():

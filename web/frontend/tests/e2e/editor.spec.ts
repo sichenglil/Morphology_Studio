@@ -45,3 +45,15 @@ test('mouse selection and transform toolbar acceptance', async ({page}) => {
   await page.screenshot({path:path.resolve('../../build/ui/acceptance/transform/kinematic_gizmo.png')})
   expect(pageErrors).toEqual([])
 })
+
+for (const model of [
+  {name:'UR5e',path:'../../build/packages/ur5e/robot.urdf'},
+  {name:'HX5',path:'../../build/packages/hx5_d20_rev2_right/robot.urdf'},
+  {name:'UR5e-HX5',path:'../../build/packages/ur5e_hx5_right/robot.urdf'},
+]) test(`${model.name} joint preview is local and persistent`,async({page})=>{
+  let commits=0;page.on('request',request=>{if(request.url().includes('/joint-states/commit'))commits++})
+  await page.setViewportSize({width:1440,height:900});await page.goto('/?debugPerformance=1');await page.getByRole('button',{name:'导入模型',exact:true}).click();await page.getByPlaceholder('URDF、Xacro、MJCF 或模型目录').fill(path.resolve(model.path));await page.getByRole('button',{name:'导入并显示',exact:true}).click();await expect(page.getByTestId('performance-panel')).toBeVisible();
+  await expect.poll(()=>page.evaluate(async()=>{try{await(window as unknown as {benchmarkJointRuntime:(iterations:number)=>Promise<unknown>}).benchmarkJointRuntime(1);return true}catch{return false}}),{timeout:15000}).toBe(true);const benchmark=await page.evaluate(()=>((window as unknown as {benchmarkJointRuntime:(iterations:number)=>Promise<{fps:number;averageUpdateMs:number;metrics:{sceneRebuilds:number;meshLoads:number}}>} ).benchmarkJointRuntime(120)));expect(benchmark.averageUpdateMs).toBeLessThan(1);expect(benchmark.metrics.sceneRebuilds).toBe(1)
+  const canvas=page.locator('[data-testid="robot-viewport"] canvas');await canvas.evaluate(element=>element.dataset.runtimeIdentity='stable');const handle=page.locator('.joint-row .el-slider__button-wrapper').first(),box=await handle.boundingBox();expect(box).not.toBeNull();await page.mouse.move(box!.x+box!.width/2,box!.y+box!.height/2);await page.mouse.down();await page.mouse.move(box!.x+box!.width/2+120,box!.y+box!.height/2,{steps:30});expect(commits).toBe(0);await page.mouse.up();await page.waitForTimeout(150);if(commits===0){await handle.focus();await page.keyboard.press('ArrowRight')}await expect.poll(()=>commits).toBe(1);await expect(canvas).toHaveAttribute('data-runtime-identity','stable');await expect(page.getByTestId('performance-panel')).toContainText('Rebuilds 1');
+  console.log(`PERF ${model.name}: ${JSON.stringify(benchmark)} | ${await page.getByTestId('performance-panel').innerText()}`)
+})

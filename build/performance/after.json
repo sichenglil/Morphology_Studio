@@ -1,0 +1,13 @@
+{
+  "stage": "after",
+  "environment": "Microsoft Edge Playwright, 1440x900, local production build",
+  "simple_runtime": {"iterations": 1000, "total_ms": 2.7657, "average_update_ms": 0.002766, "p95_update_ms": 0.0058, "render_requests": 1},
+  "ur5e": {"iterations": 120, "fps": 120.41, "average_update_ms": 0.1283, "p95_update_ms": 0.3, "frame_ms": 9.30, "draw_calls": 33, "triangles": 121789, "scene_rebuilds": 1, "mesh_loads": 7},
+  "hx5_d20_rev2_right": {"iterations": 120, "fps": 120.35, "average_update_ms": 0.0758, "p95_update_ms": 0.2, "frame_ms": 8.82, "draw_calls": 28, "triangles": 236060, "scene_rebuilds": 1, "mesh_loads": 9},
+  "ur5e_hx5": {"iterations": 120, "fps": 120.26, "average_update_ms": 0.1367, "p95_update_ms": 0.3, "frame_ms": 8.61, "draw_calls": 59, "triangles": 357849, "scene_rebuilds": 1, "mesh_loads": 16},
+  "preview_backend_requests": 0,
+  "final_commits": 1,
+  "workspace_saves": 0,
+  "full_validations": 0,
+  "note": "FPS is diagnostic data from this 120 Hz headless browser run, not a portable CI threshold."
+}

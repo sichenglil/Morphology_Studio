@@ -48,6 +48,10 @@ morphology-tool desktop --browser
 工作区可保存为 `workspace.yaml`，记录源模型、根变换、已提交编辑与界面设置；重新打开时会从只读
 源模型重建并重放编辑。导出 URDF 时 Joint/Visual/Collision 的变换与几何缩放来自同一内存模型。
 
+关节滑块使用本地增量 FK：拖动实时更新 Joint Motion，同一帧事件合并渲染，松手后才批量提交。
+使用 `?debugPerformance=1` 打开 FPS、FK、Render、Draw Calls、Triangles、重建及网格加载诊断面板。
+详见 [渲染性能](docs/rendering_performance.md) 与 [运行时架构](docs/joint_runtime_architecture.md)。
+
 源模型不会被界面修改；生成内容写入用户工作区、`build/` 或 `generated/`。
 
 ## 无 ROS 的 Xacro

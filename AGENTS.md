@@ -11,5 +11,9 @@
 - Only locally executed results count as PASS; unavailable capabilities are `NOT_AVAILABLE_LOCAL`.
 - The default processing mode is `assisted`; low-confidence recommendations require confirmation.
 - Every completed feature needs a real local test.
+- Performance work requires GitHub pre and post snapshots in a PRIVATE repository through the independent `github-backup` remote.
+- Snapshot workflows must preserve `origin`, include non-ignored uncommitted/untracked files, scan sensitive filenames, and verify exact local restoration.
+- Never use force push for snapshots or upload tokens, `.env`, keys, certificates, credentials, or secrets.
+- A failed pre snapshot blocks performance edits; a failed post snapshot blocks completion.
 - Desktop mode must work when `sys.stdout` and `sys.stderr` are `None` and must not depend on console logging.
 - Do not use `git reset --hard` or `git clean -fd`.

@@ -10,5 +10,5 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: { proxy: { '/api': 'http://127.0.0.1:8000' } },
-  test: { environment: 'jsdom', globals: true, include: ['tests/*.spec.ts'] },
+  test: { environment: 'jsdom', globals: true, include: ['tests/*.spec.ts', 'tests/performance/*.spec.ts'] },
 })
