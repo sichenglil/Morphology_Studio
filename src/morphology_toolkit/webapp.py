@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import math
 import mimetypes
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -40,6 +41,11 @@ class EditorSession:
     resources: dict[str, Path] = field(default_factory=dict)
     joint_values: dict[str, float] = field(default_factory=dict)
     changes: list[dict[str, Any]] = field(default_factory=list)
+    transform_history: list[dict[str, Any]] = field(default_factory=list)
+    history_cursor: int = 0
+    revision: int = 0
+    root_transform: Transform = field(default_factory=Transform)
+    assembly_joints: set[str] = field(default_factory=set)
 
     def clear(self) -> None:
         self.model = None
@@ -48,6 +54,75 @@ class EditorSession:
         self.resources.clear()
         self.joint_values.clear()
         self.changes.clear()
+        self.transform_history.clear()
+        self.history_cursor = 0
+        self.revision = 0
+        self.root_transform = Transform()
+        self.assembly_joints.clear()
+
+
+def _transform_dict(value: Transform, scale: tuple[float, float, float] | None = None):
+    result: dict[str, Any] = {"xyz": list(value.xyz), "rpy": list(value.rpy)}
+    if scale is not None:
+        result["scale"] = list(scale)
+    return result
+
+
+def _parse_transform(payload: dict[str, Any], allow_scale: bool = False):
+    try:
+        xyz = tuple(float(item) for item in payload["xyz"])
+        rpy = tuple(float(item) for item in payload["rpy"])
+        scale = tuple(float(item) for item in payload.get("scale", (1, 1, 1)))
+    except (KeyError, TypeError, ValueError) as exc:
+        raise ValueError("transform requires numeric xyz and rpy arrays") from exc
+    if len(xyz) != 3 or len(rpy) != 3 or len(scale) != 3:
+        raise ValueError("xyz, rpy and scale must contain three numbers")
+    values = (*xyz, *rpy, *(scale if allow_scale else ()))
+    if not all(math.isfinite(item) for item in values):
+        raise ValueError("transform values must be finite")
+    if allow_scale and any(item <= 0 for item in scale):
+        raise ValueError("scale values must be greater than zero")
+    return Transform(xyz, rpy), scale
+
+
+def _resolve_transform_target(session: EditorSession, target_type: str, entity_id: str):
+    model = session.model
+    if model is None:
+        raise KeyError("No model is loaded")
+    if target_type == "model_instance":
+        return session, "root_transform", None
+    if target_type in {"joint", "assembly_connection"}:
+        joint = model.joints[entity_id]
+        if target_type == "assembly_connection" and entity_id not in session.assembly_joints:
+            raise KeyError("Assembly connection not found")
+        return joint, "origin", None
+    if target_type == "link":
+        matches = [joint for joint in model.joints.values() if joint.child == entity_id]
+        if not matches:
+            raise ValueError("Root links use the model_instance transform")
+        return matches[0], "origin", None
+    if target_type in {"visual", "collision"}:
+        parts = entity_id.rsplit(":", 2)
+        if len(parts) != 3 or parts[1] != target_type:
+            raise KeyError("Invalid geometry entity id")
+        link = model.links[parts[0]]
+        items = link.visuals if target_type == "visual" else link.collisions
+        return items[int(parts[2])], "origin", "geometry"
+    raise KeyError("Unsupported transform target")
+
+
+def _target_state(session: EditorSession, target_type: str, entity_id: str):
+    owner, attribute, geometry = _resolve_transform_target(session, target_type, entity_id)
+    scale = owner.geometry.scale if geometry else None
+    return _transform_dict(getattr(owner, attribute), scale)
+
+
+def _apply_target_state(session: EditorSession, target_type: str, entity_id: str, state):
+    owner, attribute, geometry = _resolve_transform_target(session, target_type, entity_id)
+    transform, scale = _parse_transform(state, geometry is not None)
+    setattr(owner, attribute, transform)
+    if geometry:
+        owner.geometry.scale = scale
 
 
 def _pick_path(kind: str) -> str:
@@ -111,11 +186,14 @@ def _scene_manifest(session: EditorSession) -> dict[str, Any]:
     child_joint = {joint.child: joint for joint in model.joints.values()}
     for link in model.links.values():
         visuals = []
-        render_geometry = link.collisions if link.collisions else link.visuals
-        for visual in render_geometry:
+        render_geometry = link.visuals if link.visuals else link.collisions
+        render_kind = "visual" if link.visuals else "collision"
+        for index, visual in enumerate(render_geometry):
             geometry = visual.geometry
             visuals.append(
                 {
+                    "id": f"{link.name}:{render_kind}:{index}",
+                    "entityType": render_kind,
                     "kind": geometry.kind,
                     "size": list(geometry.size or []),
                     "scale": list(geometry.scale),
@@ -164,6 +242,10 @@ def _scene_manifest(session: EditorSession) -> dict[str, Any]:
         "joints": joints,
         "resources": list(resource_urls.values()),
         "sourceFormat": model.source_format,
+        "revision": session.revision,
+        "rootTransform": _transform_dict(session.root_transform),
+        "assemblyJoints": sorted(session.assembly_joints),
+        "history": {"canUndo": session.history_cursor > 0, "canRedo": session.history_cursor < len(session.transform_history)},
     }
 
 
@@ -270,6 +352,101 @@ def create_app():
     def scene():
         return _scene_manifest(session)
 
+    @app.get("/api/workspaces/current/transform-state")
+    def transform_state():
+        manifest = _scene_manifest(session)
+        return {"revision": session.revision, "rootTransform": manifest.get("rootTransform"), "history": manifest.get("history")}
+
+    @app.post("/api/workspaces/current/transforms/commit")
+    def commit_transform(request: dict[str, Any] = required_body):
+        target_type, entity_id = request.get("targetType"), request.get("entityId")
+        if request.get("expectedRevision") != session.revision:
+            raise HTTPException(409, f"Workspace revision changed to {session.revision}")
+        if not isinstance(target_type, str) or not isinstance(entity_id, str):
+            raise HTTPException(422, "targetType and entityId are required")
+        try:
+            before = _target_state(session, target_type, entity_id)
+            _apply_target_state(session, target_type, entity_id, request.get("transform", {}))
+            after = _target_state(session, target_type, entity_id)
+        except KeyError as exc:
+            raise HTTPException(404, str(exc)) from exc
+        except (ValueError, IndexError) as exc:
+            raise HTTPException(422, str(exc)) from exc
+        session.transform_history[session.history_cursor :] = []
+        session.transform_history.append({"targetType": target_type, "entityId": entity_id, "before": before, "after": after})
+        session.history_cursor += 1
+        session.revision += 1
+        return {"scene": _scene_manifest(session), "transform": after}
+
+    def move_history(direction: int):
+        if direction < 0:
+            if session.history_cursor == 0:
+                raise HTTPException(409, "Nothing to undo")
+            session.history_cursor -= 1
+            edit = session.transform_history[session.history_cursor]
+            state = edit["before"]
+        else:
+            if session.history_cursor >= len(session.transform_history):
+                raise HTTPException(409, "Nothing to redo")
+            edit = session.transform_history[session.history_cursor]
+            session.history_cursor += 1
+            state = edit["after"]
+        _apply_target_state(session, edit["targetType"], edit["entityId"], state)
+        session.revision += 1
+        return _scene_manifest(session)
+
+    @app.post("/api/workspaces/current/history/undo")
+    def undo_transform():
+        return move_history(-1)
+
+    @app.post("/api/workspaces/current/history/redo")
+    def redo_transform():
+        return move_history(1)
+
+    @app.post("/api/workspaces/current/save")
+    def save_workspace(request: dict[str, Any] = required_body):
+        import yaml
+        value = request.get("path")
+        if not isinstance(value, str) or not value:
+            raise HTTPException(422, "path is required")
+        destination = Path(value).expanduser().resolve()
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        document = {
+            "version": 1,
+            "source": session.source.as_posix() if session.source else None,
+            "revision": session.revision,
+            "root_transform": _transform_dict(session.root_transform),
+            "transform_edits": session.transform_history[: session.history_cursor],
+            "settings": request.get("settings", {}),
+        }
+        destination.write_text(yaml.safe_dump(document, sort_keys=False, allow_unicode=True), encoding="utf-8")
+        return {"ok": True, "path": destination.as_posix()}
+
+    @app.post("/api/workspaces/open")
+    def open_workspace(request: dict[str, Any] = required_body):
+        import yaml
+        value = request.get("path")
+        if not isinstance(value, str) or not value:
+            raise HTTPException(422, "path is required")
+        workspace = Path(value).expanduser().resolve()
+        try:
+            document = yaml.safe_load(workspace.read_text(encoding="utf-8")) or {}
+            source = Path(document["source"]).expanduser().resolve()
+            model = _load_model(source, None, {}, {})
+            session.clear()
+            session.model, session.source = model, source
+            root, _ = _parse_transform(document.get("root_transform", {}))
+            session.root_transform = root
+            for edit in document.get("transform_edits", []):
+                _apply_target_state(session, edit["targetType"], edit["entityId"], edit["after"])
+                session.transform_history.append(edit)
+            session.history_cursor = len(session.transform_history)
+            session.revision = int(document.get("revision", session.history_cursor))
+        except Exception as exc:
+            LOGGER.exception("Workspace load failed")
+            raise HTTPException(400, str(exc)) from exc
+        return _scene_manifest(session)
+
     @app.get("/api/models/tree")
     def model_tree():
         manifest = _scene_manifest(session)
@@ -359,6 +536,7 @@ def create_app():
             LOGGER.exception("Assembly failed")
             raise HTTPException(400, str(exc)) from exc
         session.model = result.model
+        session.assembly_joints.add(request["name"])
         session.changes.append({"action": "assembly", "connection": request["name"]})
         LOGGER.info("Assembled child model %s", child.robot_id)
         return _scene_manifest(session)

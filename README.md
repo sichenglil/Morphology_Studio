@@ -33,6 +33,21 @@ morphology-tool desktop --browser
 4. 使用“装配”选择父 Link、子模型根 Link 和 XYZ/RPY，创建通用 fixed 连接。
 5. 运行验证并从“导出”生成 URDF、MJCF、Morphology JSON 或可移植资源包。
 
+### 鼠标变换编辑
+
+视口单击可选择零件；选中项使用青色包围框和原生 Three.js `TransformControls` 操作柄。默认是
+“装配编辑”，内部 Link 被锁定，只允许移动整机根实例、装配连接以及 Visual/Collision；切换到
+“运动学编辑”后，移动非根 Link 会写回其父 Joint 的 `origin`。缩放仅适用于 Visual/Collision。
+
+- `Q` 清除选择，`W/E/R` 移动/旋转/缩放，`X` 切换局部/世界坐标。
+- `F` 或 `Home` 聚焦模型，`Esc` 取消选择，`Ctrl+Z` 撤销，`Ctrl+Y` 或 `Ctrl+Shift+Z` 重做。
+- 可开启平移、5° 旋转和缩放吸附；输入框获得焦点时不会触发快捷键。
+- 拖动只在浏览器内实时预览，松开鼠标后提交一次。服务端通过 workspace revision 拒绝过期提交，
+  并拒绝 `NaN`/`Infinity`。数值 Inspector 与视口共享同一提交和历史链路。
+
+工作区可保存为 `workspace.yaml`，记录源模型、根变换、已提交编辑与界面设置；重新打开时会从只读
+源模型重建并重放编辑。导出 URDF 时 Joint/Visual/Collision 的变换与几何缩放来自同一内存模型。
+
 源模型不会被界面修改；生成内容写入用户工作区、`build/` 或 `generated/`。
 
 ## 无 ROS 的 Xacro

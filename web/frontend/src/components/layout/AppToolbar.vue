@@ -7,6 +7,8 @@
       <el-button @click="$emit('assemble')">装配</el-button>
       <el-button :disabled="!store.scene.robotId" @click="$emit('validate')">验证</el-button>
       <el-button :disabled="!store.scene.robotId" @click="$emit('export')">导出</el-button>
+      <el-button data-testid="undo" :disabled="!store.scene.history.canUndo" @click="store.undo">撤销</el-button>
+      <el-button data-testid="redo" :disabled="!store.scene.history.canRedo" @click="store.redo">重做</el-button>
       <el-segmented v-model="store.mode" :options="modeOptions" size="small" />
     </div>
   </header>

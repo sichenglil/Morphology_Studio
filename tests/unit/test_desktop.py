@@ -98,3 +98,50 @@ def test_generic_ui_assembly_and_export(tmp_path):
     exported = client.post("/api/export", json={"format": "urdf", "output": str(output)})
     assert exported.status_code == 200
     assert output.is_file()
+
+
+def test_transform_commit_revision_undo_and_urdf_writeback(tmp_path):
+    model = tmp_path / "editable.urdf"
+    model.write_text(
+        '<robot name="editable"><link name="base"/><link name="tool">'
+        '<visual><origin xyz="0 0 0"/><geometry><box size="1 1 1"/></geometry></visual>'
+        '</link><joint name="mount" type="fixed"><parent link="base"/><child link="tool"/>'
+        '<origin xyz="0 0 1"/></joint></robot>', encoding="utf-8"
+    )
+    client = TestClient(create_app())
+    scene = client.post("/api/models/load", json={"path": str(model)}).json()
+    response = client.post("/api/workspaces/current/transforms/commit", json={
+        "targetType": "link", "entityId": "tool", "expectedRevision": scene["revision"],
+        "transform": {"xyz": [0.2, 0.3, 1.4], "rpy": [0, 0, 0.5]},
+    })
+    assert response.status_code == 200
+    assert response.json()["scene"]["joints"][0]["origin"]["xyz"] == [0.2, 0.3, 1.4]
+    stale = client.post("/api/workspaces/current/transforms/commit", json={
+        "targetType": "link", "entityId": "tool", "expectedRevision": 0,
+        "transform": {"xyz": [0, 0, 0], "rpy": [0, 0, 0]},
+    })
+    assert stale.status_code == 409
+    assert client.post("/api/workspaces/current/history/undo").json()["joints"][0]["origin"]["xyz"] == [0.0, 0.0, 1.0]
+    assert client.post("/api/workspaces/current/history/redo").json()["joints"][0]["origin"]["xyz"] == [0.2, 0.3, 1.4]
+    output = tmp_path / "written.urdf"
+    assert client.post("/api/export", json={"format": "urdf", "output": str(output)}).status_code == 200
+    assert 'xyz="0.2 0.3 1.4"' in output.read_text(encoding="utf-8")
+
+
+def test_transform_rejects_non_finite_and_saves_workspace(tmp_path):
+    model = tmp_path / "root.urdf"
+    model.write_text('<robot name="root"><link name="base"/></robot>', encoding="utf-8")
+    client = TestClient(create_app())
+    client.post("/api/models/load", json={"path": str(model)})
+    invalid = client.post("/api/workspaces/current/transforms/commit", json={
+        "targetType": "model_instance", "entityId": "root", "expectedRevision": 0,
+        "transform": {"xyz": ["NaN", 0, 0], "rpy": [0, 0, 0]},
+    })
+    assert invalid.status_code == 422
+    workspace = tmp_path / "workspace.yaml"
+    saved = client.post("/api/workspaces/current/save", json={"path": str(workspace), "settings": {"space": "local"}})
+    assert saved.status_code == 200
+    assert "transform_edits:" in workspace.read_text(encoding="utf-8")
+    reopened = client.post("/api/workspaces/open", json={"path": str(workspace)})
+    assert reopened.status_code == 200
+    assert reopened.json()["robotId"] == "root"

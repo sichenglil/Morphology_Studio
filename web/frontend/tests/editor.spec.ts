@@ -9,6 +9,7 @@ import { useEditorStore } from '@/stores/editor'
 
 const sampleScene = {
   robotId: 'sample', rootLinks: ['base'], resources: [],
+  revision:0,rootTransform:{xyz:[0,0,0],rpy:[0,0,0]},assemblyJoints:[],history:{canUndo:false,canRedo:false},
   links: [{id:'base',name:'base',parentJoint:null,visuals:[],collisions:0,inertial:null},{id:'tool',name:'tool',parentJoint:'hinge',visuals:[],collisions:0,inertial:null}],
   joints: [{id:'hinge',name:'hinge',type:'revolute',parent:'base',child:'tool',origin:{xyz:[0,0,1],rpy:[0,0,0]},axis:[0,0,1],limit:{lower:-1,upper:1},value:0}],
 }
