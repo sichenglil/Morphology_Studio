@@ -1,0 +1,1 @@
+<template><div class="log-panel"><code v-for="(line,index) in store.logs" :key="index">{{line}}</code></div></template><script setup lang="ts">import {useEditorStore} from '@/stores/editor';const store=useEditorStore()</script>

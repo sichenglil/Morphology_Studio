@@ -11,3 +11,5 @@
 - Only locally executed results count as PASS; unavailable capabilities are `NOT_AVAILABLE_LOCAL`.
 - The default processing mode is `assisted`; low-confidence recommendations require confirmation.
 - Every completed feature needs a real local test.
+- Desktop mode must work when `sys.stdout` and `sys.stderr` are `None` and must not depend on console logging.
+- Do not use `git reset --hard` or `git clean -fd`.

@@ -1,44 +1,71 @@
-# Morphology Toolkit
+# Morphology Studio
 
-通用机器人模型导入、装配、验证、资源打包和转换工具。核心代码不依赖具体机器人；仓库中的 UR 与 ROBOTIS 模型仅用于本地验收。
+面向 URDF、Xacro 与 MJCF 的通用机器人模型导入、三维检查、装配、验证和转换工具。Python
+`RobotModel` 是唯一事实来源；UR5e 与 HX5 仅用于示例和本地验收。
 
-## Windows 快速开始
+## Windows 开发环境
 
 ```powershell
-Set-Location "G:\Code_Programs\VscodeProjects\Robot\Morphology-Conditioned"
-python -m pip install -e ".[dev]"
+python -m pip install -e ".[dev,desktop]"
+pnpm --dir web/frontend install
+pnpm --dir web/frontend build
+```
+
+启动原生桌面窗口：
+
+```powershell
+python desktop_entry.py
+# 或
+morphology-tool desktop
+```
+
+如果本机缺少 WebView2，可显式使用浏览器回退：
+
+```powershell
+morphology-tool desktop --browser
+```
+
+## 基本工作流
+
+1. 点击“导入模型”，选择 URDF、Xacro 或模型目录；目录候选与低置信度推断会要求确认。
+2. 在左侧模型树选择 Link/Joint，并在中央 Three.js 视口检查真实网格。
+3. 使用底部关节滑块检查通用正向运动学；右侧 Inspector 显示变换、轴向、限位和几何信息。
+4. 使用“装配”选择父 Link、子模型根 Link 和 XYZ/RPY，创建通用 fixed 连接。
+5. 运行验证并从“导出”生成 URDF、MJCF、Morphology JSON 或可移植资源包。
+
+源模型不会被界面修改；生成内容写入用户工作区、`build/` 或 `generated/`。
+
+## 无 ROS 的 Xacro
+
+```powershell
+morphology-tool build-xacro --input model.urdf.xacro --output build/model.urdf --package-map configs/package_maps/local_models.yaml
+```
+
+本机没有 ROS 2、Isaac Sim 或 Isaac Lab。相关状态严格显示为 `NOT_AVAILABLE_LOCAL`，不会生成
+伪造 USD 或远程验收结果。
+
+## 测试
+
+```powershell
 $env:PYTHONPATH = "$PWD\src"
 $env:PYTEST_DISABLE_PLUGIN_AUTOLOAD = "1"
 python -m pytest -q
+python -m ruff check src tests
+pnpm --dir web/frontend type-check
+pnpm --dir web/frontend lint
+pnpm --dir web/frontend test
+pnpm --dir web/frontend build
 ```
 
-本机无需 ROS 2。Python `xacro` 配合 [package map](configs/package_maps/local_models.yaml) 可以展开使用 `$(find package)` 的模型。
-
-## 常用命令
+## 构建 EXE
 
 ```powershell
-python -m morphology_toolkit audit
-python -m morphology_toolkit import --path models/ur_description --package-map configs/package_maps/local_models.yaml --mode assisted
-python -m morphology_toolkit inspect-package-map --package-map configs/package_maps/local_models.yaml
-python -m morphology_toolkit assemble --config configs/examples/ur5e_hx5_right_assembly.yaml --output build/real_models/combined/robot.urdf
-python -m morphology_toolkit validate --input build/real_models/ur5e/ur5e.urdf --package-map configs/package_maps/local_models.yaml
-python -m morphology_toolkit package --input build/real_models/ur5e/ur5e.urdf --output build/packages/ur5e --package-map configs/package_maps/local_models.yaml
-python -m morphology_toolkit convert --input build/packages/ur5e/robot.urdf --format mjcf --output build/mjcf/ur5e.xml
-python -m morphology_toolkit web
+powershell -ExecutionPolicy Bypass -File scripts/build_desktop.ps1
+powershell -ExecutionPolicy Bypass -File scripts/smoke_test_desktop.ps1
+dist\MorphologyStudio\MorphologyStudio.exe
 ```
 
-## 真实模型生成
-
-```powershell
-python scripts/build_xacro_model.py --config configs/examples/ur5e_local.yaml --output build/real_models/ur5e/ur5e.urdf --trace build/reports/ur5e_generation_trace.json --validation-json build/reports/ur5e_validation.json --validation-md build/reports/ur5e_validation.md
-python scripts/build_xacro_model.py --config configs/examples/hx5_d20_rev2_right.yaml --output build/real_models/hx5_d20_rev2_right/hx5_d20_rev2_right.urdf --trace build/reports/hx5_generation_trace.json --validation-json build/reports/hx5_validation.json --validation-md build/reports/hx5_validation.md
-```
-
-## 本机能力边界
-
-- URDF、无 ROS Xacro、装配、验证、打包、MJCF 静态转换：本机已测试。
-- Isaac Sim USD、Isaac Lab、ROS 2 原生索引：`NOT_AVAILABLE_LOCAL`，不会生成假输出。
-- Web 当前是基础扫描/结构接口，不是完整 Three.js 编辑器。
-
-详细说明见 [docs/local_windows_setup.md](docs/local_windows_setup.md) 和 [docs/troubleshooting.md](docs/troubleshooting.md)。第三方信息见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
-
+发布单元是整个 `dist\MorphologyStudio` 目录。日志位于
+`%LOCALAPPDATA%\MorphologyStudio\logs\morphology-studio.log`。更多信息见
+[桌面架构](docs/desktop_architecture.md)、[故障排查](docs/desktop_troubleshooting.md)和
+[界面验收报告](docs/ui_acceptance_report.md)。

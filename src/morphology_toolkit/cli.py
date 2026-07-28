@@ -57,6 +57,7 @@ def build_parser() -> argparse.ArgumentParser:
     for action in ("create", "open"):
         item = ws.add_parser(action); item.add_argument("--path", type=Path, required=True); item.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED)
     imp = sub.add_parser("import"); imp.add_argument("--path", type=Path, required=True); imp.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED); imp.add_argument("--entry"); imp.add_argument("--workspace", type=Path); imp.add_argument("--package-map", type=Path); imp.add_argument("--package-root", type=Path, action="append", default=[])
+    build_xacro = sub.add_parser("build-xacro"); build_xacro.add_argument("--input", type=Path, required=True); build_xacro.add_argument("--output", type=Path, required=True); build_xacro.add_argument("--package-map", type=Path); build_xacro.add_argument("--arg", action="append", default=[]); build_xacro.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED)
     package_map_parser = sub.add_parser("inspect-package-map"); package_map_parser.add_argument("--package-map", type=Path, required=True); package_map_parser.add_argument("--package", action="append", default=[])
     inspect = sub.add_parser("inspect"); inspect.add_argument("--path", type=Path, required=True); inspect.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED)
     validate = sub.add_parser("validate"); validate.add_argument("--input", type=Path, required=True); validate.add_argument("--output", type=Path, default=Path("build/reports")); validate.add_argument("--package-map", type=Path)
@@ -65,6 +66,8 @@ def build_parser() -> argparse.ArgumentParser:
     package = sub.add_parser("package"); package.add_argument("--input", type=Path, required=True); package.add_argument("--output", type=Path, required=True); package.add_argument("--resource-root", type=Path); package.add_argument("--package-map", type=Path)
     convert = sub.add_parser("convert"); convert.add_argument("--input", type=Path, required=True); convert.add_argument("--format", choices=("urdf", "mjcf", "usd"), required=True); convert.add_argument("--output", type=Path, required=True); convert.add_argument("--mode", type=_mode, default=ProcessingMode.ASSISTED); convert.add_argument("--isaac-python", type=Path)
     sub.add_parser("web").add_argument("--port", type=int, default=8000)
+    desktop = sub.add_parser("desktop")
+    desktop.add_argument("--browser", action="store_true")
     return parser
 
 
@@ -92,6 +95,18 @@ def main(argv=None) -> int:
             if args.workspace:
                 ws = Workspace.open(args.workspace); ws.imported_models.append({"source": args.path.as_posix(), "entry": args.entry, "mode": args.mode.value, "package_map": args.package_map.as_posix() if args.package_map else None, "package_roots": [p.as_posix() for p in args.package_root]}); ws.save(); ws.log("model_import", payload)
             print(json.dumps(payload, indent=2)); return 0
+        if args.command == "build-xacro":
+            arguments = {}
+            for item in args.arg:
+                if "=" not in item: raise ValueError(f"Xacro argument must be NAME=VALUE: {item}")
+                key, value = item.split("=", 1); arguments[key] = value
+            package_map = load_package_map(args.package_map, Path.cwd()) if args.package_map else {}
+            expansion = XacroImporter().expand(args.input, arguments, PackageResolver(package_map, mode=args.mode))
+            if expansion.returncode: raise RuntimeError(expansion.stderr)
+            leftovers = [token for token in ("$(find ", "${", "<xacro:") if token in expansion.xml]
+            if leftovers: raise RuntimeError(f"Unresolved Xacro tokens: {leftovers}")
+            args.output.parent.mkdir(parents=True, exist_ok=True); args.output.write_text(expansion.xml, encoding="utf-8")
+            print(args.output); return 0
         if args.command == "inspect":
             model = _load(args.path, args.mode); print(json.dumps(model.to_dict(), indent=2)); return 0
         if args.command == "validate":
@@ -122,6 +137,9 @@ def main(argv=None) -> int:
         if args.command == "web":
             from morphology_toolkit.webapp import run
             run(args.port); return 0
+        if args.command == "desktop":
+            from morphology_toolkit.desktop import main as desktop_main
+            return desktop_main(browser_fallback=args.browser)
     except Exception as exc:
         print(f"ERROR: {exc}", file=sys.stderr); return 2
     return 0
