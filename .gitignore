@@ -4,6 +4,10 @@ __pycache__/
 .pytest_cache/
 .coverage
 .ruff_cache/
+.mypy_cache/
+.pyright/
+.pytype/
+htmlcov/
 .venv/
 build/
 generated/
@@ -24,6 +28,7 @@ playwright-report/
 test-results/
 site/
 *.log
+artifacts/logs/*.log
 .env
 .env.*
 *.pem

@@ -1,5 +1,5 @@
 Morphology Studio test report
-Resource verifier: PASS (40 links, 39 joints, 56 mesh references, 0 missing, 60 GIF frames)
+Resource verifier: PASS (40 links, 39 joints, 56 mesh references, 0 missing, 49 GIF frames)
 Python compileall: PASS
 Ruff: PASS
 Pytest: 43 passed, 0 failed, 1 third-party deprecation warning

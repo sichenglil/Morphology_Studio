@@ -1,6 +1,6 @@
 from pathlib import Path
 
-SCRIPT = Path("scripts/github_snapshot_backup.ps1")
+SCRIPT = Path("scripts/maintenance/github_snapshot_backup.ps1")
 
 
 def test_snapshot_script_has_private_remote_and_restore_guards():

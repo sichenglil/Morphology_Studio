@@ -38,4 +38,7 @@ def config_dir() -> Path:
 
 def logs_dir() -> Path:
     override = os.environ.get("MORPHOLOGY_LOG_DIR")
-    return Path(override).expanduser().resolve() if override else executable_root() / "logs"
+    if override:
+        return Path(override).expanduser().resolve()
+    root = executable_root()
+    return root / "logs" if getattr(sys, "frozen", False) else root / "artifacts" / "logs"

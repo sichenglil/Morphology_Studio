@@ -1,1 +1,0 @@
-<robot name="numeric"><link name="base"><visual><geometry><box size="0.1 0.1 0.1"/></geometry></visual></link><link name="child"><visual><geometry><box size="0.1 0.1 0.1"/></geometry></visual></link><joint name="parent_joint" type="fixed"><parent link="base"/><child link="child"/><origin xyz="0.1 0 0" rpy="0 0 0"/></joint></robot>

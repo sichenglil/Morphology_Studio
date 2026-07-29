@@ -1,3 +1,3 @@
 # Desktop build
 
-Run `powershell -ExecutionPolicy Bypass -File scripts/build_desktop.ps1`. The script builds frontend assets and the PyInstaller directory distribution at `dist/MorphologyStudio/`. Use `scripts/smoke_test_desktop.ps1` to verify health and shutdown behavior. Release archives must exclude models, workspaces, caches, Git data, and secrets.
+Run `project/build_exe.bat release` for the supported clean build, release preparation, smoke test, and intermediate-directory cleanup. The lower-level helper is `scripts/build/build_desktop.ps1`; `scripts/validation/smoke_test_desktop.ps1` verifies health and shutdown behavior.

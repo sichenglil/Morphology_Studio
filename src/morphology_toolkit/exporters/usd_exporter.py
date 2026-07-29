@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 def launch_usd_conversion(input_path: Path, output: Path, isaac_python: Path = None) -> Path:
-    runner = Path(__file__).resolve().parents[3] / "scripts" / "isaac_urdf_to_usd.py"
+    runner = Path(__file__).resolve().parents[3] / "scripts" / "render" / "isaac_urdf_to_usd.py"
     python = Path(isaac_python) if isaac_python else _discover_isaac_python()
     if python is None:
         raise RuntimeError(

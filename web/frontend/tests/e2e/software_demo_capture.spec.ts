@@ -11,17 +11,14 @@ test('capture real robot operation inside Morphology Studio', async ({ page }) =
 
   await page.setViewportSize({ width: 1280, height: 720 })
   await page.goto('/')
-  await expect(page.getByTestId('model-preview')).toBeVisible()
-  await page.getByRole('button', { name: '加载到三维视图', exact: true }).click()
+  const loaded = await page.request.post('/api/model-registry/ur5e_hx5_right/load')
+  expect(loaded.ok()).toBeTruthy()
+  await page.reload()
   await expect(page.getByText('40 Links')).toBeVisible()
   await expect(page.locator('[data-testid="robot-viewport"] canvas')).toHaveCount(1)
   // Mesh resources arrive asynchronously after the scene manifest. Wait for
   // the real arm to be painted before recording the first visible frame.
   await page.waitForTimeout(3_000)
-  await page.locator('[data-testid="model-preview"]').evaluate((element) => {
-    ;(element as HTMLElement).style.display = 'none'
-  })
-
   const capture = async (index: number) => {
     await page.waitForTimeout(55)
     await page.screenshot({ path: path.join(output, `${String(index).padStart(3, '0')}.png`) })

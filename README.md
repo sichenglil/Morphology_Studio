@@ -27,7 +27,7 @@ The animation below records the packaged `ur5e_hx5_right` robot being loaded and
 - The GIF is captured from the real application while loading the model and moving a joint.
 - The application and EXE use the copied resources under `assets/robot_models/ur5e_hx5_right`.
 - Running the application does not require the original Morphology-Conditioned project.
-- Regenerate with `python scripts/generate_software_demo_gif.py`.
+- Regenerate with `python scripts/render/generate_software_demo_gif.py`.
 
 <a id="contents"></a>
 <h2 align="center">Contents</h2>
@@ -98,13 +98,13 @@ git clone https://github.com/sichenglil/Morphology_Studio.git
 Set-Location Morphology_Studio
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-./scripts/setup_dev.ps1
-python desktop_entry.py
+./scripts/maintenance/setup_dev.ps1
+python project/desktop_entry.py
 ```
 
-Open `assets/robot_models/ur5e_hx5_right/robot.urdf`. Browser development uses `./scripts/run_web.ps1` plus `pnpm --dir web/frontend dev` in a second terminal.
+Open `assets/robot_models/ur5e_hx5_right/robot.urdf`. Browser development uses `./scripts/maintenance/run_web.ps1` plus `pnpm --dir web/frontend dev` in a second terminal.
 
-Run the complete local verification suite with `./scripts/test_all.ps1`.
+Run the complete local verification suite with `./scripts/validation/test_all.ps1`.
 
 <a id="five-minute-workflow"></a>
 <h2 align="center">Five-minute workflow</h2>
@@ -132,14 +132,14 @@ The Vue/Three.js editor talks to a local FastAPI service. Importers populate one
 | Path | Purpose |
 |:--:|:--:|
 | `.github/` | CI, release automation, issue and pull-request templates |
-| `packaging/windows/` | PyInstaller Windows packaging configuration |
+| `scripts/build/packaging/` | PyInstaller Windows packaging configuration |
 | `src/morphology_toolkit/` | Robot-agnostic Python backend and packaged frontend assets |
 | `web/frontend/` | Sole editable Vue 3 and Three.js frontend |
 | `tests/` | Python unit, integration, documentation, and local acceptance tests |
 | `assets/robot_models/ur5e_hx5_right/` | Packaged combined robot model |
 | `docs/` | User, architecture, maintainer, audit, and visual documentation |
 | `scripts/` | Stable entry scripts plus grouped development and migration helpers |
-| `configs/` | Optional package maps and acceptance configuration |
+| `config/` | Application, model registry, and package-map configuration |
 
 Generated output belongs in ignored `build/`, `dist/`, `generated/`, or a user workspace. See [repository_structure.md](docs/repository_structure.md).
 
@@ -152,5 +152,5 @@ Generated output belongs in ignored `build/`, `dist/`, `generated/`, or a user w
 
 <h2 align="center">Contributing, security, and license</h2>
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md), report vulnerabilities privately through [SECURITY.md](SECURITY.md), and use the provided issue templates without attaching proprietary models. Morphology Studio is licensed under [Apache-2.0](LICENSE); dependency attribution is recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Read [CONTRIBUTING.md](docs/governance/CONTRIBUTING.md), report vulnerabilities privately through [SECURITY.md](docs/governance/SECURITY.md), and use the provided issue templates without attaching proprietary models. Morphology Studio is licensed under [Apache-2.0](LICENSE); dependency attribution is recorded in [THIRD_PARTY_NOTICES.md](project/THIRD_PARTY_NOTICES.md).
 

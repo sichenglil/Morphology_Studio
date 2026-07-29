@@ -1,15 +1,15 @@
 Morphology Studio build report
-Build time: 2026-07-29T21:38:08+08:00
+Build time: 2026-07-29T23:17:14+08:00
 Operating system: Windows-10-10.0.22631-SP0
 Python: 3.9.13
 PyInstaller: 6.21.0 (isolated build/packaging-venv)
-Command: python -m PyInstaller packaging\MorphologyStudio.spec --noconfirm --clean
+Command: python -m PyInstaller scripts\build\packaging\MorphologyStudio.spec --noconfirm --clean
 Mode: release, windowed, onedir
 EXE: G:\Code_Programs\VscodeProjects\Robot\Morphology_Studio\release\MorphologyStudio\MorphologyStudio.exe
-EXE size: 5100204 bytes
-Release size: 56241850 bytes
+EXE size: 5100258 bytes
+Release size: 60978909 bytes
 Packaged models: 1 (ur5e_hx5_right)
-Generated GIFs: 1 (512x512, 60 frames, 20 FPS)
+Generated GIFs: 1 (512x512, 49 frames)
 Tests: Python 43 passed; frontend 20 passed; Playwright 13 passed; EXE smoke passed
 Known warnings: one xacro deprecation warning; Vite reports a large frontend chunk.
 Initial build issue: global Anaconda pathlib backport conflicted with PyInstaller; solved with an isolated venv.

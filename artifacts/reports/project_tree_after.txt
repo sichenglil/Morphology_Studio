@@ -16,9 +16,7 @@ Morphology_Studio
 |-- .pytest_cache
 |   |-- v
 |   |   `-- cache
-|   |       |-- lastfailed
-|   |       |-- nodeids
-|   |       `-- stepwise
+|   |       `-- nodeids
 |   |-- .gitignore
 |   |-- CACHEDIR.TAG
 |   `-- README.md
@@ -26,57 +24,63 @@ Morphology_Studio
 |   `-- dep5
 |-- .ruff_cache
 |   |-- 0.16.0
-|   |   |-- 1037787765541318828
+|   |   |-- 11989837338764427772
 |   |   |-- 12143153529119594144
-|   |   |-- 12379167059561846053
+|   |   |-- 13298721485815752785
 |   |   |-- 13957425210405774341
 |   |   |-- 14887734508638777271
 |   |   |-- 18171832296093402217
-|   |   |-- 335856185758011255
-|   |   `-- 6884232318968957854
+|   |   |-- 6884232318968957854
+|   |   |-- 8719506545531964648
+|   |   `-- 8874785635923496319
 |   |-- .gitignore
 |   `-- CACHEDIR.TAG
 |-- artifacts
-|   `-- reports
-|       |-- screenshots
-|       |   |-- tutorial
-|       |   |   |-- 01-launch.png
-|       |   |   |-- 02-create-workspace.png
-|       |   |   |-- 03-import-model.png
-|       |   |   |-- 04-select-entry.png
-|       |   |   |-- 05-model-loaded.png
-|       |   |   |-- 06-control-joint.png
-|       |   |   |-- 07-transform-object.png
-|       |   |   |-- 08-validate.png
-|       |   |   |-- 09-choose-output.png
-|       |   |   `-- 10-export-complete.png
-|       |   |-- assembly-dialog.png
-|       |   |-- assembly-editor.png
-|       |   |-- export-dialog.png
-|       |   |-- hero-editor.png
-|       |   |-- import-dialog.png
-|       |   |-- import-wizard.png
-|       |   |-- joint-control-numeric.png
-|       |   |-- joint-control-slider.png
-|       |   |-- joint-control.png
-|       |   |-- link-selected.png
-|       |   |-- model-imported.png
-|       |   |-- model-loaded.png
-|       |   |-- model-tree.png
-|       |   |-- output-folder-picker.png
-|       |   |-- resources-panel.png
-|       |   |-- rotate-gizmo.png
-|       |   |-- transform-gizmo.png
-|       |   |-- transform-inspector.png
-|       |   |-- validation-panel.png
-|       |   |-- validation-results.png
-|       |   |-- welcome-screen.png
-|       |   `-- workspace-overview.png
-|       |-- 临时 启动目录
-|       |-- build_report.txt
-|       |-- project_tree_after.txt
-|       |-- project_tree_before.txt
-|       `-- test_report.txt
+|   |-- logs
+|   |   `-- MorphologyStudio.log
+|   |-- reports
+|   |   |-- 临时 启动目录
+|   |   |-- build_report.txt
+|   |   |-- project_tree_after.txt
+|   |   |-- project_tree_before.txt
+|   |   `-- test_report.txt
+|   |-- screenshots
+|   |   `-- acceptance
+|   |       |-- tutorial
+|   |       |   |-- 01-launch.png
+|   |       |   |-- 02-create-workspace.png
+|   |       |   |-- 03-import-model.png
+|   |       |   |-- 04-select-entry.png
+|   |       |   |-- 05-model-loaded.png
+|   |       |   |-- 06-control-joint.png
+|   |       |   |-- 07-transform-object.png
+|   |       |   |-- 08-validate.png
+|   |       |   |-- 09-choose-output.png
+|   |       |   `-- 10-export-complete.png
+|   |       |-- assembly-dialog.png
+|   |       |-- assembly-editor.png
+|   |       |-- export-dialog.png
+|   |       |-- hero-editor.png
+|   |       |-- import-dialog.png
+|   |       |-- import-wizard.png
+|   |       |-- joint-control-numeric.png
+|   |       |-- joint-control-slider.png
+|   |       |-- joint-control.png
+|   |       |-- link-selected.png
+|   |       |-- model-imported.png
+|   |       |-- model-loaded.png
+|   |       |-- model-tree.png
+|   |       |-- output-folder-picker.png
+|   |       |-- resources-panel.png
+|   |       |-- rotate-gizmo.png
+|   |       |-- transform-gizmo.png
+|   |       |-- transform-inspector.png
+|   |       |-- validation-panel.png
+|   |       |-- validation-results.png
+|   |       |-- welcome-screen.png
+|   |       `-- workspace-overview.png
+|   `-- temporary
+|       `-- 中文 启动目录
 |-- assets
 |   |-- placeholders
 |   |   `-- model-preview.png
@@ -84,7 +88,9 @@ Morphology_Studio
 |   |   `-- ur5e_hx5_right
 |   |       |-- robot.cache.json
 |   |       |-- robot.gif
-|   |       `-- robot.png
+|   |       |-- robot.png
+|   |       |-- robot_turntable.cache.json
+|   |       `-- robot_turntable.gif
 |   `-- robot_models
 |       `-- ur5e_hx5_right
 |           |-- meshes
@@ -114,10 +120,10 @@ Morphology_Studio
 |           |-- textures
 |           `-- robot.urdf
 |-- config
+|   |-- models
+|   |   `-- package_maps
+|   |       `-- local_models.yaml
 |   `-- robot_models.json
-|-- configs
-|   `-- package_maps
-|       `-- local_models.yaml
 |-- docs
 |   |-- audits
 |   |   |-- code_quality_audit.md
@@ -126,13 +132,28 @@ Morphology_Studio
 |   |   |-- open_source_readiness.md
 |   |   |-- project_structure_audit.md
 |   |   `-- root_directory_audit.md
+|   |-- development
+|   |   `-- CHANGELOG.md
+|   |-- governance
+|   |   |-- CODE_OF_CONDUCT.md
+|   |   |-- CONTRIBUTING.md
+|   |   |-- GOVERNANCE.md
+|   |   |-- SECURITY.md
+|   |   `-- SUPPORT.md
 |   |-- maintainers
 |   |   `-- migration.md
+|   |-- packaging
+|   |   `-- BUILD_AND_RELEASE.md
+|   |-- reports
+|   |   |-- BUILD_REPORT.md
+|   |   |-- CLEANUP_REPORT.md
+|   |   |-- PROJECT_STRUCTURE_LEGACY.md
+|   |   |-- PROJECT_STRUCTURE_REPORT.md
+|   |   `-- URDF_MODEL_REPORT.md
+|   |-- user
 |   |-- application_menus.md
 |   |-- architecture.md
 |   |-- assembly.md
-|   |-- BUILD_AND_RELEASE.md
-|   |-- CLEANUP_REPORT.md
 |   |-- dependencies.md
 |   |-- desktop_architecture.md
 |   |-- desktop_build.md
@@ -163,7 +184,6 @@ Morphology_Studio
 |   |-- performance_troubleshooting.md
 |   |-- portable_package.md
 |   |-- pose_management.md
-|   |-- PROJECT_STRUCTURE.md
 |   |-- reference_alignment_matrix.md
 |   |-- reference_product_audit.md
 |   |-- releasing.md
@@ -174,7 +194,6 @@ Morphology_Studio
 |   |-- troubleshooting.md
 |   |-- ui_acceptance_report.md
 |   |-- ui_architecture.md
-|   |-- URDF_MODEL_REPORT.md
 |   |-- user_guide.md
 |   |-- validation.md
 |   |-- workspaces.md
@@ -182,97 +201,105 @@ Morphology_Studio
 |-- LICENSES
 |   |-- Apache-2.0.txt
 |   `-- MIT.txt
-|-- logs
-|   `-- MorphologyStudio.log
-|-- packaging
-|   |-- windows
-|   `-- MorphologyStudio.spec
+|-- project
+|   |-- build_exe.bat
+|   |-- desktop_entry.py
+|   |-- requirements-dev.txt
+|   |-- requirements.txt
+|   |-- run_app.bat
+|   `-- THIRD_PARTY_NOTICES.md
 |-- scripts
-|   |-- dev
+|   |-- maintenance
+|   |   |-- generate_delivery_reports.py
+|   |   |-- github_snapshot_backup.ps1
+|   |   |-- run_desktop.ps1
+|   |   |-- run_web.ps1
+|   |   |-- run_web.sh
+|   |   |-- send_completion_email.py
+|   |   |-- setup_dev.ps1
+|   |   `-- setup_dev.sh
+|   |-- render
 |   |   |-- build_xacro_model.py
+|   |   |-- generate_software_demo_gif.py
+|   |   |-- generate_urdf_gifs.py
 |   |   |-- isaac_urdf_to_usd.py
-|   |   |-- run_step2urdf.py
-|   |   |-- validate_mjcf.py
-|   |   `-- xml_fidelity_report.py
-|   |-- migrations
-|   |   `-- build_windows_app.ps1
-|   |-- build_desktop.ps1
-|   |-- check_docs_links.py
-|   |-- check_readme_format.py
-|   |-- check_repository_health.py
-|   |-- generate_delivery_reports.py
-|   |-- generate_urdf_gifs.py
-|   |-- github_snapshot_backup.ps1
-|   |-- prepare_release.py
-|   |-- run_desktop.ps1
-|   |-- run_web.ps1
-|   |-- run_web.sh
-|   |-- send_completion_email.py
-|   |-- setup_dev.ps1
-|   |-- setup_dev.sh
-|   |-- smoke_release.py
-|   |-- smoke_test_desktop.ps1
-|   |-- test_all.ps1
-|   |-- test_all.sh
-|   `-- verify_resources.py
+|   |   `-- run_step2urdf.py
+|   `-- validation
+|       |-- check_docs_links.py
+|       |-- check_readme_format.py
+|       |-- check_repository_health.py
+|       |-- smoke_release.py
+|       |-- smoke_test_desktop.ps1
+|       |-- test_all.ps1
+|       |-- test_all.sh
+|       |-- validate_mjcf.py
+|       |-- verify_resources.py
+|       `-- xml_fidelity_report.py
 |-- src
-|   `-- morphology_toolkit
-|       |-- assembly
-|       |   |-- __init__.py
-|       |   `-- engine.py
-|       |-- conversion
-|       |   |-- __init__.py
-|       |   `-- mesh.py
-|       |-- core
-|       |   |-- __init__.py
-|       |   `-- model.py
-|       |-- exporters
-|       |   |-- __init__.py
-|       |   |-- mjcf_exporter.py
-|       |   |-- portable_package_exporter.py
-|       |   |-- urdf_exporter.py
-|       |   `-- usd_exporter.py
-|       |-- importers
-|       |   |-- __init__.py
-|       |   |-- base.py
-|       |   |-- directory_importer.py
-|       |   |-- registry.py
-|       |   |-- urdf_importer.py
-|       |   `-- xacro_importer.py
-|       |-- morphology
-|       |   |-- __init__.py
-|       |   `-- metadata.py
-|       |-- reports
-|       |   |-- __init__.py
-|       |   `-- audit.py
-|       |-- resources
-|       |   |-- __init__.py
-|       |   |-- package_map.py
-|       |   |-- package_resolver.py
-|       |   `-- resolver.py
-|       |-- services
-|       |   |-- __init__.py
-|       |   `-- model_registry.py
-|       |-- static
-|       |   |-- frontend
-|       |   |   |-- assets
-|       |   |   |   |-- index-BO3JkjZF.css
-|       |   |   |   `-- index-Bt1GniLE.js
-|       |   |   `-- index.html
-|       |   `-- index.html
-|       |-- validation
-|       |   |-- __init__.py
-|       |   `-- validator.py
-|       |-- workspace
-|       |   |-- __init__.py
-|       |   `-- manager.py
-|       |-- __init__.py
-|       |-- __main__.py
-|       |-- cli.py
-|       |-- desktop.py
-|       |-- logging_config.py
-|       |-- paths.py
-|       `-- webapp.py
+|   |-- morphology_toolkit
+|   |   |-- assembly
+|   |   |   |-- __init__.py
+|   |   |   `-- engine.py
+|   |   |-- conversion
+|   |   |   |-- __init__.py
+|   |   |   `-- mesh.py
+|   |   |-- core
+|   |   |   |-- __init__.py
+|   |   |   `-- model.py
+|   |   |-- exporters
+|   |   |   |-- __init__.py
+|   |   |   |-- mjcf_exporter.py
+|   |   |   |-- portable_package_exporter.py
+|   |   |   |-- urdf_exporter.py
+|   |   |   `-- usd_exporter.py
+|   |   |-- importers
+|   |   |   |-- __init__.py
+|   |   |   |-- base.py
+|   |   |   |-- directory_importer.py
+|   |   |   |-- registry.py
+|   |   |   |-- urdf_importer.py
+|   |   |   `-- xacro_importer.py
+|   |   |-- morphology
+|   |   |   |-- __init__.py
+|   |   |   `-- metadata.py
+|   |   |-- reports
+|   |   |   |-- __init__.py
+|   |   |   `-- audit.py
+|   |   |-- resources
+|   |   |   |-- __init__.py
+|   |   |   |-- package_map.py
+|   |   |   |-- package_resolver.py
+|   |   |   `-- resolver.py
+|   |   |-- services
+|   |   |   |-- __init__.py
+|   |   |   `-- model_registry.py
+|   |   |-- static
+|   |   |   |-- frontend
+|   |   |   |   |-- assets
+|   |   |   |   |   |-- index-Cju1vS5L.css
+|   |   |   |   |   `-- index-D1bqtBvR.js
+|   |   |   |   `-- index.html
+|   |   |   `-- index.html
+|   |   |-- validation
+|   |   |   |-- __init__.py
+|   |   |   `-- validator.py
+|   |   |-- workspace
+|   |   |   |-- __init__.py
+|   |   |   `-- manager.py
+|   |   |-- __init__.py
+|   |   |-- __main__.py
+|   |   |-- cli.py
+|   |   |-- desktop.py
+|   |   |-- logging_config.py
+|   |   |-- paths.py
+|   |   `-- webapp.py
+|   `-- morphology_toolkit.egg-info
+|       |-- dependency_links.txt
+|       |-- entry_points.txt
+|       |-- PKG-INFO
+|       |-- requires.txt
+|       |-- SOURCES.txt
+|       `-- top_level.txt
 |-- tests
 |   |-- docs
 |   |   |-- test_readme_commands.py
@@ -368,7 +395,8 @@ Morphology_Studio
 |       |   |   |-- editable_joint_values.spec.ts
 |       |   |   |-- editor.spec.ts
 |       |   |   |-- menu_numeric.spec.ts
-|       |   |   `-- scroll_panels.spec.ts
+|       |   |   |-- scroll_panels.spec.ts
+|       |   |   `-- software_demo_capture.spec.ts
 |       |   |-- performance
 |       |   |   `-- joint_runtime.spec.ts
 |       |   |-- editor.spec.ts
@@ -387,22 +415,10 @@ Morphology_Studio
 |-- .gitattributes
 |-- .gitignore
 |-- AGENTS.md
-|-- build_exe.bat
-|-- CHANGELOG.md
 |-- CITATION.cff
-|-- CODE_OF_CONDUCT.md
-|-- CONTRIBUTING.md
-|-- desktop_entry.py
-|-- GOVERNANCE.md
 |-- LICENSE
 |-- mkdocs.yml
 |-- pnpm-workspace.yaml
 |-- pyproject.toml
 |-- README.md
-|-- README.zh-CN.md
-|-- requirements-dev.txt
-|-- requirements.txt
-|-- run_app.bat
-|-- SECURITY.md
-|-- SUPPORT.md
-`-- THIRD_PARTY_NOTICES.md
+`-- README.zh-CN.md

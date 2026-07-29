@@ -12,8 +12,8 @@
 - Treat externally selected `ur_description` and `robotis_hand` source trees as read-only.
 - Core modules must remain robot-agnostic; robot-specific names belong only in tests, examples, and acceptance configurations.
 - Use `pathlib.Path` for filesystem paths and emit portable forward-slash resource URIs.
-- Generated files belong in `build/`, `generated/`, or a user workspace.
-- Run tests with `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1` on this workstation because an unrelated global pytest plugin stalls collection.
+- Generated reports and temporary files belong in `artifacts/`; `build/` and `dist/` are disposable packaging directories, while `release/` is the only deliverable tree.
+- Run tests with `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1` on this workstation because an unrelated global pytest plugin stalls collection. Use `scripts/validation/test_all.ps1` for the complete suite and `project/build_exe.bat release` for a verified clean release build.
 - Never push without an explicit user request.
 - This is a generic robot model tool; UR5e and HX5 are examples and acceptance data only.
 - This workstation has no ROS 2, Isaac Sim, or Isaac Lab. Do not create remote acceptance flows.

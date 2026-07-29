@@ -3,21 +3,3 @@ site_description: Generic robot model desktop toolkit
 repo_url: https://github.com/sichenglil/Morphology_Studio
 theme: readthedocs
 strict: true
-nav:
-  - Home: index.md
-  - Getting Started: getting_started.md
-  - User Guide: user_guide.md
-  - Visual Tutorial: visual_tutorial.md
-  - Import Models: import_models.md
-  - Joint Control: joint_control.md
-  - Transform Editing: transform_editing.md
-  - Assembly: assembly.md
-  - Validation: validation.md
-  - Export: export.md
-  - Workspaces: workspaces.md
-  - Desktop Build: desktop_build.md
-  - Architecture: architecture.md
-  - Repository Structure: repository_structure.md
-  - Development: maintainer_guide.md
-  - Releasing: releasing.md
-  - Troubleshooting: troubleshooting.md

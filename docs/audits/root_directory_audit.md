@@ -10,6 +10,6 @@ Actions:
 - **MOVE:** deprecated Windows build forwarder to `scripts/migrations/`.
 - **DELETE_AFTER_TEST:** duplicate `scripts/desktop_entry.py`; the root compatibility entry and package entry remain.
 - **KEEP:** GitHub-standard governance, security, citation, license, changelog, and README files.
-- **KEEP:** `desktop_entry.py`, because it is documented and delegates all implementation to the package.
+- **MOVED:** `desktop_entry.py` to `project/desktop_entry.py`; it remains a thin documented delegate to the package entry point.
 
 Ignored `.coverage`, caches, `build`, `dist`, and `site` are local products rather than repository content. PyInstaller, documentation, CI, and script references were updated before verification.

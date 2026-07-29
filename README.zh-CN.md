@@ -27,7 +27,7 @@
 - GIF 来自真实软件界面，展示模型加载及机械臂关节操作过程。
 - 最终应用和 EXE 使用 `assets/robot_models/ur5e_hx5_right` 中的项目内部副本。
 - 运行程序不需要原始 Morphology-Conditioned 项目。
-- 使用 `python scripts/generate_software_demo_gif.py` 可重新录制。
+- 使用 `python scripts/render/generate_software_demo_gif.py` 可重新录制。
 
 <a id="contents"></a><h2 align="center">目录</h2>
 <p align="center"><a href="#overview">项目概览</a> · <a href="#features">功能模块</a> · <a href="#formats">格式</a> · <a href="#requirements">运行环境</a> · <a href="#quick-start">快速开始</a> · <a href="#gallery">截图</a> · <a href="#architecture">架构</a> · <a href="#roadmap">路线图</a></p>
@@ -89,13 +89,13 @@ git clone https://github.com/sichenglil/Morphology_Studio.git
 Set-Location Morphology_Studio
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-./scripts/setup_dev.ps1
-python desktop_entry.py
+./scripts/maintenance/setup_dev.ps1
+python project/desktop_entry.py
 ```
 
-首次导入 `assets/robot_models/ur5e_hx5_right/robot.urdf`。浏览器开发模式运行 `./scripts/run_web.ps1`，并在第二个终端运行 `pnpm --dir web/frontend dev`。
+首次导入 `assets/robot_models/ur5e_hx5_right/robot.urdf`。浏览器开发模式运行 `./scripts/maintenance/run_web.ps1`，并在第二个终端运行 `pnpm --dir web/frontend dev`。
 
-使用 `./scripts/test_all.ps1` 运行完整本地验收。
+使用 `./scripts/validation/test_all.ps1` 运行完整本地验收。
 
 <a id="five-minute-workflow"></a><h2 align="center">五分钟使用流程</h2>
 
@@ -119,14 +119,14 @@ Vue/Three.js 编辑器通过本地 HTTP 调用 FastAPI。导入器写入唯一�
 | 路径 | 用途 |
 |:--:|:--:|
 | `.github/` | CI、发布流程、Issue 与 PR 模板 |
-| `packaging/windows/` | Windows PyInstaller 打包配置 |
+| `scripts/build/packaging/` | Windows PyInstaller 打包配置 |
 | `src/morphology_toolkit/` | 通用 Python 后端和发行版前端资源 |
 | `web/frontend/` | 唯一可编辑 Vue 3 / Three.js 前端 |
 | `tests/` | Python 单元、集成、文档和本地验收测试 |
 | `assets/robot_models/ur5e_hx5_right/` | 内置组合机械臂模型 |
 | `docs/` | 用户、架构、维护、审计和视觉文档 |
 | `scripts/` | 稳定入口以及分组后的开发和迁移工具 |
-| `configs/` | 可选 package map 与验收配置 |
+| `config/` | 应用、模型清单与 package map 配置 |
 
 生成内容只能进入已忽略的 `build/`、`dist/`、`generated/` 或用户工作区。详细结构见 [repository_structure.md](docs/repository_structure.md)。
 
@@ -138,5 +138,5 @@ Vue/Three.js 编辑器通过本地 HTTP 调用 FastAPI。导入器写入唯一�
 
 <h2 align="center">贡献、安全与许可证</h2>
 
-贡献前阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，漏洞按 [SECURITY.md](SECURITY.md) 私下报告，提交 Issue 时不要附带专有模型。本项目采用 [Apache-2.0](LICENSE)，依赖与致谢见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+贡献前阅读 [CONTRIBUTING.md](docs/governance/CONTRIBUTING.md)，漏洞按 [SECURITY.md](docs/governance/SECURITY.md) 私下报告，提交 Issue 时不要附带专有模型。本项目采用 [Apache-2.0](LICENSE)，依赖与致谢见 [THIRD_PARTY_NOTICES.md](project/THIRD_PARTY_NOTICES.md)。
 

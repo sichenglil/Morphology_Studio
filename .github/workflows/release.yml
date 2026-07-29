@@ -17,8 +17,8 @@ jobs:
       - run: python -m pip install -e '.[dev,desktop,docs]'
       - run: python -m pip install pyinstaller
       - run: pnpm --dir web/frontend install --frozen-lockfile
-      - run: powershell -ExecutionPolicy Bypass -File scripts/test_all.ps1
-      - run: powershell -ExecutionPolicy Bypass -File scripts/build_desktop.ps1
+      - run: powershell -ExecutionPolicy Bypass -File scripts/validation/test_all.ps1
+      - run: powershell -ExecutionPolicy Bypass -File scripts/build/build_desktop.ps1
       - run: Compress-Archive -Path dist/MorphologyStudio -DestinationPath dist/MorphologyStudio-windows.zip
       - run: (Get-FileHash dist/MorphologyStudio-windows.zip -Algorithm SHA256).Hash + '  MorphologyStudio-windows.zip' | Set-Content dist/SHA256SUMS.txt
       - uses: softprops/action-gh-release@v2

@@ -9,4 +9,4 @@ License: Apache-2.0
 Files: web/frontend/pnpm-lock.yaml src/morphology_toolkit/static/frontend/* src/morphology_toolkit/static/frontend/assets/*
 Copyright: respective upstream authors
 License: Apache-2.0 and MIT
-Comment: Generated lockfile and bundled output contain metadata or compiled forms of dependencies listed in THIRD_PARTY_NOTICES.md.
+Comment: Generated lockfile and bundled output contain metadata or compiled forms of dependencies listed in project/THIRD_PARTY_NOTICES.md.

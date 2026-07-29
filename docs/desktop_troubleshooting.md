@@ -12,7 +12,7 @@ handler (5 MB, five backups) and add a stream handler only when a writable strea
 Logs are stored at `%LOCALAPPDATA%\MorphologyStudio\logs\morphology-studio.log`, or
 `~/.morphology_studio/logs/` when `LOCALAPPDATA` is unavailable.
 
-Run from source with `python desktop_entry.py`, or use `morphology-tool desktop`. Rebuild with
-`powershell -ExecutionPolicy Bypass -File scripts/build_desktop.ps1`. If WebView2/pywebview is missing,
+Run from source with `python project/desktop_entry.py`, or use `morphology-tool desktop`. Rebuild with
+`powershell -ExecutionPolicy Bypass -File scripts/build/build_desktop.ps1`. If WebView2/pywebview is missing,
 the program displays an error dialog containing the log path; `morphology-tool desktop --browser`
 is the explicit browser fallback.
