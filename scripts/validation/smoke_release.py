@@ -39,14 +39,20 @@ def main() -> int:
         registry = json.loads(fetch("/api/model-registry"))
         gif = fetch("/app-assets/previews/ur5e_hx5_right/robot.gif")
         model = registry["models"][0]
-        print(json.dumps({
-            "health": health,
-            "model_count": len(registry["models"]),
-            "model_id": model["id"],
-            "available": model["available"],
-            "gif_bytes": len(gif),
-            "working_directory": str(WORKING_DIRECTORY),
-        }, ensure_ascii=False, indent=2))
+        print(
+            json.dumps(
+                {
+                    "health": health,
+                    "model_count": len(registry["models"]),
+                    "model_id": model["id"],
+                    "available": model["available"],
+                    "gif_bytes": len(gif),
+                    "working_directory": str(WORKING_DIRECTORY),
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
     finally:
         process.terminate()
         try:

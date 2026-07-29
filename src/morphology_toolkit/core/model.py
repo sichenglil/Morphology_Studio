@@ -73,6 +73,7 @@ class JointModel:
     limit: Dict[str, float] = field(default_factory=dict)
     mimic: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
+    dynamics: Dict[str, float] = field(default_factory=dict)
 
 
 @dataclass

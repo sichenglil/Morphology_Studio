@@ -17,6 +17,8 @@ def test_desktop_port_and_routes():
         "/",
         "/api/health",
         "/api/status",
+        "/api/step-adapter/status",
+        "/api/step-adapter/launch",
         "/api/models/analyze",
         "/api/models/load",
         "/api/models/tree",
@@ -39,7 +41,9 @@ def test_logging_survives_missing_standard_streams(monkeypatch, tmp_path):
     monkeypatch.setattr(sys, "stderr", None)
     path = configure_logging()
     logging.getLogger("test").warning("windowed mode works")
-    assert path == Path(__file__).resolve().parents[2] / "artifacts" / "logs" / "MorphologyStudio.log"
+    assert (
+        path == Path(__file__).resolve().parents[2] / "artifacts" / "logs" / "MorphologyStudio.log"
+    )
     assert "windowed mode works" in path.read_text(encoding="utf-8")
 
 

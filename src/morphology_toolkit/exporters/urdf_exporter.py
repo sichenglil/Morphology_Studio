@@ -69,6 +69,10 @@ class UrdfExporter:
                 ET.SubElement(
                     node, "limit", **{key: str(value) for key, value in joint.limit.items()}
                 )
+            if joint.dynamics:
+                ET.SubElement(
+                    node, "dynamics", **{key: str(value) for key, value in joint.dynamics.items()}
+                )
             if joint.mimic:
                 ET.SubElement(node, "mimic", joint=joint.mimic)
         for raw in model.extension_elements:

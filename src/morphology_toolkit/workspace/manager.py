@@ -18,6 +18,7 @@ class Workspace:
     imported_models: List[Dict[str, Any]] = field(default_factory=list)
     assemblies: List[Dict[str, Any]] = field(default_factory=list)
     settings: Dict[str, Any] = field(default_factory=dict)
+    schema_version: int = 1
 
     @classmethod
     def create(cls, root: Path, mode: ProcessingMode = ProcessingMode.ASSISTED) -> "Workspace":
@@ -42,15 +43,17 @@ class Workspace:
         root = Path(root).resolve()
         data = yaml.safe_load((root / "workspace.yaml").read_text(encoding="utf-8")) or {}
         return cls(
-            root,
-            ProcessingMode(data.get("mode", "assisted")),
-            data.get("imported_models", []),
-            data.get("assemblies", []),
-            data.get("settings", {}),
+            root=root,
+            mode=ProcessingMode(data.get("mode", "assisted")),
+            imported_models=data.get("imported_models", []),
+            assemblies=data.get("assemblies", []),
+            settings=data.get("settings", {}),
+            schema_version=int(data.get("schema_version", 1)),
         )
 
     def save(self) -> None:
         payload = {
+            "schema_version": self.schema_version,
             "mode": self.mode.value,
             "imported_models": self.imported_models,
             "assemblies": self.assemblies,

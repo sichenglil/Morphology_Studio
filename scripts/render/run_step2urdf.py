@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import argparse
-import subprocess
 from pathlib import Path
+
+from morphology_toolkit.step import Step2UrdfAdapter
 
 
 def main() -> int:
@@ -11,13 +12,16 @@ def main() -> int:
     parser.add_argument("--install", action="store_true")
     args = parser.parse_args()
     root = args.path.resolve()
-    if not (root / "package.json").exists():
-        raise SystemExit(
-            f"step2urdf is not installed at {root}. Clone the MIT project there first; see docs/step_workflow.md"
-        )
+    adapter = Step2UrdfAdapter(root)
     if args.install:
+        import subprocess
+
+        if not (root / "package.json").is_file():
+            raise SystemExit(f"step2urdf package.json not found at {root}")
         subprocess.run(["pnpm", "install"], cwd=root, check=True)
-    return subprocess.run(["pnpm", "dev"], cwd=root, check=False).returncode
+    status = adapter.launch()
+    print(status.url)
+    return 0
 
 
 if __name__ == "__main__":

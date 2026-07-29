@@ -4,6 +4,7 @@ import copy
 import hashlib
 import json
 import shutil
+import tempfile
 from pathlib import Path
 
 from morphology_toolkit.core.model import RobotModel
@@ -62,6 +63,19 @@ class PortablePackageExporter:
         report = validate_model(portable, ResourceResolver(output))
         report.write(output / "validation.json", output / "validation.md")
         return output
+
+    def export_zip(self, model: RobotModel, output: Path, resolver: ResourceResolver) -> Path:
+        output = Path(output).resolve()
+        if output.suffix.lower() != ".zip":
+            output = output.with_suffix(".zip")
+        output.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix="morphology-package-") as temporary:
+            package_root = Path(temporary) / model.robot_id
+            self.export(model, package_root, resolver)
+            archive = shutil.make_archive(
+                str(output.with_suffix("")), "zip", package_root.parent, package_root.name
+            )
+        return Path(archive)
 
 
 def replace_many(text: str, replacements: dict) -> str:
