@@ -1,0 +1,32 @@
+name: Bug report
+description: Report a reproducible Morphology Studio defect
+body:
+  - type: markdown
+    attributes: {value: "Do not upload confidential robot models, tokens, credentials, or screenshots containing private paths."}
+  - type: input
+    id: version
+    attributes: {label: Morphology Studio version}
+    validations: {required: true}
+  - type: input
+    id: environment
+    attributes: {label: OS, Python, and Node versions}
+    validations: {required: true}
+  - type: dropdown
+    id: mode
+    attributes: {label: Launch mode, options: [Windows desktop, Browser development, CLI]}
+    validations: {required: true}
+  - type: input
+    id: format
+    attributes: {label: Model format and whether it is sensitive}
+  - type: textarea
+    id: steps
+    attributes: {label: Reproduction steps}
+    validations: {required: true}
+  - type: textarea
+    id: expected
+    attributes: {label: Expected behavior}
+    validations: {required: true}
+  - type: textarea
+    id: actual
+    attributes: {label: Actual behavior, sanitized logs, and screenshots}
+    validations: {required: true}

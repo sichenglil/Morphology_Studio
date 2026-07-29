@@ -1,0 +1,9 @@
+source: models/ur_description/urdf/ur.urdf.xacro
+mode: assisted
+arguments:
+  ur_type: ur5e
+  name: ur5e
+  tf_prefix: ""
+  force_abs_paths: "false"
+package_map: configs/package_maps/local_models.yaml
+

@@ -1,0 +1,16 @@
+import { defineConfig } from '@playwright/test'
+
+export default defineConfig({
+  testDir: './tests/e2e',
+  workers: 1,
+  timeout: 30_000,
+  use: { baseURL: 'http://127.0.0.1:8771', channel: process.platform === 'win32' ? 'msedge' : undefined, screenshot: 'only-on-failure' },
+  webServer: {
+    command: process.platform === 'win32'
+      ? `powershell -NoProfile -Command "$env:PYTHONPATH=(Resolve-Path '../../src'); python -m morphology_toolkit.cli web --port 8771"`
+      : `PYTHONPATH=$PWD/../../src python -m morphology_toolkit.cli web --port 8771`,
+    url: 'http://127.0.0.1:8771/api/health',
+    timeout: 30_000,
+    reuseExistingServer: true,
+  },
+})

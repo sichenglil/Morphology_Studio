@@ -1,0 +1,7 @@
+# Application menu interaction audit
+
+The menu labels were located in `web/frontend/src/components/layout/AppToolbar.vue`. They were four plain `<span>` elements inside `.menus`: no click handler, popup, command mapping, or disabled-state logic existed. Browser inspection confirmed `document.elementFromPoint()` at every label returned the menu-bar content itself; the Three.js canvas starts in the workbench row below and did not overlap it. Computed pointer events were `auto`; there was no global pointer handler, pywebview drag region, or popup overflow issue. The real root cause was therefore an unimplemented placeholder menu, not interception.
+
+`AppMenuBar.vue` now provides four keyboard-focusable Element Plus dropdown triggers. Popups are teleported to `body`; trigger z-index is 100 and Element Plus manages popup stacking. Escape and outside-click close behavior are active. Commands and contextual enablement are declared in `src/config/menuCommands.ts`, while `EditorLayout.vue` is the single dispatcher for toolbar and menu actions. Three.js receives only explicit view commands and continues binding pointer/raycast controls exclusively to the renderer canvas.
+
+Real-browser verification at 1440×900 found each trigger with `elementFromPoint`, opened all four popups, closed them with Escape, and launched ImportWizard through `file.importModel`. The same production static assets are packaged into pywebview.

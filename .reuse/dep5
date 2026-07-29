@@ -1,0 +1,12 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Morphology Studio
+Source: https://github.com/sichenglil/Morphology_Studio
+
+Files: *
+Copyright: 2026 Morphology Studio maintainers
+License: Apache-2.0
+
+Files: web/frontend/pnpm-lock.yaml src/morphology_toolkit/static/frontend/* src/morphology_toolkit/static/frontend/assets/*
+Copyright: respective upstream authors
+License: Apache-2.0 and MIT
+Comment: Generated lockfile and bundled output contain metadata or compiled forms of dependencies listed in THIRD_PARTY_NOTICES.md.

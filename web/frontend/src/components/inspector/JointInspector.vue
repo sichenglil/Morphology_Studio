@@ -1,0 +1,2 @@
+<template><div v-if="joint"><p class="axis">轴向 <b>{{joint.axis.map(x=>x.toFixed(2)).join(' / ')}}</b></p><p class="metric">下限 <b>{{joint.limit.lower ?? '—'}}</b></p><p class="metric">上限 <b>{{joint.limit.upper ?? '—'}}</b></p></div></template>
+<script setup lang="ts">import {computed} from 'vue'; import {useEditorStore} from '@/stores/editor'; import type {JointNode} from '@/types/scene'; const store=useEditorStore(); const joint=computed(()=>store.selectedType==='joint'?store.selected as JointNode:null)</script>

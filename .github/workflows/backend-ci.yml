@@ -1,0 +1,18 @@
+name: Backend CI
+on: [push, pull_request]
+permissions: {contents: read}
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: {python-version: ['3.9', '3.11', '3.13']}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '${{ matrix.python-version }}'}
+      - run: python -m pip install -e '.[dev,web]'
+      - run: python -m compileall -q src tests
+      - run: python -m ruff check src tests scripts
+      - run: python -m pytest -p pytest_cov --cov=src/morphology_toolkit --cov-report=term-missing
+        env: {PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'}
+      - run: git diff --check

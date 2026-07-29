@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<robot name="simple_two_link">
+  <link name="base"><visual><geometry><box size="0.3 0.3 0.1"/></geometry><material name="blue"><color rgba="0.15 0.45 0.8 1"/></material></visual></link>
+  <link name="arm"><visual><origin xyz="0 0 0.3"/><geometry><cylinder radius="0.06" length="0.6"/></geometry><material name="orange"><color rgba="0.95 0.45 0.1 1"/></material></visual></link>
+  <joint name="arm_joint" type="revolute"><parent link="base"/><child link="arm"/><origin xyz="0 0 0.1"/><axis xyz="0 1 0"/><limit lower="-1.57" upper="1.57" effort="10" velocity="1"/></joint>
+</robot>
