@@ -29,6 +29,17 @@ The animation below records the packaged `ur5e_hx5_right` robot being loaded and
 - Running the application does not require the original Morphology-Conditioned project.
 - Regenerate with `python scripts/render/generate_software_demo_gif.py`.
 
+### UR5e and dexterous-hand assembly
+
+This recording shows the real assembly workflow: import the standalone UR5e model,
+select the standalone HX5 dexterous hand as the child model, connect its root to
+the UR5e `tool0` link, display the assembled 40-link robot, and export the result.
+Local file and output paths are blurred in the recording for privacy.
+
+<p align="center"><img src="assets/previews/ur5e_hx5_right/assembly_workflow.gif" width="960" alt="Importing and assembling a UR5e robot arm with an HX5 dexterous hand in Morphology Studio"></p>
+
+Regenerate with `python scripts/render/generate_assembly_demo_gif.py`.
+
 <a id="contents"></a>
 <h2 align="center">Contents</h2>
 

@@ -29,6 +29,17 @@
 - 运行程序不需要原始 Morphology-Conditioned 项目。
 - 使用 `python scripts/render/generate_software_demo_gif.py` 可重新录制。
 
+### UR5e 与灵巧手装配过程
+
+以下动画记录真实的软件操作流程：导入独立 UR5e 模型，在装配窗口选择独立
+HX5 灵巧手作为子模型，将灵巧手根节点连接到 UR5e 的 `tool0`，并显示最终的
+40-Link 组合机器人，最后将装配结果导出。动画中的本地模型路径和导出路径
+均已模糊处理，避免暴露个人目录信息。
+
+<p align="center"><img src="assets/previews/ur5e_hx5_right/assembly_workflow.gif" width="960" alt="在 Morphology Studio 中分别导入并装配 UR5e 与 HX5 灵巧手"></p>
+
+使用 `python scripts/render/generate_assembly_demo_gif.py` 可重新录制。
+
 <a id="contents"></a><h2 align="center">目录</h2>
 <p align="center"><a href="#overview">项目概览</a> · <a href="#features">功能模块</a> · <a href="#formats">格式</a> · <a href="#requirements">运行环境</a> · <a href="#quick-start">快速开始</a> · <a href="#gallery">截图</a> · <a href="#architecture">架构</a> · <a href="#roadmap">路线图</a></p>
 
