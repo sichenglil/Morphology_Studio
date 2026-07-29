@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 # Morphology Studio
 
@@ -13,11 +13,21 @@
   <a href="LICENSE"><img alt="Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue.svg"></a>
 </p>
 
-<img src="docs/assets/screenshots/hero-editor.png" width="960" alt="包含模型树、三维视口、属性面板和关节控制的 Morphology Studio 编辑器">
 
 <p><strong>版本 0.1.0 · Alpha · 核心功能无需 ROS · ROS 2 与 Isaac 集成规划中</strong></p>
 
 </div>
+
+## 软件内机械臂操作演示
+
+以下动画是在 Morphology Studio 中实际加载 `ur5e_hx5_right`，并操作机械臂关节时录制生成的。
+
+<p align="center"><img src="assets/previews/ur5e_hx5_right/robot.gif" width="960" alt="在 Morphology Studio 中操作 UR5e 与 HX5 Right 组合机械臂"></p>
+
+- GIF 来自真实软件界面，展示模型加载及机械臂关节操作过程。
+- 最终应用和 EXE 使用 `assets/robot_models/ur5e_hx5_right` 中的项目内部副本。
+- 运行程序不需要原始 Morphology-Conditioned 项目。
+- 使用 `python scripts/generate_software_demo_gif.py` 可重新录制。
 
 <a id="contents"></a><h2 align="center">目录</h2>
 <p align="center"><a href="#overview">项目概览</a> · <a href="#features">功能模块</a> · <a href="#formats">格式</a> · <a href="#requirements">运行环境</a> · <a href="#quick-start">快速开始</a> · <a href="#gallery">截图</a> · <a href="#architecture">架构</a> · <a href="#roadmap">路线图</a></p>
@@ -83,7 +93,7 @@ python -m venv .venv
 python desktop_entry.py
 ```
 
-首次导入 `examples/simple_two_link/robot.urdf`。浏览器开发模式运行 `./scripts/run_web.ps1`，并在第二个终端运行 `pnpm --dir web/frontend dev`。
+首次导入 `assets/robot_models/ur5e_hx5_right/robot.urdf`。浏览器开发模式运行 `./scripts/run_web.ps1`，并在第二个终端运行 `pnpm --dir web/frontend dev`。
 
 使用 `./scripts/test_all.ps1` 运行完整本地验收。
 
@@ -93,14 +103,12 @@ python desktop_entry.py
 2. 在模型树选择 `arm`，旋转视口并聚焦对象。
 3. 拖动关节滑块，或输入精确值并按 Enter。
 4. 使用 `W`/`E` 切换移动和旋转操作柄。
-5. 导入 `examples/simple_tool/tool.urdf`，通过“装配”创建 fixed 连接。
+5. 导入 `assets/robot_models/ur5e_hx5_right/robot.urdf`，通过“装配”创建 fixed 连接。
 6. 运行“验证”，选择输出位置并导出可移植资源包。
 
 <a id="gallery"></a><h2 align="center">截图画廊</h2>
 
-<table align="center"><tr><td align="center"><img src="docs/assets/screenshots/import-dialog.png" width="440" alt="模型导入对话框"><br><strong>导入</strong></td><td align="center"><img src="docs/assets/screenshots/link-selected.png" width="440" alt="已选择机器人 Link"><br><strong>选择与检查</strong></td></tr><tr><td align="center"><img src="docs/assets/screenshots/joint-control.png" width="440" alt="关节滑块和数值输入"><br><strong>关节控制</strong></td><td align="center"><img src="docs/assets/screenshots/validation-results.png" width="440" alt="模型验证面板"><br><strong>验证</strong></td></tr></table>
 
-<p align="center"><img src="docs/assets/demo/morphology-studio-demo.webp" width="720" alt="Morphology Studio 动态工作流程"></p>
 
 <a id="architecture"></a><h2 align="center">架构</h2>
 
@@ -115,7 +123,7 @@ Vue/Three.js 编辑器通过本地 HTTP 调用 FastAPI。导入器写入唯一�
 | `src/morphology_toolkit/` | 通用 Python 后端和发行版前端资源 |
 | `web/frontend/` | 唯一可编辑 Vue 3 / Three.js 前端 |
 | `tests/` | Python 单元、集成、文档和本地验收测试 |
-| `examples/` | 小型 Apache-2.0 通用 URDF 示例 |
+| `assets/robot_models/ur5e_hx5_right/` | 内置组合机械臂模型 |
 | `docs/` | 用户、架构、维护、审计和视觉文档 |
 | `scripts/` | 稳定入口以及分组后的开发和迁移工具 |
 | `configs/` | 可选 package map 与验收配置 |
@@ -131,3 +139,4 @@ Vue/Three.js 编辑器通过本地 HTTP 调用 FastAPI。导入器写入唯一�
 <h2 align="center">贡献、安全与许可证</h2>
 
 贡献前阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，漏洞按 [SECURITY.md](SECURITY.md) 私下报告，提交 Issue 时不要附带专有模型。本项目采用 [Apache-2.0](LICENSE)，依赖与致谢见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+

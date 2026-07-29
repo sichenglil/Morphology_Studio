@@ -1,0 +1,9 @@
+-r requirements.txt
+Pillow==11.3.0
+pycollada==0.8
+trimesh==4.12.2
+numpy==2.0.2
+PyInstaller==6.21.0
+pytest==8.4.2
+pytest-cov==6.3.0
+ruff==0.16.0

@@ -27,7 +27,9 @@ from morphology_toolkit.importers import (
     detect_format,
 )
 from morphology_toolkit.morphology import generate_morphology
+from morphology_toolkit.paths import assets_dir, resource_root
 from morphology_toolkit.resources import ResourceResolver, load_package_map
+from morphology_toolkit.services.model_registry import load_registry
 from morphology_toolkit.validation import validate_model
 
 LOGGER = logging.getLogger(__name__)
@@ -288,10 +290,35 @@ def create_app():
     frontend_root = static_root / "frontend"
     if frontend_root.exists():
         app.mount("/assets", StaticFiles(directory=frontend_root / "assets"), name="assets")
+    packaged_assets = assets_dir()
+    if packaged_assets.is_dir():
+        app.mount("/app-assets", StaticFiles(directory=packaged_assets), name="app-assets")
 
     @app.get("/api/health")
     def health():
         return {"status": "ok", "app": "Morphology Studio"}
+
+    @app.get("/api/model-registry")
+    def model_registry():
+        root = resource_root()
+        return {"models": [entry.public_dict(root) for entry in load_registry(root)]}
+
+    @app.post("/api/model-registry/{model_id}/load")
+    def load_packaged_model(model_id: str):
+        root = resource_root()
+        entry = next((item for item in load_registry(root) if item.id == model_id), None)
+        if entry is None:
+            raise HTTPException(404, "Packaged model not found")
+        source = entry.urdf_path(root).resolve()
+        try:
+            model = _load_model(source, None, {}, {})
+        except Exception as exc:
+            LOGGER.exception("Packaged model import failed: %s", model_id)
+            raise HTTPException(400, str(exc)) from exc
+        session.clear()
+        session.model, session.source = model, source
+        LOGGER.info("Loaded packaged model %s from %s", model.robot_id, source)
+        return _scene_manifest(session)
 
     @app.get("/api/status")
     def status():

@@ -44,8 +44,8 @@ CONTENTS_ANCHORS = (
 
 def check() -> list[str]:
     errors: list[str] = []
-    english = (ROOT / "README.md").read_text(encoding="utf-8")
-    chinese = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
+    english = (ROOT / "README.md").read_text(encoding="utf-8-sig")
+    chinese = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8-sig")
     for name, text in (("README.md", english), ("README.zh-CN.md", chinese)):
         if not text.startswith('<div align="center">'):
             errors.append(f"{name}: centered hero missing")

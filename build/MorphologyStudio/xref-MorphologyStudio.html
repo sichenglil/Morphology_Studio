@@ -2107,9 +2107,11 @@ imported by:
  &#8226;   <a href="#morphology_toolkit.importers.xacro_importer">morphology_toolkit.importers.xacro_importer</a>
  &#8226;   <a href="#morphology_toolkit.logging_config">morphology_toolkit.logging_config</a>
  &#8226;   <a href="#morphology_toolkit.morphology.metadata">morphology_toolkit.morphology.metadata</a>
+ &#8226;   <a href="#morphology_toolkit.paths">morphology_toolkit.paths</a>
  &#8226;   <a href="#morphology_toolkit.resources.package_map">morphology_toolkit.resources.package_map</a>
  &#8226;   <a href="#morphology_toolkit.resources.package_resolver">morphology_toolkit.resources.package_resolver</a>
  &#8226;   <a href="#morphology_toolkit.resources.resolver">morphology_toolkit.resources.resolver</a>
+ &#8226;   <a href="#morphology_toolkit.services.model_registry">morphology_toolkit.services.model_registry</a>
  &#8226;   <a href="#morphology_toolkit.validation.validator">morphology_toolkit.validation.validator</a>
  &#8226;   <a href="#morphology_toolkit.webapp">morphology_toolkit.webapp</a>
  &#8226;   <a href="#packaging._elffile">packaging._elffile</a>
@@ -8691,6 +8693,7 @@ imported by:
  &#8226;   <a href="#morphology_toolkit.importers.xacro_importer">morphology_toolkit.importers.xacro_importer</a>
  &#8226;   <a href="#morphology_toolkit.resources.package_resolver">morphology_toolkit.resources.package_resolver</a>
  &#8226;   <a href="#morphology_toolkit.resources.resolver">morphology_toolkit.resources.resolver</a>
+ &#8226;   <a href="#morphology_toolkit.services.model_registry">morphology_toolkit.services.model_registry</a>
  &#8226;   <a href="#morphology_toolkit.validation.validator">morphology_toolkit.validation.validator</a>
  &#8226;   <a href="#morphology_toolkit.webapp">morphology_toolkit.webapp</a>
  &#8226;   <a href="#packaging._tokenizer">packaging._tokenizer</a>
@@ -16374,6 +16377,7 @@ imported by:
  &#8226;   <a href="#json.scanner">json.scanner</a>
  &#8226;   <a href="#logging.config">logging.config</a>
  &#8226;   <a href="#morphology_toolkit.exporters.portable_package_exporter">morphology_toolkit.exporters.portable_package_exporter</a>
+ &#8226;   <a href="#morphology_toolkit.services.model_registry">morphology_toolkit.services.model_registry</a>
  &#8226;   <a href="#morphology_toolkit.validation.validator">morphology_toolkit.validation.validator</a>
  &#8226;   <a href="#morphology_toolkit.webapp">morphology_toolkit.webapp</a>
  &#8226;   <a href="#pydantic.deprecated.parse">pydantic.deprecated.parse</a>
@@ -16577,6 +16581,7 @@ imported by:
  &#8226;   <a href="#logging.handlers">logging.handlers</a>
  &#8226;   <a href="#morphology_toolkit.desktop">morphology_toolkit.desktop</a>
  &#8226;   <a href="#morphology_toolkit.logging_config">morphology_toolkit.logging_config</a>
+ &#8226;   <a href="#morphology_toolkit.services.model_registry">morphology_toolkit.services.model_registry</a>
  &#8226;   <a href="#morphology_toolkit.webapp">morphology_toolkit.webapp</a>
  &#8226;   <a href="#multiprocessing.util">multiprocessing.util</a>
  &#8226;   <a href="#packaging.pylock">packaging.pylock</a>
@@ -16852,7 +16857,9 @@ imported by:
  &#8226;   <a href="#morphology_toolkit.importers">morphology_toolkit.importers</a>
  &#8226;   <a href="#morphology_toolkit.logging_config">morphology_toolkit.logging_config</a>
  &#8226;   <a href="#morphology_toolkit.morphology">morphology_toolkit.morphology</a>
+ &#8226;   <a href="#morphology_toolkit.paths">morphology_toolkit.paths</a>
  &#8226;   <a href="#morphology_toolkit.resources">morphology_toolkit.resources</a>
+ &#8226;   <a href="#morphology_toolkit.services">morphology_toolkit.services</a>
  &#8226;   <a href="#morphology_toolkit.validation">morphology_toolkit.validation</a>
  &#8226;   <a href="#morphology_toolkit.webapp">morphology_toolkit.webapp</a>
 
@@ -16962,6 +16969,7 @@ imports:
  &#8226;   <a href="#logging">logging</a>
  &#8226;   <a href="#morphology_toolkit">morphology_toolkit</a>
  &#8226;   <a href="#morphology_toolkit.logging_config">morphology_toolkit.logging_config</a>
+ &#8226;   <a href="#morphology_toolkit.paths">morphology_toolkit.paths</a>
  &#8226;   <a href="#morphology_toolkit.webapp">morphology_toolkit.webapp</a>
  &#8226;   <a href="#os">os</a>
  &#8226;   <a href="#socket">socket</a>
@@ -17243,7 +17251,7 @@ imports:
  &#8226;   <a href="#logging">logging</a>
  &#8226;   <a href="#logging.handlers">logging.handlers</a>
  &#8226;   <a href="#morphology_toolkit">morphology_toolkit</a>
- &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#morphology_toolkit.paths">morphology_toolkit.paths</a>
  &#8226;   <a href="#pathlib">pathlib</a>
  &#8226;   <a href="#sys">sys</a>
  &#8226;   <a href="#typing">typing</a>
@@ -17289,6 +17297,29 @@ imports:
   <div class="import">
 imported by:
     <a href="#morphology_toolkit.morphology">morphology_toolkit.morphology</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="morphology_toolkit.paths"></a>
+  <a target="code" href="///G:/Code_Programs/VscodeProjects/Robot/Morphology_Studio/src/morphology_toolkit/paths.py" type="text/plain"><tt>morphology_toolkit.paths</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#__future__">__future__</a>
+ &#8226;   <a href="#morphology_toolkit">morphology_toolkit</a>
+ &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+ &#8226;   <a href="#sys">sys</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#morphology_toolkit.desktop">morphology_toolkit.desktop</a>
+ &#8226;   <a href="#morphology_toolkit.logging_config">morphology_toolkit.logging_config</a>
+ &#8226;   <a href="#morphology_toolkit.services.model_registry">morphology_toolkit.services.model_registry</a>
+ &#8226;   <a href="#morphology_toolkit.webapp">morphology_toolkit.webapp</a>
 
   </div>
 
@@ -17384,6 +17415,44 @@ imported by:
 </div>
 
 <div class="node">
+  <a name="morphology_toolkit.services"></a>
+  <a target="code" href="///G:/Code_Programs/VscodeProjects/Robot/Morphology_Studio/src/morphology_toolkit/services/__init__.py" type="text/plain"><tt>morphology_toolkit.services</tt></a>
+<span class="moduletype">Package</span>  <div class="import">
+imports:
+    <a href="#morphology_toolkit">morphology_toolkit</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#morphology_toolkit.services.model_registry">morphology_toolkit.services.model_registry</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="morphology_toolkit.services.model_registry"></a>
+  <a target="code" href="///G:/Code_Programs/VscodeProjects/Robot/Morphology_Studio/src/morphology_toolkit/services/model_registry.py" type="text/plain"><tt>morphology_toolkit.services.model_registry</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#__future__">__future__</a>
+ &#8226;   <a href="#dataclasses">dataclasses</a>
+ &#8226;   <a href="#json">json</a>
+ &#8226;   <a href="#logging">logging</a>
+ &#8226;   <a href="#morphology_toolkit.paths">morphology_toolkit.paths</a>
+ &#8226;   <a href="#morphology_toolkit.services">morphology_toolkit.services</a>
+ &#8226;   <a href="#pathlib">pathlib</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#morphology_toolkit.webapp">morphology_toolkit.webapp</a>
+
+  </div>
+
+</div>
+
+<div class="node">
   <a name="morphology_toolkit.validation"></a>
   <a target="code" href="///G:/Code_Programs/VscodeProjects/Robot/Morphology_Studio/src/morphology_toolkit/validation/__init__.py" type="text/plain"><tt>morphology_toolkit.validation</tt></a>
 <span class="moduletype">Package</span>  <div class="import">
@@ -17449,7 +17518,9 @@ imports:
  &#8226;   <a href="#morphology_toolkit.exporters.urdf_exporter">morphology_toolkit.exporters.urdf_exporter</a>
  &#8226;   <a href="#morphology_toolkit.importers">morphology_toolkit.importers</a>
  &#8226;   <a href="#morphology_toolkit.morphology">morphology_toolkit.morphology</a>
+ &#8226;   <a href="#morphology_toolkit.paths">morphology_toolkit.paths</a>
  &#8226;   <a href="#morphology_toolkit.resources">morphology_toolkit.resources</a>
+ &#8226;   <a href="#morphology_toolkit.services.model_registry">morphology_toolkit.services.model_registry</a>
  &#8226;   <a href="#morphology_toolkit.validation">morphology_toolkit.validation</a>
  &#8226;   <a href="#pathlib">pathlib</a>
  &#8226;   <a href="#tkinter">tkinter</a>
@@ -18738,7 +18809,7 @@ imported by:
  &#8226;   <a href="#mimetypes">mimetypes</a>
  &#8226;   <a href="#morphology_toolkit.desktop">morphology_toolkit.desktop</a>
  &#8226;   <a href="#morphology_toolkit.exporters.mjcf_exporter">morphology_toolkit.exporters.mjcf_exporter</a>
- &#8226;   <a href="#morphology_toolkit.logging_config">morphology_toolkit.logging_config</a>
+ &#8226;   <a href="#morphology_toolkit.paths">morphology_toolkit.paths</a>
  &#8226;   <a href="#multiprocessing.connection">multiprocessing.connection</a>
  &#8226;   <a href="#multiprocessing.context">multiprocessing.context</a>
  &#8226;   <a href="#multiprocessing.forkserver">multiprocessing.forkserver</a>
@@ -19488,9 +19559,11 @@ imported by:
  &#8226;   <a href="#morphology_toolkit.importers.urdf_importer">morphology_toolkit.importers.urdf_importer</a>
  &#8226;   <a href="#morphology_toolkit.importers.xacro_importer">morphology_toolkit.importers.xacro_importer</a>
  &#8226;   <a href="#morphology_toolkit.logging_config">morphology_toolkit.logging_config</a>
+ &#8226;   <a href="#morphology_toolkit.paths">morphology_toolkit.paths</a>
  &#8226;   <a href="#morphology_toolkit.resources.package_map">morphology_toolkit.resources.package_map</a>
  &#8226;   <a href="#morphology_toolkit.resources.package_resolver">morphology_toolkit.resources.package_resolver</a>
  &#8226;   <a href="#morphology_toolkit.resources.resolver">morphology_toolkit.resources.resolver</a>
+ &#8226;   <a href="#morphology_toolkit.services.model_registry">morphology_toolkit.services.model_registry</a>
  &#8226;   <a href="#morphology_toolkit.validation.validator">morphology_toolkit.validation.validator</a>
  &#8226;   <a href="#morphology_toolkit.webapp">morphology_toolkit.webapp</a>
  &#8226;   <a href="#packaging.metadata">packaging.metadata</a>
@@ -27742,6 +27815,7 @@ imported by:
  &#8226;   <a href="#mimetypes">mimetypes</a>
  &#8226;   <a href="#morphology_toolkit.desktop">morphology_toolkit.desktop</a>
  &#8226;   <a href="#morphology_toolkit.logging_config">morphology_toolkit.logging_config</a>
+ &#8226;   <a href="#morphology_toolkit.paths">morphology_toolkit.paths</a>
  &#8226;   <a href="#multiprocessing">multiprocessing</a>
  &#8226;   <a href="#multiprocessing.connection">multiprocessing.connection</a>
  &#8226;   <a href="#multiprocessing.context">multiprocessing.context</a>

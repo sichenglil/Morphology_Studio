@@ -1,0 +1,7 @@
+2026-07-29 22:10:30,824 INFO morphology_toolkit.desktop: Starting Morphology Studio 0.1.0
+2026-07-29 22:10:30,824 INFO morphology_toolkit.desktop: Frozen=True executable=G:\Code_Programs\VscodeProjects\Robot\Morphology_Studio\release\MorphologyStudio\MorphologyStudio.exe
+2026-07-29 22:10:30,824 INFO morphology_toolkit.desktop: Resource root=G:\Code_Programs\VscodeProjects\Robot\Morphology_Studio\release\MorphologyStudio
+2026-07-29 22:10:31,510 INFO uvicorn.error: Started server process [14772]
+2026-07-29 22:10:31,510 INFO uvicorn.error: Waiting for application startup.
+2026-07-29 22:10:31,510 INFO uvicorn.error: Application startup complete.
+2026-07-29 22:10:31,524 INFO uvicorn.error: Uvicorn running on http://127.0.0.1:48765 (Press CTRL+C to quit)

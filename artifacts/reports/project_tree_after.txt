@@ -1,0 +1,408 @@
+Morphology_Studio
+|-- .github
+|   |-- ISSUE_TEMPLATE
+|   |   |-- bug_report.yml
+|   |   |-- config.yml
+|   |   |-- documentation.yml
+|   |   `-- feature_request.yml
+|   |-- workflows
+|   |   |-- backend-ci.yml
+|   |   |-- desktop-build.yml
+|   |   |-- e2e.yml
+|   |   |-- frontend-ci.yml
+|   |   `-- release.yml
+|   |-- dependabot.yml
+|   `-- pull_request_template.md
+|-- .pytest_cache
+|   |-- v
+|   |   `-- cache
+|   |       |-- lastfailed
+|   |       |-- nodeids
+|   |       `-- stepwise
+|   |-- .gitignore
+|   |-- CACHEDIR.TAG
+|   `-- README.md
+|-- .reuse
+|   `-- dep5
+|-- .ruff_cache
+|   |-- 0.16.0
+|   |   |-- 1037787765541318828
+|   |   |-- 12143153529119594144
+|   |   |-- 12379167059561846053
+|   |   |-- 13957425210405774341
+|   |   |-- 14887734508638777271
+|   |   |-- 18171832296093402217
+|   |   |-- 335856185758011255
+|   |   `-- 6884232318968957854
+|   |-- .gitignore
+|   `-- CACHEDIR.TAG
+|-- artifacts
+|   `-- reports
+|       |-- screenshots
+|       |   |-- tutorial
+|       |   |   |-- 01-launch.png
+|       |   |   |-- 02-create-workspace.png
+|       |   |   |-- 03-import-model.png
+|       |   |   |-- 04-select-entry.png
+|       |   |   |-- 05-model-loaded.png
+|       |   |   |-- 06-control-joint.png
+|       |   |   |-- 07-transform-object.png
+|       |   |   |-- 08-validate.png
+|       |   |   |-- 09-choose-output.png
+|       |   |   `-- 10-export-complete.png
+|       |   |-- assembly-dialog.png
+|       |   |-- assembly-editor.png
+|       |   |-- export-dialog.png
+|       |   |-- hero-editor.png
+|       |   |-- import-dialog.png
+|       |   |-- import-wizard.png
+|       |   |-- joint-control-numeric.png
+|       |   |-- joint-control-slider.png
+|       |   |-- joint-control.png
+|       |   |-- link-selected.png
+|       |   |-- model-imported.png
+|       |   |-- model-loaded.png
+|       |   |-- model-tree.png
+|       |   |-- output-folder-picker.png
+|       |   |-- resources-panel.png
+|       |   |-- rotate-gizmo.png
+|       |   |-- transform-gizmo.png
+|       |   |-- transform-inspector.png
+|       |   |-- validation-panel.png
+|       |   |-- validation-results.png
+|       |   |-- welcome-screen.png
+|       |   `-- workspace-overview.png
+|       |-- 临时 启动目录
+|       |-- build_report.txt
+|       |-- project_tree_after.txt
+|       |-- project_tree_before.txt
+|       `-- test_report.txt
+|-- assets
+|   |-- placeholders
+|   |   `-- model-preview.png
+|   |-- previews
+|   |   `-- ur5e_hx5_right
+|   |       |-- robot.cache.json
+|   |       |-- robot.gif
+|   |       `-- robot.png
+|   `-- robot_models
+|       `-- ur5e_hx5_right
+|           |-- meshes
+|           |   |-- 04e6d4a1ea71_wrist3.dae
+|           |   |-- 2964a63f60ce_wrist2.stl
+|           |   |-- 2e7423cab807_forearm.stl
+|           |   |-- 36ad4f32d1d3_shoulder.dae
+|           |   |-- 4ddee90cb3dd_hx5_d20_base_unit.stl
+|           |   |-- 61e7a9609198_upperarm.dae
+|           |   |-- 72d2ae2396f7_hx5_d20_thumb_mcp2.stl
+|           |   |-- 834b49fc5b95_wrist1.dae
+|           |   |-- 83b3666b4ae2_wrist3.stl
+|           |   |-- 918d348a5635_wrist2.dae
+|           |   |-- 9a145e0d46f2_base.stl
+|           |   |-- b050d0c2c8a3_hx5_d20_thumb_mcp.stl
+|           |   |-- b3913fed373a_hx5_d20_finger_mcp.stl
+|           |   |-- b9e3b9def32a_base.dae
+|           |   |-- c94412c121cf_hx5_d20_thumb_tip.stl
+|           |   |-- ceb92532177d_shoulder.stl
+|           |   |-- d7f9d330496c_hx5_d20_finger_pip.stl
+|           |   |-- e23344be5dc6_hx5_d20_finger_tip.stl
+|           |   |-- e582ee3126bd_hx5_d20_finger_dip.stl
+|           |   |-- e5c67e47e013_forearm.dae
+|           |   |-- ee893044caf0_upperarm.stl
+|           |   |-- f8c9f9337b6f_wrist1.stl
+|           |   `-- fa2759b28c8f_hx5_d20_thumb_ip.stl
+|           |-- textures
+|           `-- robot.urdf
+|-- config
+|   `-- robot_models.json
+|-- configs
+|   `-- package_maps
+|       `-- local_models.yaml
+|-- docs
+|   |-- audits
+|   |   |-- code_quality_audit.md
+|   |   |-- dependency_audit.md
+|   |   |-- documentation_audit.md
+|   |   |-- open_source_readiness.md
+|   |   |-- project_structure_audit.md
+|   |   `-- root_directory_audit.md
+|   |-- maintainers
+|   |   `-- migration.md
+|   |-- application_menus.md
+|   |-- architecture.md
+|   |-- assembly.md
+|   |-- BUILD_AND_RELEASE.md
+|   |-- CLEANUP_REPORT.md
+|   |-- dependencies.md
+|   |-- desktop_architecture.md
+|   |-- desktop_build.md
+|   |-- desktop_troubleshooting.md
+|   |-- editable_joint_value_acceptance.md
+|   |-- editable_joint_value_audit.md
+|   |-- export.md
+|   |-- getting_started.md
+|   |-- import_models.md
+|   |-- index.md
+|   |-- joint_control.md
+|   |-- joint_rendering_performance_audit.md
+|   |-- joint_runtime_architecture.md
+|   |-- joint_units.md
+|   |-- joint_value_input.md
+|   |-- link_numeric_editing.md
+|   |-- link_panel_scroll_acceptance.md
+|   |-- link_panel_scroll_audit.md
+|   |-- local_windows_setup.md
+|   |-- maintainer_guide.md
+|   |-- menu_and_link_numeric_acceptance.md
+|   |-- menu_interaction_audit.md
+|   |-- mjcf_conversion.md
+|   |-- model_audit.md
+|   |-- package_map.md
+|   |-- performance_baseline.md
+|   |-- performance_benchmark.md
+|   |-- performance_troubleshooting.md
+|   |-- portable_package.md
+|   |-- pose_management.md
+|   |-- PROJECT_STRUCTURE.md
+|   |-- reference_alignment_matrix.md
+|   |-- reference_product_audit.md
+|   |-- releasing.md
+|   |-- rendering_performance.md
+|   |-- repository_structure.md
+|   |-- transform_coordinate_spaces.md
+|   |-- transform_editing.md
+|   |-- troubleshooting.md
+|   |-- ui_acceptance_report.md
+|   |-- ui_architecture.md
+|   |-- URDF_MODEL_REPORT.md
+|   |-- user_guide.md
+|   |-- validation.md
+|   |-- workspaces.md
+|   `-- xacro_without_ros.md
+|-- LICENSES
+|   |-- Apache-2.0.txt
+|   `-- MIT.txt
+|-- logs
+|   `-- MorphologyStudio.log
+|-- packaging
+|   |-- windows
+|   `-- MorphologyStudio.spec
+|-- scripts
+|   |-- dev
+|   |   |-- build_xacro_model.py
+|   |   |-- isaac_urdf_to_usd.py
+|   |   |-- run_step2urdf.py
+|   |   |-- validate_mjcf.py
+|   |   `-- xml_fidelity_report.py
+|   |-- migrations
+|   |   `-- build_windows_app.ps1
+|   |-- build_desktop.ps1
+|   |-- check_docs_links.py
+|   |-- check_readme_format.py
+|   |-- check_repository_health.py
+|   |-- generate_delivery_reports.py
+|   |-- generate_urdf_gifs.py
+|   |-- github_snapshot_backup.ps1
+|   |-- prepare_release.py
+|   |-- run_desktop.ps1
+|   |-- run_web.ps1
+|   |-- run_web.sh
+|   |-- send_completion_email.py
+|   |-- setup_dev.ps1
+|   |-- setup_dev.sh
+|   |-- smoke_release.py
+|   |-- smoke_test_desktop.ps1
+|   |-- test_all.ps1
+|   |-- test_all.sh
+|   `-- verify_resources.py
+|-- src
+|   `-- morphology_toolkit
+|       |-- assembly
+|       |   |-- __init__.py
+|       |   `-- engine.py
+|       |-- conversion
+|       |   |-- __init__.py
+|       |   `-- mesh.py
+|       |-- core
+|       |   |-- __init__.py
+|       |   `-- model.py
+|       |-- exporters
+|       |   |-- __init__.py
+|       |   |-- mjcf_exporter.py
+|       |   |-- portable_package_exporter.py
+|       |   |-- urdf_exporter.py
+|       |   `-- usd_exporter.py
+|       |-- importers
+|       |   |-- __init__.py
+|       |   |-- base.py
+|       |   |-- directory_importer.py
+|       |   |-- registry.py
+|       |   |-- urdf_importer.py
+|       |   `-- xacro_importer.py
+|       |-- morphology
+|       |   |-- __init__.py
+|       |   `-- metadata.py
+|       |-- reports
+|       |   |-- __init__.py
+|       |   `-- audit.py
+|       |-- resources
+|       |   |-- __init__.py
+|       |   |-- package_map.py
+|       |   |-- package_resolver.py
+|       |   `-- resolver.py
+|       |-- services
+|       |   |-- __init__.py
+|       |   `-- model_registry.py
+|       |-- static
+|       |   |-- frontend
+|       |   |   |-- assets
+|       |   |   |   |-- index-BO3JkjZF.css
+|       |   |   |   `-- index-Bt1GniLE.js
+|       |   |   `-- index.html
+|       |   `-- index.html
+|       |-- validation
+|       |   |-- __init__.py
+|       |   `-- validator.py
+|       |-- workspace
+|       |   |-- __init__.py
+|       |   `-- manager.py
+|       |-- __init__.py
+|       |-- __main__.py
+|       |-- cli.py
+|       |-- desktop.py
+|       |-- logging_config.py
+|       |-- paths.py
+|       `-- webapp.py
+|-- tests
+|   |-- docs
+|   |   |-- test_readme_commands.py
+|   |   `-- test_readme_layout.py
+|   |-- integration
+|   |   |-- test_cli.py
+|   |   |-- test_pipeline.py
+|   |   |-- test_portable_package.py
+|   |   `-- test_real_models.py
+|   |-- unit
+|   |   |-- test_assembly.py
+|   |   |-- test_desktop.py
+|   |   |-- test_github_snapshot_script.py
+|   |   |-- test_importers.py
+|   |   |-- test_model_registry.py
+|   |   |-- test_package_resolver.py
+|   |   |-- test_previews.py
+|   |   |-- test_resource_paths.py
+|   |   |-- test_usd_local_status.py
+|   |   |-- test_validation.py
+|   |   |-- test_xacro.py
+|   |   `-- test_xml_fidelity.py
+|   `-- conftest.py
+|-- web
+|   `-- frontend
+|       |-- src
+|       |   |-- api
+|       |   |   |-- assembly.ts
+|       |   |   |-- client.ts
+|       |   |   |-- export.ts
+|       |   |   |-- modelRegistry.ts
+|       |   |   |-- models.ts
+|       |   |   |-- scene.ts
+|       |   |   |-- transforms.ts
+|       |   |   |-- validation.ts
+|       |   |   `-- workspace.ts
+|       |   |-- components
+|       |   |   |-- debug
+|       |   |   |   `-- PerformancePanel.vue
+|       |   |   |-- dialogs
+|       |   |   |   |-- AssemblyWizard.vue
+|       |   |   |   |-- ExportDialog.vue
+|       |   |   |   `-- ImportWizard.vue
+|       |   |   |-- inspector
+|       |   |   |   |-- JointInspector.vue
+|       |   |   |   |-- SemanticInspector.vue
+|       |   |   |   `-- TransformInspector.vue
+|       |   |   |-- joints
+|       |   |   |   |-- JointControlPanel.vue
+|       |   |   |   |-- JointSlider.vue
+|       |   |   |   `-- JointValueInput.vue
+|       |   |   |-- layout
+|       |   |   |   |-- AppMenuBar.vue
+|       |   |   |   |-- AppToolbar.vue
+|       |   |   |   |-- BottomDock.vue
+|       |   |   |   |-- EditorLayout.vue
+|       |   |   |   |-- LeftSidebar.vue
+|       |   |   |   |-- RightInspector.vue
+|       |   |   |   `-- StatusBar.vue
+|       |   |   |-- logs
+|       |   |   |   `-- LogPanel.vue
+|       |   |   |-- model
+|       |   |   |   |-- ModelPreview.vue
+|       |   |   |   |-- ModelTree.vue
+|       |   |   |   `-- ResourceBrowser.vue
+|       |   |   |-- validation
+|       |   |   |   `-- ValidationPanel.vue
+|       |   |   `-- viewport
+|       |   |       `-- RobotViewport.vue
+|       |   |-- config
+|       |   |   `-- menuCommands.ts
+|       |   |-- runtime
+|       |   |   |-- JointController.ts
+|       |   |   |-- jointRuntimeBridge.ts
+|       |   |   |-- PerformanceMetrics.ts
+|       |   |   |-- RenderScheduler.ts
+|       |   |   |-- ResourceCache.ts
+|       |   |   `-- RobotRuntimeIndex.ts
+|       |   |-- stores
+|       |   |   `-- editor.ts
+|       |   |-- styles
+|       |   |   `-- base.css
+|       |   |-- types
+|       |   |   `-- scene.ts
+|       |   |-- App.vue
+|       |   |-- main.ts
+|       |   `-- vite-env.d.ts
+|       |-- test-results
+|       |   `-- .last-run.json
+|       |-- tests
+|       |   |-- e2e
+|       |   |   |-- capture_documentation_screenshots.spec.ts
+|       |   |   |-- editable_joint_values.spec.ts
+|       |   |   |-- editor.spec.ts
+|       |   |   |-- menu_numeric.spec.ts
+|       |   |   `-- scroll_panels.spec.ts
+|       |   |-- performance
+|       |   |   `-- joint_runtime.spec.ts
+|       |   |-- editor.spec.ts
+|       |   |-- joint_slider.spec.ts
+|       |   |-- joint_value_input.spec.ts
+|       |   `-- model_tree_scroll.spec.ts
+|       |-- eslint.config.js
+|       |-- index.html
+|       |-- package.json
+|       |-- playwright.config.ts
+|       |-- pnpm-lock.yaml
+|       |-- pnpm-workspace.yaml
+|       |-- tsconfig.json
+|       `-- vite.config.ts
+|-- .editorconfig
+|-- .gitattributes
+|-- .gitignore
+|-- AGENTS.md
+|-- build_exe.bat
+|-- CHANGELOG.md
+|-- CITATION.cff
+|-- CODE_OF_CONDUCT.md
+|-- CONTRIBUTING.md
+|-- desktop_entry.py
+|-- GOVERNANCE.md
+|-- LICENSE
+|-- mkdocs.yml
+|-- pnpm-workspace.yaml
+|-- pyproject.toml
+|-- README.md
+|-- README.zh-CN.md
+|-- requirements-dev.txt
+|-- requirements.txt
+|-- run_app.bat
+|-- SECURITY.md
+|-- SUPPORT.md
+`-- THIRD_PARTY_NOTICES.md

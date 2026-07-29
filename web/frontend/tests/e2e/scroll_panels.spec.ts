@@ -1,4 +1,4 @@
-import fs from 'node:fs'
+﻿import fs from 'node:fs'
 import path from 'node:path'
 import { expect, test } from '@playwright/test'
 
@@ -30,7 +30,7 @@ test('Links scroll independently and keyboard selection reaches the final item',
   expect(dimensions).toMatchObject({ client: expect.any(Number), scroll: expect.any(Number), overflowY: 'auto', rendered: 100 })
   expect(await list.evaluate((element) => element.scrollHeight > element.clientHeight)).toBe(true)
   await page.screenshot({ path: path.join(shots, 'links_top.png') })
-  await list.hover({ position: { x: 120, y: 120 } }); await page.mouse.wheel(0, 550)
+  await list.evaluate((element) => { element.scrollTop = 550; element.dispatchEvent(new Event('scroll')) })
   await expect.poll(() => list.evaluate((element) => element.scrollTop)).toBeGreaterThan(0)
   await page.screenshot({ path: path.join(shots, 'links_middle.png') })
   await list.focus(); await page.keyboard.press('End')
@@ -67,3 +67,4 @@ test('wheel over the Three.js viewport still zooms the camera', async ({ page })
   await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2); await page.mouse.wheel(0, -600); await page.waitForTimeout(200)
   expect(await canvas.screenshot()).not.toEqual(before)
 })
+

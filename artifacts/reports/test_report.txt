@@ -1,0 +1,12 @@
+Morphology Studio test report
+Resource verifier: PASS (40 links, 39 joints, 56 mesh references, 0 missing, 60 GIF frames)
+Python compileall: PASS
+Ruff: PASS
+Pytest: 43 passed, 0 failed, 1 third-party deprecation warning
+Vue type-check: PASS
+ESLint: PASS
+Vitest: 20 passed, 0 failed
+Vite production build: PASS
+Playwright: 13 passed, 0 failed
+Release smoke: PASS from an unrelated directory containing Chinese characters and a space
+Smoke endpoints: /api/health, /api/model-registry and packaged GIF all returned successfully

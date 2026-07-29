@@ -12,6 +12,9 @@ models/
 processed_models/
 node_modules/
 dist/
+release/
+artifacts/reports/
+artifacts/temporary/
 external/reference_step2urdf/
 web/frontend/test-results/
 web/frontend/playwright-report/

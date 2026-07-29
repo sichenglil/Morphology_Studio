@@ -1,10 +1,10 @@
-import fs from 'node:fs'
+﻿import fs from 'node:fs'
 import path from 'node:path'
 import { expect, test } from '@playwright/test'
 
-const output = path.resolve('../../docs/assets/screenshots')
+const output = path.resolve('../../artifacts/reports/screenshots')
 const tutorial = path.join(output, 'tutorial')
-const model = path.resolve('../../examples/simple_two_link/robot.urdf')
+const model = path.resolve('../../assets/robot_models/ur5e_hx5_right/robot.urdf')
 
 test('capture current generic-model documentation screenshots', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
@@ -20,20 +20,20 @@ test('capture current generic-model documentation screenshots', async ({ page })
   await page.screenshot({ path: path.join(tutorial, '03-import-model.png') })
   await page.screenshot({ path: path.join(tutorial, '04-select-entry.png') })
   await page.getByRole('button', { name: '导入并显示', exact: true }).click()
-  await expect(page.getByText('2 Links')).toBeVisible()
+  await expect(page.getByText('40 Links')).toBeVisible()
   await page.waitForTimeout(500)
   await page.screenshot({ path: path.join(output, 'hero-editor.png') })
   await page.screenshot({ path: path.join(output, 'model-imported.png') })
   await page.screenshot({ path: path.join(output, 'model-loaded.png') })
   await page.screenshot({ path: path.join(output, 'model-tree.png') })
   await page.screenshot({ path: path.join(tutorial, '05-model-loaded.png') })
-  await page.getByRole('button', { name: /arm$/ }).first().click()
+  await page.getByRole('button', { name: /ur5e_upper_arm_link$/ }).first().click()
   await page.screenshot({ path: path.join(output, 'link-selected.png') })
   await page.keyboard.press('KeyE')
   await page.screenshot({ path: path.join(output, 'rotate-gizmo.png') })
   await page.screenshot({ path: path.join(output, 'transform-gizmo.png') })
   await page.screenshot({ path: path.join(tutorial, '07-transform-object.png') })
-  const input = page.locator('[data-joint-id="arm_joint"] input')
+  const input = page.locator('[data-joint-id="ur5e_shoulder_pan_joint"] input')
   await input.fill('0.5')
   await input.press('Enter')
   await page.screenshot({ path: path.join(output, 'joint-control.png') })
@@ -62,3 +62,4 @@ test('capture current generic-model documentation screenshots', async ({ page })
   await page.screenshot({ path: path.join(output, 'transform-inspector.png') })
   await page.screenshot({ path: path.join(output, 'workspace-overview.png') })
 })
+

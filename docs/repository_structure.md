@@ -1,4 +1,4 @@
-# Repository structure
+﻿# Repository structure
 
 The root contains only standard project entry files and the major source, documentation, packaging, configuration, and automation directories.
 
@@ -17,3 +17,4 @@ The root contains only standard project entry files and the major source, docume
 | `build/`, `dist/`, `site/` | Reports, desktop artifacts, documentation output | Yes; ignored |
 
 `desktop_entry.py` remains as a small discoverable compatibility entry; its implementation delegates to `morphology_toolkit.desktop`. The editable frontend exists only under `web/frontend`; packaged static assets are build input for the offline desktop distribution, not a second source tree.
+

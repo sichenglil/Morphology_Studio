@@ -1,0 +1,346 @@
+{
+  "resources": [
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/visual/base.dae",
+      "portable_uri": "meshes/b9e3b9def32a_base.dae",
+      "sha256": "b9e3b9def32a3601409bc93d95ccafbf85653a6de7cc3a8f2d099428d9d39e63",
+      "bytes": 358228
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/collision/base.stl",
+      "portable_uri": "meshes/9a145e0d46f2_base.stl",
+      "sha256": "9a145e0d46f2130afdf2a2e8825a00a929870c4c3d6d8e4d1adc5f04db3aac1b",
+      "bytes": 21084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/visual/shoulder.dae",
+      "portable_uri": "meshes/36ad4f32d1d3_shoulder.dae",
+      "sha256": "36ad4f32d1d31cd99e6c8ec3973d8b7fea1fe174c61a292e5dd6c538c4db275e",
+      "bytes": 1797331
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/collision/shoulder.stl",
+      "portable_uri": "meshes/ceb92532177d_shoulder.stl",
+      "sha256": "ceb92532177daa77682f5fbd628e01c2137d168f949a7a706ce1dabe9f002387",
+      "bytes": 70084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/visual/upperarm.dae",
+      "portable_uri": "meshes/61e7a9609198_upperarm.dae",
+      "sha256": "61e7a96091984514100c54c66260dd19c307b31e64d6dc402cd2db964fde6a21",
+      "bytes": 3082982
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/collision/upperarm.stl",
+      "portable_uri": "meshes/ee893044caf0_upperarm.stl",
+      "sha256": "ee893044caf00075cb55b4cf666d1f1311c7979786212a501009f33bee945209",
+      "bytes": 99684
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/visual/forearm.dae",
+      "portable_uri": "meshes/e5c67e47e013_forearm.dae",
+      "sha256": "e5c67e47e01323427ca5d43220bbdedfa5fcbf555d431a5002ffc545d84aacf0",
+      "bytes": 1141382
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/collision/forearm.stl",
+      "portable_uri": "meshes/2e7423cab807_forearm.stl",
+      "sha256": "2e7423cab807c34160ec4f770daee5e747d70e777eb01b7beeace2b8c5751816",
+      "bytes": 53284
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/visual/wrist1.dae",
+      "portable_uri": "meshes/834b49fc5b95_wrist1.dae",
+      "sha256": "834b49fc5b950b50e24b3a3d6825a1ef38427ab5944102db96ec76fa897d317a",
+      "bytes": 1334911
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/collision/wrist1.stl",
+      "portable_uri": "meshes/f8c9f9337b6f_wrist1.stl",
+      "sha256": "f8c9f9337b6fd98c75f052e96de10e14a107ddb6874ba6b904e546f8a4e4f43a",
+      "bytes": 59584
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/visual/wrist2.dae",
+      "portable_uri": "meshes/918d348a5635_wrist2.dae",
+      "sha256": "918d348a56355fd3dd93421a61a2500a43f321c9a3c4b4ffcb6101ef20c27b07",
+      "bytes": 1555083
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/collision/wrist2.stl",
+      "portable_uri": "meshes/2964a63f60ce_wrist2.stl",
+      "sha256": "2964a63f60ce3e3cf3ad55bcf190d7876d50e373cb64b70a57cea5885eaf3c86",
+      "bytes": 67584
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/visual/wrist3.dae",
+      "portable_uri": "meshes/04e6d4a1ea71_wrist3.dae",
+      "sha256": "04e6d4a1ea71a1f10f51d4cb2a376322e1617068faaa776dd29c7cf53bd2ea63",
+      "bytes": 66177
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/ur_description/meshes/ur5e/collision/wrist3.stl",
+      "portable_uri": "meshes/83b3666b4ae2_wrist3.stl",
+      "sha256": "83b3666b4ae2badd54af0d2c25a921682ecbc29e849eec646c3ed55fb74c78a3",
+      "bytes": 7184
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_base_unit.stl",
+      "portable_uri": "meshes/4ddee90cb3dd_hx5_d20_base_unit.stl",
+      "sha256": "4ddee90cb3dd3a1c74da46b8e201715dc3061beb19e293ef0d87eed5547a2fa2",
+      "bytes": 2107884
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_base_unit.stl",
+      "portable_uri": "meshes/4ddee90cb3dd_hx5_d20_base_unit.stl",
+      "sha256": "4ddee90cb3dd3a1c74da46b8e201715dc3061beb19e293ef0d87eed5547a2fa2",
+      "bytes": 2107884
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_thumb_mcp.stl",
+      "portable_uri": "meshes/b050d0c2c8a3_hx5_d20_thumb_mcp.stl",
+      "sha256": "b050d0c2c8a3f7cac6e03dd8be2aa95cc3418617ebb686d61e672b39cb25cc51",
+      "bytes": 948484
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_thumb_mcp.stl",
+      "portable_uri": "meshes/b050d0c2c8a3_hx5_d20_thumb_mcp.stl",
+      "sha256": "b050d0c2c8a3f7cac6e03dd8be2aa95cc3418617ebb686d61e672b39cb25cc51",
+      "bytes": 948484
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_thumb_mcp2.stl",
+      "portable_uri": "meshes/72d2ae2396f7_hx5_d20_thumb_mcp2.stl",
+      "sha256": "72d2ae2396f7edffab447cb90b81a7ba52913df6196c74d20fd49851c370a119",
+      "bytes": 480684
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_thumb_mcp2.stl",
+      "portable_uri": "meshes/72d2ae2396f7_hx5_d20_thumb_mcp2.stl",
+      "sha256": "72d2ae2396f7edffab447cb90b81a7ba52913df6196c74d20fd49851c370a119",
+      "bytes": 480684
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_thumb_ip.stl",
+      "portable_uri": "meshes/fa2759b28c8f_hx5_d20_thumb_ip.stl",
+      "sha256": "fa2759b28c8fd8fd3ef3fbeb6e280e6bb23f0cdcbfd6f0463261a0babad31b79",
+      "bytes": 866184
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_thumb_ip.stl",
+      "portable_uri": "meshes/fa2759b28c8f_hx5_d20_thumb_ip.stl",
+      "sha256": "fa2759b28c8fd8fd3ef3fbeb6e280e6bb23f0cdcbfd6f0463261a0babad31b79",
+      "bytes": 866184
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_thumb_tip.stl",
+      "portable_uri": "meshes/c94412c121cf_hx5_d20_thumb_tip.stl",
+      "sha256": "c94412c121cfdd6a98d0857010cd0d603415d832f05dbf369347f74f97b515d5",
+      "bytes": 873184
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_thumb_tip.stl",
+      "portable_uri": "meshes/c94412c121cf_hx5_d20_thumb_tip.stl",
+      "sha256": "c94412c121cfdd6a98d0857010cd0d603415d832f05dbf369347f74f97b515d5",
+      "bytes": 873184
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_mcp.stl",
+      "portable_uri": "meshes/b3913fed373a_hx5_d20_finger_mcp.stl",
+      "sha256": "b3913fed373aae024fad967b4ce591d7eb0ea589f36b49bcc1be17120546e07c",
+      "bytes": 493284
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_mcp.stl",
+      "portable_uri": "meshes/b3913fed373a_hx5_d20_finger_mcp.stl",
+      "sha256": "b3913fed373aae024fad967b4ce591d7eb0ea589f36b49bcc1be17120546e07c",
+      "bytes": 493284
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_pip.stl",
+      "portable_uri": "meshes/d7f9d330496c_hx5_d20_finger_pip.stl",
+      "sha256": "d7f9d330496c0f32e066248bf8a81b1da8b22a250b710bbf0fc9738ff16dd307",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_pip.stl",
+      "portable_uri": "meshes/d7f9d330496c_hx5_d20_finger_pip.stl",
+      "sha256": "d7f9d330496c0f32e066248bf8a81b1da8b22a250b710bbf0fc9738ff16dd307",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_dip.stl",
+      "portable_uri": "meshes/e582ee3126bd_hx5_d20_finger_dip.stl",
+      "sha256": "e582ee3126bd9b6e7c3ca1a8ac415be56c2395c70eeb6f6e339c23feccf09495",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_dip.stl",
+      "portable_uri": "meshes/e582ee3126bd_hx5_d20_finger_dip.stl",
+      "sha256": "e582ee3126bd9b6e7c3ca1a8ac415be56c2395c70eeb6f6e339c23feccf09495",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_tip.stl",
+      "portable_uri": "meshes/e23344be5dc6_hx5_d20_finger_tip.stl",
+      "sha256": "e23344be5dc686cdfcc9c3dfc3d187f0715bdbe971e655642e3cc8ff00ff6030",
+      "bytes": 225884
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_tip.stl",
+      "portable_uri": "meshes/e23344be5dc6_hx5_d20_finger_tip.stl",
+      "sha256": "e23344be5dc686cdfcc9c3dfc3d187f0715bdbe971e655642e3cc8ff00ff6030",
+      "bytes": 225884
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_mcp.stl",
+      "portable_uri": "meshes/b3913fed373a_hx5_d20_finger_mcp.stl",
+      "sha256": "b3913fed373aae024fad967b4ce591d7eb0ea589f36b49bcc1be17120546e07c",
+      "bytes": 493284
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_mcp.stl",
+      "portable_uri": "meshes/b3913fed373a_hx5_d20_finger_mcp.stl",
+      "sha256": "b3913fed373aae024fad967b4ce591d7eb0ea589f36b49bcc1be17120546e07c",
+      "bytes": 493284
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_pip.stl",
+      "portable_uri": "meshes/d7f9d330496c_hx5_d20_finger_pip.stl",
+      "sha256": "d7f9d330496c0f32e066248bf8a81b1da8b22a250b710bbf0fc9738ff16dd307",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_pip.stl",
+      "portable_uri": "meshes/d7f9d330496c_hx5_d20_finger_pip.stl",
+      "sha256": "d7f9d330496c0f32e066248bf8a81b1da8b22a250b710bbf0fc9738ff16dd307",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_dip.stl",
+      "portable_uri": "meshes/e582ee3126bd_hx5_d20_finger_dip.stl",
+      "sha256": "e582ee3126bd9b6e7c3ca1a8ac415be56c2395c70eeb6f6e339c23feccf09495",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_dip.stl",
+      "portable_uri": "meshes/e582ee3126bd_hx5_d20_finger_dip.stl",
+      "sha256": "e582ee3126bd9b6e7c3ca1a8ac415be56c2395c70eeb6f6e339c23feccf09495",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_tip.stl",
+      "portable_uri": "meshes/e23344be5dc6_hx5_d20_finger_tip.stl",
+      "sha256": "e23344be5dc686cdfcc9c3dfc3d187f0715bdbe971e655642e3cc8ff00ff6030",
+      "bytes": 225884
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_tip.stl",
+      "portable_uri": "meshes/e23344be5dc6_hx5_d20_finger_tip.stl",
+      "sha256": "e23344be5dc686cdfcc9c3dfc3d187f0715bdbe971e655642e3cc8ff00ff6030",
+      "bytes": 225884
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_mcp.stl",
+      "portable_uri": "meshes/b3913fed373a_hx5_d20_finger_mcp.stl",
+      "sha256": "b3913fed373aae024fad967b4ce591d7eb0ea589f36b49bcc1be17120546e07c",
+      "bytes": 493284
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_mcp.stl",
+      "portable_uri": "meshes/b3913fed373a_hx5_d20_finger_mcp.stl",
+      "sha256": "b3913fed373aae024fad967b4ce591d7eb0ea589f36b49bcc1be17120546e07c",
+      "bytes": 493284
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_pip.stl",
+      "portable_uri": "meshes/d7f9d330496c_hx5_d20_finger_pip.stl",
+      "sha256": "d7f9d330496c0f32e066248bf8a81b1da8b22a250b710bbf0fc9738ff16dd307",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_pip.stl",
+      "portable_uri": "meshes/d7f9d330496c_hx5_d20_finger_pip.stl",
+      "sha256": "d7f9d330496c0f32e066248bf8a81b1da8b22a250b710bbf0fc9738ff16dd307",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_dip.stl",
+      "portable_uri": "meshes/e582ee3126bd_hx5_d20_finger_dip.stl",
+      "sha256": "e582ee3126bd9b6e7c3ca1a8ac415be56c2395c70eeb6f6e339c23feccf09495",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_dip.stl",
+      "portable_uri": "meshes/e582ee3126bd_hx5_d20_finger_dip.stl",
+      "sha256": "e582ee3126bd9b6e7c3ca1a8ac415be56c2395c70eeb6f6e339c23feccf09495",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_tip.stl",
+      "portable_uri": "meshes/e23344be5dc6_hx5_d20_finger_tip.stl",
+      "sha256": "e23344be5dc686cdfcc9c3dfc3d187f0715bdbe971e655642e3cc8ff00ff6030",
+      "bytes": 225884
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_tip.stl",
+      "portable_uri": "meshes/e23344be5dc6_hx5_d20_finger_tip.stl",
+      "sha256": "e23344be5dc686cdfcc9c3dfc3d187f0715bdbe971e655642e3cc8ff00ff6030",
+      "bytes": 225884
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_mcp.stl",
+      "portable_uri": "meshes/b3913fed373a_hx5_d20_finger_mcp.stl",
+      "sha256": "b3913fed373aae024fad967b4ce591d7eb0ea589f36b49bcc1be17120546e07c",
+      "bytes": 493284
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_mcp.stl",
+      "portable_uri": "meshes/b3913fed373a_hx5_d20_finger_mcp.stl",
+      "sha256": "b3913fed373aae024fad967b4ce591d7eb0ea589f36b49bcc1be17120546e07c",
+      "bytes": 493284
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_pip.stl",
+      "portable_uri": "meshes/d7f9d330496c_hx5_d20_finger_pip.stl",
+      "sha256": "d7f9d330496c0f32e066248bf8a81b1da8b22a250b710bbf0fc9738ff16dd307",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_pip.stl",
+      "portable_uri": "meshes/d7f9d330496c_hx5_d20_finger_pip.stl",
+      "sha256": "d7f9d330496c0f32e066248bf8a81b1da8b22a250b710bbf0fc9738ff16dd307",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_dip.stl",
+      "portable_uri": "meshes/e582ee3126bd_hx5_d20_finger_dip.stl",
+      "sha256": "e582ee3126bd9b6e7c3ca1a8ac415be56c2395c70eeb6f6e339c23feccf09495",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_dip.stl",
+      "portable_uri": "meshes/e582ee3126bd_hx5_d20_finger_dip.stl",
+      "sha256": "e582ee3126bd9b6e7c3ca1a8ac415be56c2395c70eeb6f6e339c23feccf09495",
+      "bytes": 456084
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_tip.stl",
+      "portable_uri": "meshes/e23344be5dc6_hx5_d20_finger_tip.stl",
+      "sha256": "e23344be5dc686cdfcc9c3dfc3d187f0715bdbe971e655642e3cc8ff00ff6030",
+      "bytes": 225884
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_description/meshes/hx5_d20_rev2/hx5_d20_right/hx5_d20_finger_tip.stl",
+      "portable_uri": "meshes/e23344be5dc6_hx5_d20_finger_tip.stl",
+      "sha256": "e23344be5dc686cdfcc9c3dfc3d187f0715bdbe971e655642e3cc8ff00ff6030",
+      "bytes": 225884
+    },
+    {
+      "source_uri": "G:/Code_Programs/VscodeProjects/Robot/Morphology-Conditioned/models/robotis_hand/robotis_hand_bringup/config/hx5_d20/hx5_d20_hardware_controller_manager.yaml",
+      "portable_uri": "resources/cb6c0f2d23f6_hx5_d20_hardware_controller_manager.yaml",
+      "sha256": "cb6c0f2d23f69adc808c1b9324aaf61e88b5dd6c2df01ad1ff955beb47bdae9e",
+      "bytes": 4787
+    }
+  ]
+}

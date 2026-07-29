@@ -1,23 +1,22 @@
 from __future__ import annotations
 
 import logging
-import os
 import sys
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import TextIO
 
+from morphology_toolkit.paths import logs_dir
+
 
 def log_directory() -> Path:
-    base = os.environ.get("LOCALAPPDATA")
-    root = Path(base) / "MorphologyStudio" if base else Path.home() / ".morphology_studio"
-    return root / "logs"
+    return logs_dir()
 
 
 def configure_logging(stream: TextIO | None = None) -> Path:
     directory = log_directory()
     directory.mkdir(parents=True, exist_ok=True)
-    path = directory / "morphology-studio.log"
+    path = directory / "MorphologyStudio.log"
     handlers: list[logging.Handler] = [
         RotatingFileHandler(
             path,

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="numeric">
+  <link name="base">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <box size="0.1 0.1 0.1" />
+      </geometry>
+    </visual>
+  </link>
+  <link name="child">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+      <geometry>
+        <box size="0.1 0.1 0.1" />
+      </geometry>
+    </visual>
+  </link>
+  <joint name="parent_joint" type="fixed">
+    <parent link="base" />
+    <child link="child" />
+    <origin xyz="0.025 0.0 0.0" rpy="0.0 0.0 0.2617993877991494" />
+  </joint>
+</robot>

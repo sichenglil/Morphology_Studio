@@ -1,0 +1,87 @@
+{
+  "summary": {
+    "errors": 0,
+    "warnings": 12,
+    "export_ready": true
+  },
+  "diagnostics": [
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "ur5e_world"
+    },
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "ur5e_base_link"
+    },
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "ur5e_ft_frame"
+    },
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "ur5e_base"
+    },
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "ur5e_flange"
+    },
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "ur5e_tool0"
+    },
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "hx5_world"
+    },
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "hx5_finger_end_r_link1"
+    },
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "hx5_finger_end_r_link2"
+    },
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "hx5_finger_end_r_link3"
+    },
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "hx5_finger_end_r_link4"
+    },
+    {
+      "severity": "WARNING",
+      "code": "missing_inertial",
+      "message": "Link has no inertial data",
+      "subject": "hx5_finger_end_r_link5"
+    },
+    {
+      "severity": "INFO",
+      "code": "compatibility",
+      "message": "URDF structural checks completed; target converters perform additional compatibility checks",
+      "subject": null
+    }
+  ]
+}

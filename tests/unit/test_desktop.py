@@ -39,7 +39,7 @@ def test_logging_survives_missing_standard_streams(monkeypatch, tmp_path):
     monkeypatch.setattr(sys, "stderr", None)
     path = configure_logging()
     logging.getLogger("test").warning("windowed mode works")
-    assert path == tmp_path / "MorphologyStudio" / "logs" / "morphology-studio.log"
+    assert path == Path(__file__).resolve().parents[2] / "logs" / "MorphologyStudio.log"
     assert "windowed mode works" in path.read_text(encoding="utf-8")
 
 

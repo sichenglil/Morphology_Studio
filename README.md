@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 # Morphology Studio
 
@@ -13,11 +13,21 @@
   <a href="LICENSE"><img alt="Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue.svg"></a>
 </p>
 
-<img src="docs/assets/screenshots/hero-editor.png" width="960" alt="Morphology Studio editor with model tree, 3D viewport, inspector, and joint controls">
 
 <p><strong>Version 0.1.0 · Alpha · ROS-free core · Optional ROS 2 and Isaac integrations planned</strong></p>
 
 </div>
+
+## Robot operation demo
+
+The animation below records the packaged `ur5e_hx5_right` robot being loaded and operated inside Morphology Studio.
+
+<p align="center"><img src="assets/previews/ur5e_hx5_right/robot.gif" width="960" alt="Operating UR5e with HX5 Right inside Morphology Studio"></p>
+
+- The GIF is captured from the real application while loading the model and moving a joint.
+- The application and EXE use the copied resources under `assets/robot_models/ur5e_hx5_right`.
+- Running the application does not require the original Morphology-Conditioned project.
+- Regenerate with `python scripts/generate_software_demo_gif.py`.
 
 <a id="contents"></a>
 <h2 align="center">Contents</h2>
@@ -92,7 +102,7 @@ python -m venv .venv
 python desktop_entry.py
 ```
 
-Open `examples/simple_two_link/robot.urdf`. Browser development uses `./scripts/run_web.ps1` plus `pnpm --dir web/frontend dev` in a second terminal.
+Open `assets/robot_models/ur5e_hx5_right/robot.urdf`. Browser development uses `./scripts/run_web.ps1` plus `pnpm --dir web/frontend dev` in a second terminal.
 
 Run the complete local verification suite with `./scripts/test_all.ps1`.
 
@@ -103,15 +113,13 @@ Run the complete local verification suite with `./scripts/test_all.ps1`.
 2. Select `arm` in the model tree; orbit and focus the 3D viewport.
 3. Move the joint slider or type an exact value and press Enter.
 4. Use `W` and `E` to switch the transform gizmo between move and rotate.
-5. Import `examples/simple_tool/tool.urdf`, open **Assembly**, and create a fixed joint.
+5. Import `assets/robot_models/ur5e_hx5_right/robot.urdf`, open **Assembly**, and create a fixed joint.
 6. Run **Validation**, choose an output destination, and export a portable package.
 
 <a id="gallery"></a>
 <h2 align="center">Screenshot gallery</h2>
 
-<table align="center"><tr><td align="center"><img src="docs/assets/screenshots/import-dialog.png" width="440" alt="Model import dialog"><br><strong>Import</strong></td><td align="center"><img src="docs/assets/screenshots/link-selected.png" width="440" alt="Selected robot link"><br><strong>Select and inspect</strong></td></tr><tr><td align="center"><img src="docs/assets/screenshots/joint-control.png" width="440" alt="Joint slider and numeric input"><br><strong>Control joints</strong></td><td align="center"><img src="docs/assets/screenshots/validation-results.png" width="440" alt="Validation panel"><br><strong>Validate</strong></td></tr></table>
 
-<p align="center"><img src="docs/assets/demo/morphology-studio-demo.webp" width="720" alt="Animated Morphology Studio workflow"></p>
 
 <a id="architecture"></a>
 <h2 align="center">Architecture</h2>
@@ -128,7 +136,7 @@ The Vue/Three.js editor talks to a local FastAPI service. Importers populate one
 | `src/morphology_toolkit/` | Robot-agnostic Python backend and packaged frontend assets |
 | `web/frontend/` | Sole editable Vue 3 and Three.js frontend |
 | `tests/` | Python unit, integration, documentation, and local acceptance tests |
-| `examples/` | Small Apache-2.0 generic URDF fixtures |
+| `assets/robot_models/ur5e_hx5_right/` | Packaged combined robot model |
 | `docs/` | User, architecture, maintainer, audit, and visual documentation |
 | `scripts/` | Stable entry scripts plus grouped development and migration helpers |
 | `configs/` | Optional package maps and acceptance configuration |
@@ -145,3 +153,4 @@ Generated output belongs in ignored `build/`, `dist/`, `generated/`, or a user w
 <h2 align="center">Contributing, security, and license</h2>
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md), report vulnerabilities privately through [SECURITY.md](SECURITY.md), and use the provided issue templates without attaching proprietary models. Morphology Studio is licensed under [Apache-2.0](LICENSE); dependency attribution is recorded in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+

@@ -10,7 +10,9 @@ import traceback
 from urllib.error import URLError
 from urllib.request import urlopen
 
+from morphology_toolkit import __version__
 from morphology_toolkit.logging_config import configure_logging
+from morphology_toolkit.paths import resource_root
 
 
 def available_port() -> int:
@@ -63,6 +65,9 @@ def show_error(message: str) -> None:
 def _run(browser_fallback: bool = False) -> int:
     log_path = configure_logging()
     logger = logging.getLogger(__name__)
+    logger.info("Starting Morphology Studio %s", __version__)
+    logger.info("Frozen=%s executable=%s", getattr(sys, "frozen", False), sys.executable)
+    logger.info("Resource root=%s", resource_root())
     port = int(os.environ.get("MORPHOLOGY_PORT", "0")) or available_port()
     url = f"http://127.0.0.1:{port}"
     server = create_server(port)
