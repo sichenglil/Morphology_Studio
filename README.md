@@ -84,7 +84,7 @@ Each module below states its purpose, main action, input, output, maturity, and 
 <tr><td align="center">URDF</td><td align="center">Yes</td><td align="center">Yes</td><td align="center">Supported</td><td align="left">Core robot model format</td></tr>
 <tr><td align="center">Xacro</td><td align="center">Yes</td><td align="center">Expanded URDF</td><td align="center">Partial</td><td align="left">Explicit package maps work without ROS</td></tr>
 <tr><td align="center">MJCF</td><td align="center">Yes</td><td align="center">Yes</td><td align="center">Partial</td><td align="left">Static structural conversion; review output fidelity</td></tr>
-<tr><td align="center">STEP</td><td align="center">Adapter required</td><td align="center">No</td><td align="center">Experimental</td><td align="left">Requires a separately installed step2urdf adapter</td></tr>
+<tr><td align="center">STEP</td><td align="center">Yes, assisted</td><td align="center">URDF package</td><td align="center">Experimental</td><td align="left">Separate step2urdf editor; safe ZIP round trip</td></tr>
 <tr><td align="center">USD</td><td align="center">No</td><td align="center">No</td><td align="center">Planned</td><td align="left">Requires a verified Isaac Sim integration</td></tr>
 </tbody></table>
 
@@ -116,6 +116,21 @@ python project/desktop_entry.py
 Open `assets/robot_models/ur5e_hx5_right/robot.urdf`. Browser development uses `./scripts/maintenance/run_web.ps1` plus `pnpm --dir web/frontend dev` in a second terminal.
 
 Run the complete local verification suite with `./scripts/validation/test_all.ps1`.
+
+### STEP import and URDF export
+
+Install the optional MIT-licensed step2urdf checkout separately, set
+`MORPHOLOGY_STEP2URDF_PATH`, and select a STEP file in the import dialog. Define the assembly tree,
+links, joint axes/limits, mass and inertia in the adapter; export its ZIP and import that ZIP back
+into Morphology Studio. Validate and preview all joints before choosing URDF, portable directory or
+portable ZIP export. Detailed commands and limitations are in
+[the STEP workflow](docs/step-workflow.md), with [reference analysis](docs/reference-analysis.md)
+and [export structure](docs/urdf-export.md).
+
+STEP bytes and model packages are processed locally. The upstream adapter has no headless conversion
+API, so Morphology Studio never silently infers mechanism semantics. Current Chromium/Edge WebView2
+is recommended for the adapter's OpenCascade WebAssembly worker. Very large CAD assemblies remain
+bounded by browser memory and require explicit user review.
 
 <a id="five-minute-workflow"></a>
 <h2 align="center">Five-minute workflow</h2>

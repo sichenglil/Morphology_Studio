@@ -77,7 +77,7 @@ Morphology Studio 在保持源模型只读的前提下，为检查和准备机�
 <tr><td align="center">URDF</td><td align="center">是</td><td align="center">是</td><td align="center">已支持</td><td align="left">核心机器人模型格式</td></tr>
 <tr><td align="center">Xacro</td><td align="center">是</td><td align="center">展开为 URDF</td><td align="center">部分支持</td><td align="left">显式 package map 可在无 ROS 环境使用</td></tr>
 <tr><td align="center">MJCF</td><td align="center">是</td><td align="center">是</td><td align="center">部分支持</td><td align="left">静态结构转换，建议检查输出保真度</td></tr>
-<tr><td align="center">STEP</td><td align="center">需要适配器</td><td align="center">否</td><td align="center">实验性</td><td align="left">需要单独安装 step2urdf 适配器</td></tr>
+<tr><td align="center">STEP</td><td align="center">是（辅助模式）</td><td align="center">URDF 包</td><td align="center">实验性</td><td align="left">独立 step2urdf 编辑器，安全 ZIP 回导</td></tr>
 <tr><td align="center">USD</td><td align="center">否</td><td align="center">否</td><td align="center">规划中</td><td align="left">需要经过验证的 Isaac Sim 集成</td></tr>
 </tbody></table>
 
