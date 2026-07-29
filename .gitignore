@@ -9,7 +9,7 @@ __pycache__/
 .pytype/
 htmlcov/
 .venv/
-build/
+/build/
 generated/
 /workspace/
 models/
