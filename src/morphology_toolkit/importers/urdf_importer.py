@@ -134,6 +134,7 @@ class UrdfImporter(Importer):
                 raise ValueError(f"Invalid or duplicate joint: {name!r}")
             axis = joint.find("axis")
             limit = joint.find("limit")
+            dynamics = joint.find("dynamics")
             mimic = joint.find("mimic")
             model.joints[name] = JointModel(
                 name=name,
@@ -148,6 +149,11 @@ class UrdfImporter(Importer):
                     key: float(value)
                     for key, value in (limit.attrib.items() if limit is not None else [])
                     if key in {"lower", "upper", "effort", "velocity"}
+                },
+                dynamics={
+                    key: float(value)
+                    for key, value in (dynamics.attrib.items() if dynamics is not None else [])
+                    if key in {"damping", "friction"}
                 },
                 mimic=mimic.get("joint") if mimic is not None else None,
             )

@@ -7,7 +7,7 @@ import math
 import mimetypes
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 from urllib.parse import quote
 
 from morphology_toolkit.assembly import assemble_models
@@ -30,6 +30,7 @@ from morphology_toolkit.morphology import generate_morphology
 from morphology_toolkit.paths import assets_dir, resource_root
 from morphology_toolkit.resources import ResourceResolver, load_package_map
 from morphology_toolkit.services.model_registry import load_registry
+from morphology_toolkit.step import Step2UrdfAdapter, Step2UrdfPackageImporter
 from morphology_toolkit.validation import validate_model
 
 LOGGER = logging.getLogger(__name__)
@@ -167,6 +168,13 @@ def _load_model(
             source,
             ProcessingMode.ASSISTED,
             {"arguments": arguments, "package_map": package_map},
+        )
+    if fmt == "step2urdf_package":
+        return Step2UrdfPackageImporter().execute(source, ProcessingMode.ASSISTED)
+    if fmt == "step":
+        raise ValueError(
+            "STEP requires the interactive step2urdf adapter. Launch it, define links and joints, "
+            "export the URDF ZIP, then import that ZIP."
         )
     raise ValueError(f"Unsupported model format: {fmt}")
 
@@ -334,7 +342,21 @@ def create_app():
             "xacro": xacro_status,
             "ros": "NOT_AVAILABLE_LOCAL",
             "isaac": "NOT_AVAILABLE_LOCAL",
+            "step2urdf": Step2UrdfAdapter().status().public_dict(),
         }
+
+    @app.get("/api/step-adapter/status")
+    def step_adapter_status():
+        return Step2UrdfAdapter().status().public_dict()
+
+    @app.post("/api/step-adapter/launch")
+    def launch_step_adapter(request: Optional[dict[str, Any]] = None):
+        root = Path(request["path"]) if request and request.get("path") else None
+        try:
+            return Step2UrdfAdapter(root).launch().public_dict()
+        except Exception as exc:
+            LOGGER.exception("Unable to launch step2urdf adapter")
+            raise HTTPException(409, str(exc)) from exc
 
     @app.get("/api/pick")
     def pick(kind: str = "file"):
@@ -363,6 +385,9 @@ def create_app():
                 }
                 for item in analysis.entry_candidates
             ],
+            "stepAdapter": Step2UrdfAdapter().status().public_dict()
+            if detect_format(target) == "step"
+            else None,
         }
 
     @app.post("/api/models/load")
@@ -389,7 +414,7 @@ def create_app():
             raise HTTPException(400, str(exc)) from exc
         session.clear()
         session.model = model
-        session.source = source
+        session.source = model.source_path
         session.package_map = package_map
         LOGGER.info("Loaded model %s from %s", model.robot_id, source)
         return _scene_manifest(session)
@@ -680,15 +705,17 @@ def create_app():
                     json.dumps(generate_morphology(session.model), indent=2), encoding="utf-8"
                 )
                 result = output
-            elif export_format == "package":
+            elif export_format in {"package", "package_zip"}:
                 base = session.source.parent if session.source.is_file() else session.source
-                result = PortablePackageExporter().export(
-                    session.model,
-                    output,
-                    ResourceResolver(base, package_map=session.package_map),
+                exporter = PortablePackageExporter()
+                resolver = ResourceResolver(base, package_map=session.package_map)
+                result = (
+                    exporter.export_zip(session.model, output, resolver)
+                    if export_format == "package_zip"
+                    else exporter.export(session.model, output, resolver)
                 )
             else:
-                raise ValueError("format must be urdf, mjcf, morphology, or package")
+                raise ValueError("format must be urdf, mjcf, morphology, package, or package_zip")
         except Exception as exc:
             LOGGER.exception("Export failed")
             raise HTTPException(400, str(exc)) from exc

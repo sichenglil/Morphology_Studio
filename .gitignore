@@ -29,6 +29,7 @@ test-results/
 site/
 *.log
 artifacts/logs/*.log
+artifacts/completion-email.txt
 .env
 .env.*
 *.pem

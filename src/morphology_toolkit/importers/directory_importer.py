@@ -10,7 +10,7 @@ from .registry import detect_format
 
 
 class DirectoryImporter(Importer):
-    ENTRY_FORMATS = {"urdf", "xacro", "mjcf", "step", "srdf"}
+    ENTRY_FORMATS = {"urdf", "xacro", "mjcf", "step", "step2urdf_package", "srdf"}
 
     def analyze(self, path: Path) -> ImportAnalysis:
         path = Path(path).resolve()
@@ -83,6 +83,15 @@ class DirectoryImporter(Importer):
             return UrdfImporter().execute(entry, mode, selection)
         if fmt == "xacro":
             return XacroImporter().execute(entry, mode, selection)
+        if fmt == "step2urdf_package":
+            from morphology_toolkit.step import Step2UrdfPackageImporter
+
+            return Step2UrdfPackageImporter().execute(entry, mode, selection)
+        if fmt == "step":
+            raise ValueError(
+                "STEP requires interactive link/joint definition. Open the step2urdf adapter, "
+                "export its URDF ZIP, then import that ZIP here."
+            )
         raise ValueError(f"Execution for directory candidate format {fmt!r} is not available")
 
     @staticmethod

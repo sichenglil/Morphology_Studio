@@ -36,7 +36,7 @@ def main() -> int:
     release = ROOT / "release" / "MorphologyStudio"
     exe = release / "MorphologyStudio.exe"
     build = f"""Morphology Studio build report
-Build time: {datetime.now().astimezone().isoformat(timespec='seconds')}
+Build time: {datetime.now().astimezone().isoformat(timespec="seconds")}
 Operating system: {platform.platform()}
 Python: {sys.version.split()[0]}
 PyInstaller: 6.21.0 (isolated build/packaging-venv)

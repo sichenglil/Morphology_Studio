@@ -21,6 +21,7 @@ from morphology_toolkit.importers import (
 from morphology_toolkit.morphology import generate_morphology
 from morphology_toolkit.reports import audit_repository
 from morphology_toolkit.resources import PackageResolver, ResourceResolver, load_package_map
+from morphology_toolkit.step import Step2UrdfAdapter, Step2UrdfPackageImporter
 from morphology_toolkit.validation import validate_model
 from morphology_toolkit.workspace import Workspace
 
@@ -58,6 +59,13 @@ def _load(
                 "package_paths": package_roots or [],
             },
         )
+    if fmt == "step2urdf_package":
+        return Step2UrdfPackageImporter().execute(path, mode, {"entry": entry} if entry else None)
+    if fmt == "step":
+        raise ValueError(
+            "Raw STEP needs the interactive step2urdf adapter. Run "
+            "'morphology-tool step-adapter launch', export a ZIP, and import the ZIP."
+        )
     raise ValueError(f"Unsupported input format: {fmt}")
 
 
@@ -69,6 +77,8 @@ def _analysis(path: Path):
         return UrdfImporter().analyze(path)
     if fmt == "xacro":
         return XacroImporter().analyze(path)
+    if fmt == "step2urdf_package":
+        return Step2UrdfPackageImporter().analyze(path)
     raise ValueError(f"No analyzer for {fmt}")
 
 
@@ -129,6 +139,9 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("web").add_argument("--port", type=int, default=8000)
     desktop = sub.add_parser("desktop")
     desktop.add_argument("--browser", action="store_true")
+    step_adapter = sub.add_parser("step-adapter")
+    step_adapter.add_argument("action", choices=("status", "launch"))
+    step_adapter.add_argument("--path", type=Path)
     return parser
 
 
@@ -349,6 +362,11 @@ def main(argv=None) -> int:
             from morphology_toolkit.desktop import main as desktop_main
 
             return desktop_main(browser_fallback=args.browser)
+        if args.command == "step-adapter":
+            adapter = Step2UrdfAdapter(args.path)
+            status = adapter.launch() if args.action == "launch" else adapter.status()
+            print(json.dumps(status.public_dict(), indent=2))
+            return 0 if status.available else 2
     except Exception as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2

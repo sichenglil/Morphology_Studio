@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import zipfile
 from pathlib import Path
 from typing import Dict, Type
 from xml.etree import ElementTree as ET
@@ -13,6 +14,10 @@ def detect_format(path: Path) -> str:
         if (path / "package.xml").exists():
             return "ros_package"
         return "directory"
+    if path.suffix.lower() == ".zip" and zipfile.is_zipfile(path):
+        from morphology_toolkit.step.package_importer import Step2UrdfPackageImporter
+
+        return "step2urdf_package" if Step2UrdfPackageImporter.is_package(path) else "unknown"
     head = path.read_bytes()[:4096]
     text = head.decode("utf-8", errors="ignore")
     upper = text.upper()

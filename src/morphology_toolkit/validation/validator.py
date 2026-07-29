@@ -85,7 +85,10 @@ def validate_model(
 
     for root in roots:
         visit(root)
+    reachable = set(visited)
     for name in sorted(set(model.links) - visited):
+        visit(name)
+    for name in sorted(set(model.links) - reachable):
         report.diagnostics.append(
             Diagnostic("ERROR", "orphan_link", "Link is disconnected from the kinematic root", name)
         )
@@ -136,6 +139,15 @@ def validate_model(
                     "WARNING",
                     "continuous_limit",
                     "Continuous joint has position limits",
+                    joint.name,
+                )
+            )
+        if any(not math.isfinite(value) or value < 0 for value in joint.dynamics.values()):
+            report.diagnostics.append(
+                Diagnostic(
+                    "ERROR",
+                    "invalid_dynamics",
+                    "Joint damping and friction must be finite and non-negative",
                     joint.name,
                 )
             )
