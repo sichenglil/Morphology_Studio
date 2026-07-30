@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+import platform
 import socket
 import sys
 import threading
@@ -12,7 +13,41 @@ from urllib.request import urlopen
 
 from morphology_toolkit import __version__
 from morphology_toolkit.logging_config import configure_logging
-from morphology_toolkit.paths import resource_root
+from morphology_toolkit.paths import bundled_root, resource_root
+
+WEBVIEW2_CLIENT_ID = "{F1E7E1A1-2D57-49A6-9F1C-1F7B4D5F7D5A}"
+
+
+def webview2_runtime_available() -> bool:
+    if sys.platform != "win32":
+        return True
+    try:
+        import winreg
+
+        roots = (winreg.HKEY_CURRENT_USER, winreg.HKEY_LOCAL_MACHINE)
+        keys = (
+            rf"SOFTWARE\Microsoft\EdgeUpdate\Clients\{WEBVIEW2_CLIENT_ID}",
+            rf"SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\{WEBVIEW2_CLIENT_ID}",
+        )
+        for root in roots:
+            for key in keys:
+                try:
+                    with winreg.OpenKey(root, key) as handle:
+                        if winreg.QueryValueEx(handle, "pv")[0]:
+                            return True
+                except OSError:
+                    continue
+    except ImportError:
+        return False
+    candidates = (
+        os.environ.get("PROGRAMFILES(X86)"),
+        os.environ.get("PROGRAMFILES"),
+        os.environ.get("LOCALAPPDATA"),
+    )
+    return any(
+        root and os.path.isdir(os.path.join(root, "Microsoft", "EdgeWebView", "Application"))
+        for root in candidates
+    )
 
 
 def available_port() -> int:
@@ -63,11 +98,21 @@ def show_error(message: str) -> None:
 
 
 def _run(browser_fallback: bool = False) -> int:
+    started = time.perf_counter()
     log_path = configure_logging()
     logger = logging.getLogger(__name__)
     logger.info("Starting Morphology Studio %s", __version__)
     logger.info("Frozen=%s executable=%s", getattr(sys, "frozen", False), sys.executable)
+    logger.info("Windows=%s", platform.platform())
+    logger.info("MEIPASS=%s", getattr(sys, "_MEIPASS", None))
     logger.info("Resource root=%s", resource_root())
+    frontend = bundled_root() / "morphology_toolkit" / "static" / "frontend" / "index.html"
+    logger.info("Frontend entry=%s", frontend)
+    frontend_assets = frontend.parent / "assets"
+    wasm = next(frontend_assets.glob("opencascade.full-*.wasm"), None)
+    worker = next(frontend_assets.glob("StepWorker-*.js"), None)
+    logger.info("OpenCascade WASM=%s", wasm)
+    logger.info("OpenCascade Worker=%s", worker)
     port = int(os.environ.get("MORPHOLOGY_PORT", "0")) or available_port()
     url = f"http://127.0.0.1:{port}"
     server = create_server(port)
@@ -77,6 +122,7 @@ def _run(browser_fallback: bool = False) -> int:
         server.should_exit = True
         raise RuntimeError(f"Desktop API did not become healthy in 15 seconds. Log: {log_path}")
     logger.info("Desktop API ready at %s", url)
+    logger.info("STARTUP backend_ready_seconds=%.3f", time.perf_counter() - started)
 
     try:
         if browser_fallback:
@@ -85,6 +131,12 @@ def _run(browser_fallback: bool = False) -> int:
             webbrowser.open(url)
             thread.join()
         else:
+            runtime_available = webview2_runtime_available()
+            logger.info("WebView2 runtime available=%s", runtime_available)
+            if not runtime_available:
+                raise RuntimeError(
+                    "未检测到 Microsoft Edge WebView2 Runtime。请从微软官方网站安装后重试。"
+                )
             try:
                 import webview
             except ImportError as exc:
@@ -101,7 +153,8 @@ def _run(browser_fallback: bool = False) -> int:
                 min_size=(1100, 700),
                 resizable=True,
             )
-            webview.start()
+            logger.info("STARTUP window_created_seconds=%.3f", time.perf_counter() - started)
+            webview.start(gui="edgechromium")
     finally:
         server.should_exit = True
         thread.join(timeout=5)

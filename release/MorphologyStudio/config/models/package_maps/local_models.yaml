@@ -1,7 +1,0 @@
-packages:
-  ur_description:
-    path: models/ur_description
-  robotis_hand_description:
-    path: models/robotis_hand/robotis_hand_description
-  robotis_hand_bringup:
-    path: models/robotis_hand/robotis_hand_bringup

@@ -5,44 +5,53 @@ export interface StepSolid {
 }
 
 let nextRequestId = 1
+let worker: Worker | undefined
+const pending = new Map<number, { resolve:(value:StepSolid[])=>void; reject:(reason:Error)=>void }>()
+
+function stepWorker() {
+  if (worker) return worker
+  worker = new Worker(new URL('./StepWorker.ts', import.meta.url), { type: 'module' })
+  worker.onmessage = (event) => {
+    const request = pending.get(event.data.id)
+    if (!request) return
+    pending.delete(event.data.id)
+    if (event.data.error) request.reject(new Error(event.data.error))
+    else request.resolve((event.data.solids ?? []) as StepSolid[])
+  }
+  worker.onerror = (event) => {
+    const error = new Error(event.message || 'STEP 解析 Worker 失败')
+    for (const request of pending.values()) request.reject(error)
+    pending.clear()
+    worker?.terminate()
+    worker = undefined
+  }
+  return worker
+}
+
+export function prewarmStepEngine(): Promise<void> {
+  const id = nextRequestId++
+  return new Promise((resolve, reject) => {
+    pending.set(id, { resolve: () => resolve(), reject })
+    stepWorker().postMessage({ id, action: 'init' })
+  })
+}
+
+function parseBuffer(buffer: ArrayBuffer): Promise<StepSolid[]> {
+  const id = nextRequestId++
+  return new Promise((resolve, reject) => {
+    pending.set(id, { resolve, reject })
+    stepWorker().postMessage({ id, action: 'parse', buffer }, [buffer])
+  })
+}
 
 export function parseStep(file: File): Promise<StepSolid[]> {
-  return file.arrayBuffer().then((buffer) => new Promise((resolve, reject) => {
-    const worker = new Worker(new URL('./StepWorker.ts', import.meta.url), { type: 'module' })
-    const id = nextRequestId++
-    worker.onmessage = (event) => {
-      if (event.data.id !== id) return
-      worker.terminate()
-      if (event.data.error) reject(new Error(event.data.error))
-      else resolve(event.data.solids as StepSolid[])
-    }
-    worker.onerror = (event) => {
-      worker.terminate()
-      reject(new Error(event.message || 'STEP 解析 Worker 失败'))
-    }
-    worker.postMessage({ id, buffer }, [buffer])
-  }))
+  return file.arrayBuffer().then(parseBuffer)
 }
 
 export async function parseStepPath(path: string): Promise<StepSolid[]> {
   const response = await fetch(`/api/models/step-source?path=${encodeURIComponent(path)}`)
   if (!response.ok) throw new Error(await response.text())
-  const buffer = await response.arrayBuffer()
-  return new Promise((resolve, reject) => {
-    const worker = new Worker(new URL('./StepWorker.ts', import.meta.url), { type: 'module' })
-    const id = nextRequestId++
-    worker.onmessage = (event) => {
-      if (event.data.id !== id) return
-      worker.terminate()
-      if (event.data.error) reject(new Error(event.data.error))
-      else resolve(event.data.solids as StepSolid[])
-    }
-    worker.onerror = (event) => {
-      worker.terminate()
-      reject(new Error(event.message || 'STEP 解析 Worker 失败'))
-    }
-    worker.postMessage({ id, buffer }, [buffer])
-  })
+  return parseBuffer(await response.arrayBuffer())
 }
 
 function normal(a: number[], b: number[], c: number[]) {

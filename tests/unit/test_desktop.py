@@ -35,19 +35,20 @@ def test_desktop_server_has_console_independent_uvicorn_config():
     assert server.config.use_colors is False
 
 
-def test_path_picker_forwards_export_filename_and_extension(monkeypatch):
+def test_path_picker_forwards_export_filename_and_extension(monkeypatch, tmp_path):
     captured = {}
+    selected = tmp_path / "robot.urdf"
 
     def fake_picker(kind: str, extension: str = "", filename: str = "") -> str:
         captured.update(kind=kind, extension=extension, filename=filename)
-        return r"D:\exports\robot.urdf"
+        return str(selected)
 
     monkeypatch.setattr("morphology_toolkit.webapp._pick_path", fake_picker)
     response = TestClient(create_app()).get(
         "/api/pick", params={"kind": "save", "extension": ".urdf", "filename": "robot.urdf"}
     )
     assert response.status_code == 200
-    assert response.json() == {"path": r"D:\exports\robot.urdf"}
+    assert response.json() == {"path": str(selected)}
     assert captured == {"kind": "save", "extension": ".urdf", "filename": "robot.urdf"}
 
 
@@ -57,9 +58,7 @@ def test_logging_survives_missing_standard_streams(monkeypatch, tmp_path):
     monkeypatch.setattr(sys, "stderr", None)
     path = configure_logging()
     logging.getLogger("test").warning("windowed mode works")
-    assert (
-        path == Path(__file__).resolve().parents[2] / "artifacts" / "logs" / "MorphologyStudio.log"
-    )
+    assert path == tmp_path / "MorphologyStudio" / "logs" / "MorphologyStudio.log"
     assert "windowed mode works" in path.read_text(encoding="utf-8")
 
 

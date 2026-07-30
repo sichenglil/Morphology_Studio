@@ -180,3 +180,15 @@ Generated output belongs in ignored `build/`, `dist/`, `generated/`, or a user w
 <h2 align="center">Contributing, security, and license</h2>
 
 Read [CONTRIBUTING.md](docs/governance/CONTRIBUTING.md), report vulnerabilities privately through [SECURITY.md](docs/governance/SECURITY.md), and use the provided issue templates without attaching proprietary models. Morphology Studio is licensed under [Apache-2.0](LICENSE); dependency attribution is recorded in [THIRD_PARTY_NOTICES.md](project/THIRD_PARTY_NOTICES.md).
+
+<h2 align="center">Windows single-file release</h2>
+
+Build the final onefile edition with `powershell -ExecutionPolicy Bypass -File .\scripts\build_onefile.ps1`.
+The only runtime file users must copy is `release\MorphologyStudio.exe`. It contains Python, the
+frontend, OpenCascade WASM/Worker, configuration and the default robot resources. Python, Node.js,
+pnpm, OpenCascade and the source tree are not needed; Windows must provide Edge WebView2 Runtime.
+
+PyInstaller onefile extracts native libraries and data to a temporary `_MEI*` directory, so the first
+launch can be slower. Logs and caches are stored under `%LOCALAPPDATA%\MorphologyStudio`, never beside
+the EXE. The faster onedir build remains available through `scripts\build_onedir.ps1`. See
+[packaging](docs/packaging.md) and [measured startup performance](docs/startup-performance.md).

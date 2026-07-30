@@ -75,10 +75,14 @@ def main() -> int:
         ):
             errors.append(f"generated or user data tracked: {portable}")
         large_binary_roots = ("assets/", "artifacts/", "release/")
+        bundled_runtime_assets = (
+            "src/morphology_toolkit/static/frontend/assets/opencascade.full-",
+        )
         if (
             path.is_file()
             and path.stat().st_size > 5 * 1024 * 1024
             and not portable.startswith(large_binary_roots)
+            and not portable.startswith(bundled_runtime_assets)
         ):
             errors.append(f"large file: {portable}")
         if path.suffix.lower() in {".py", ".ts", ".vue", ".md", ".yaml", ".yml", ".json"}:

@@ -5,6 +5,7 @@ import json
 import logging
 import math
 import mimetypes
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -294,6 +295,7 @@ def create_app():
     mimetypes.add_type("text/javascript", ".js", strict=True)
     mimetypes.add_type("text/css", ".css", strict=True)
     app = FastAPI(title="Morphology Studio", docs_url="/api/docs")
+    startup_started = time.perf_counter()
     required_body = Body(...)
     session = EditorSession()
     app.state.editor_session = session
@@ -308,6 +310,23 @@ def create_app():
     @app.get("/api/health")
     def health():
         return {"status": "ok", "app": "Morphology Studio"}
+
+    @app.post("/api/startup/ui-interactive")
+    def startup_ui_interactive():
+        elapsed = time.perf_counter() - startup_started
+        LOGGER.info("STARTUP ui_interactive_backend_seconds=%.3f", elapsed)
+        return {"ok": True, "seconds": elapsed}
+
+    @app.post("/api/startup/opencascade-ready")
+    def startup_opencascade_ready():
+        elapsed = time.perf_counter() - startup_started
+        LOGGER.info("STARTUP opencascade_ready_backend_seconds=%.3f", elapsed)
+        return {"ok": True, "seconds": elapsed}
+
+    @app.post("/api/startup/opencascade-failed")
+    def startup_opencascade_failed(request: dict[str, Any] = required_body):
+        LOGGER.error("OpenCascade prewarm failed: %s", request.get("error", "unknown error"))
+        return {"ok": False}
 
     @app.get("/api/model-registry")
     def model_registry():

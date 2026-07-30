@@ -11,3 +11,10 @@ def test_pyinstaller_bundle_path(monkeypatch, tmp_path):
     monkeypatch.setattr(paths.sys, "executable", str(tmp_path / "MorphologyStudio.exe"))
     monkeypatch.setattr(paths.sys, "_MEIPASS", str(tmp_path / "_internal"), raising=False)
     assert paths.bundled_root() == (tmp_path / "_internal").resolve()
+
+
+def test_writable_paths_use_localappdata(monkeypatch, tmp_path):
+    monkeypatch.setenv("LOCALAPPDATA", str(tmp_path))
+    assert paths.get_user_data_dir() == tmp_path / "MorphologyStudio"
+    assert paths.get_cache_dir() == tmp_path / "MorphologyStudio" / "cache"
+    assert paths.get_log_dir() == tmp_path / "MorphologyStudio" / "logs"

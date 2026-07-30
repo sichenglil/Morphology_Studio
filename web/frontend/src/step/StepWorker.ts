@@ -6,7 +6,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any -- OpenCascade.js beta has no TypeScript API declarations. */
 
 type SolidMesh = { name: string; positions: Float32Array; indices: Uint32Array }
-type WorkerRequest = { id: number; buffer: ArrayBuffer }
+type WorkerRequest = { id: number; action: 'init' | 'parse'; buffer?: ArrayBuffer }
 
 let oc: any
 
@@ -122,6 +122,12 @@ async function parseStep(buffer: ArrayBuffer): Promise<SolidMesh[]> {
 
 self.onmessage = async (event: MessageEvent<WorkerRequest>) => {
   try {
+    if (event.data.action === 'init') {
+      await openCascade()
+      self.postMessage({ id: event.data.id, ready: true })
+      return
+    }
+    if (!event.data.buffer) throw new Error('STEP 请求缺少文件数据')
     const solids = await parseStep(event.data.buffer)
     const transfer = solids.flatMap((solid) => [solid.positions.buffer, solid.indices.buffer])
     self.postMessage({ id: event.data.id, solids }, { transfer })
