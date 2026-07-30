@@ -17,9 +17,9 @@ def test_desktop_port_and_routes():
         "/",
         "/api/health",
         "/api/status",
-        "/api/step-adapter/status",
-        "/api/step-adapter/launch",
         "/api/models/analyze",
+        "/api/models/import-step",
+        "/api/models/step-source",
         "/api/models/load",
         "/api/models/tree",
         "/api/scene",
@@ -33,6 +33,22 @@ def test_desktop_server_has_console_independent_uvicorn_config():
     assert server.config.log_config is None
     assert server.config.access_log is False
     assert server.config.use_colors is False
+
+
+def test_path_picker_forwards_export_filename_and_extension(monkeypatch):
+    captured = {}
+
+    def fake_picker(kind: str, extension: str = "", filename: str = "") -> str:
+        captured.update(kind=kind, extension=extension, filename=filename)
+        return r"D:\exports\robot.urdf"
+
+    monkeypatch.setattr("morphology_toolkit.webapp._pick_path", fake_picker)
+    response = TestClient(create_app()).get(
+        "/api/pick", params={"kind": "save", "extension": ".urdf", "filename": "robot.urdf"}
+    )
+    assert response.status_code == 200
+    assert response.json() == {"path": r"D:\exports\robot.urdf"}
+    assert captured == {"kind": "save", "extension": ".urdf", "filename": "robot.urdf"}
 
 
 def test_logging_survives_missing_standard_streams(monkeypatch, tmp_path):

@@ -77,7 +77,7 @@ Morphology Studio 在保持源模型只读的前提下，为检查和准备机�
 <tr><td align="center">URDF</td><td align="center">是</td><td align="center">是</td><td align="center">已支持</td><td align="left">核心机器人模型格式</td></tr>
 <tr><td align="center">Xacro</td><td align="center">是</td><td align="center">展开为 URDF</td><td align="center">部分支持</td><td align="left">显式 package map 可在无 ROS 环境使用</td></tr>
 <tr><td align="center">MJCF</td><td align="center">是</td><td align="center">是</td><td align="center">部分支持</td><td align="left">静态结构转换，建议检查输出保真度</td></tr>
-<tr><td align="center">STEP</td><td align="center">是（辅助模式）</td><td align="center">URDF 包</td><td align="center">实验性</td><td align="left">独立 step2urdf 编辑器，安全 ZIP 回导</td></tr>
+<tr><td align="center">STEP</td><td align="center">是（内置辅助模式）</td><td align="center">URDF / 可移植包</td><td align="center">实验性</td><td align="left">桌面应用内置 OpenCascade WASM，离线直接解析</td></tr>
 <tr><td align="center">USD</td><td align="center">否</td><td align="center">否</td><td align="center">规划中</td><td align="left">需要经过验证的 Isaac Sim 集成</td></tr>
 </tbody></table>
 
@@ -107,6 +107,16 @@ python project/desktop_entry.py
 首次导入 `assets/robot_models/ur5e_hx5_right/robot.urdf`。浏览器开发模式运行 `./scripts/maintenance/run_web.ps1`，并在第二个终端运行 `pnpm --dir web/frontend dev`。
 
 使用 `./scripts/validation/test_all.ps1` 运行完整本地验收。
+
+### 直接导入 STEP
+
+在桌面应用的“导入模型”中直接选择 `.step` 或 `.stp`。内置 OpenCascade WebAssembly Worker
+会离线解析并三角化实体；随后在同一向导中确认 Link 名称、父实体、关节类型和关节轴，点击
+“导入并显示”即可进入三维工作区。运行 EXE 不需要另行安装 step2urdf、Node.js 或 pnpm。
+
+STEP 几何不包含可靠的机器人运动语义，因此程序不会静默猜测完整机构。实体可自动成为 Link
+候选，但父子关系、fixed/revolute/continuous/prismatic 类型及运动轴需要人工确认。内置 WASM
+未压缩约 50 MB，大型 CAD 装配仍受 WebView2 可用内存限制。
 
 <a id="five-minute-workflow"></a><h2 align="center">五分钟使用流程</h2>
 
@@ -150,4 +160,3 @@ Vue/Three.js 编辑器通过本地 HTTP 调用 FastAPI。导入器写入唯一�
 <h2 align="center">贡献、安全与许可证</h2>
 
 贡献前阅读 [CONTRIBUTING.md](docs/governance/CONTRIBUTING.md)，漏洞按 [SECURITY.md](docs/governance/SECURITY.md) 私下报告，提交 Issue 时不要附带专有模型。本项目采用 [Apache-2.0](LICENSE)，依赖与致谢见 [THIRD_PARTY_NOTICES.md](project/THIRD_PARTY_NOTICES.md)。
-

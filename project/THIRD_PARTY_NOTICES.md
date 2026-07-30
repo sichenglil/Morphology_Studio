@@ -14,7 +14,8 @@ Morphology Studio source is Apache-2.0 licensed. Dependencies are installed from
 | Three.js | 3D rendering | MIT | <https://github.com/mrdoob/three.js> | Bundled build output |
 | Element Plus | UI components | MIT | <https://github.com/element-plus/element-plus> | Bundled build output |
 | Pinia | State management | MIT | <https://github.com/vuejs/pinia> | Bundled build output |
+| OpenCascade.js | Offline STEP parsing and tessellation | LGPL-2.1-only | <https://github.com/donalffons/opencascade.js> | Bundled WebAssembly dependency; source and license available from upstream |
 | Vite, Vitest, Playwright, ESLint | Build and test tools | MIT / Apache-2.0 | Their locked package metadata | Development only |
-| step2urdf | Optional external adapter reference | Apache-2.0 | <https://github.com/Democratizing-Dexterous/step2urdf> | No source copied; invoked only when separately installed |
+| step2urdf | STEP Worker architecture reference | MIT | <https://github.com/Democratizing-Dexterous/step2urdf> | Reduced Worker adapted and modified |
 
 No upstream UR5e, ROBOTIS, or user model repositories are distributed. The primitive-only files under `examples/` are original project fixtures under Apache-2.0. Exact transitive versions are recorded by the lockfile and installed Python environment; maintainers must re-audit notices when dependencies change.

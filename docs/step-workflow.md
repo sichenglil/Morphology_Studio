@@ -1,41 +1,31 @@
-# STEP-to-URDF workflow
+# Embedded STEP-to-URDF workflow
 
-## Install the optional adapter
+## Import inside the desktop application
 
-```powershell
-git clone https://github.com/Democratizing-Dexterous/step2urdf.git external/step2urdf
-cd external/step2urdf
-pnpm install
-$env:MORPHOLOGY_STEP2URDF_PATH = (Get-Location).Path
-```
+1. Start `MorphologyStudio.exe` and choose **Import model**.
+2. Select a `.step` or `.stp` file. Choose **Parse STEP**.
+3. Wait while the bundled OpenCascade WebAssembly engine tessellates the file in a Worker.
+4. Review every solid's Link name. For each non-root solid, choose an earlier parent, joint type and
+   joint axis. The default is a fixed child of the first solid.
+5. Choose **Import and display**, inspect the model and preview movable joints.
+6. Run validation, correct transforms or semantics, then export URDF, a portable directory or ZIP.
 
-The adapter is MIT licensed and is not part of the Morphology Studio installation. Check status or
-start it with:
+No external step2urdf checkout, Node.js installation, environment variable or network connection is
+required by the packaged application. Existing step2urdf URDF ZIP files can still be imported.
 
-```powershell
-morphology-tool step-adapter status
-morphology-tool step-adapter launch
-```
+## Units, files and privacy
 
-## Convert and return
+- STEP geometry is treated as millimetres and represented in URDF with mesh scale `0.001`.
+- Generated binary STL files are cached under `%LOCALAPPDATA%\MorphologyStudio\step_imports` using a
+  content hash. Set `MORPHOLOGY_STEP_CACHE` only for development/testing overrides.
+- CAD bytes are served only by the loopback application and parsed locally in the bundled Worker.
+- Imports are limited to 500 MiB source files, 512 solids and 250 MiB of generated STL data.
 
-1. Select a `.step` or `.stp` file in the Morphology Studio import dialog.
-2. Start the detected local adapter.
-3. In step2urdf, inspect the assembly tree, bind solids to links, define parent/child joints, confirm
-   axes and limits, then configure total/link mass and inertia.
-4. Export the URDF ZIP from step2urdf.
-5. Choose **Select exported ZIP** in Morphology Studio. The package is checked for unsafe paths,
-   extracted to a content-addressed local cache and loaded with its relative STL resources.
-6. Validate the model, preview joint motion, correct warnings, and export URDF, a portable directory,
-   or a portable ZIP.
+## Limitations and troubleshooting
 
-STEP lengths are normalized to URDF metres. Geometry axes are suggestions only; degenerate and empty
-results are rejected, and no joint is silently created.
-
-## Troubleshooting
-
-- `Set MORPHOLOGY_STEP2URDF_PATH`: point it at a checkout containing `package.json`.
-- `pnpm was not found`: install a supported Node.js/pnpm toolchain.
-- `Run pnpm install first`: install the adapter's own dependencies in its checkout.
-- `Unsafe path in STEP export package`: the ZIP contains traversal entries and is rejected.
-- The browser opens before the adapter is ready: wait for Vite to finish, then refresh its local URL.
+- A STEP file does not normally encode URDF joint semantics, limits, mass or inertia. Review the
+  assisted result and add physical parameters before simulation.
+- OpenCascade WASM is about 50 MB uncompressed and is loaded only for STEP import.
+- Very large assemblies can exceed WebView2 memory. Simplify them in CAD or import subassemblies.
+- **No triangulatable solids** means the file contains unsupported, empty or damaged topology.
+- If Windows lacks WebView2, install the Microsoft Edge WebView2 Runtime before starting the EXE.

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import base64
+import struct
 import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -11,12 +13,12 @@ from morphology_toolkit.exporters.urdf_exporter import UrdfExporter
 from morphology_toolkit.importers import detect_format
 from morphology_toolkit.step import (
     GeometryTolerance,
-    Step2UrdfAdapter,
     Step2UrdfPackageImporter,
     classify_arc,
     classify_cylinder,
     classify_line,
     distribute_mass,
+    import_step_payload,
     normalize_axis,
     sanitize_name,
     stable_part_id,
@@ -35,17 +37,6 @@ def test_step_extension_magic_and_invalid_input(tmp_path: Path):
     stp.write_text("invalid", encoding="ascii")
     assert detect_format(stp) == "step"
     assert not Step2UrdfPackageImporter.is_package(stp)
-
-
-def test_optional_adapter_discovery(tmp_path: Path, monkeypatch):
-    root = tmp_path / "adapter"
-    (root / "node_modules").mkdir(parents=True)
-    (root / "package.json").write_text('{"scripts":{"dev":"vite"}}', encoding="utf-8")
-    fake_pnpm = tmp_path / "pnpm.cmd"
-    fake_pnpm.write_text("", encoding="utf-8")
-    monkeypatch.setattr("morphology_toolkit.step.adapter.shutil.which", lambda _: str(fake_pnpm))
-    status = Step2UrdfAdapter(root).status()
-    assert status.available and status.installed and status.root == root.resolve()
 
 
 def test_step_units_names_and_stable_duplicate_ids():
@@ -148,3 +139,47 @@ def test_workspace_schema_version_round_trip_and_backward_compatibility(tmp_path
     old = workspace.root / "workspace.yaml"
     old.write_text("mode: assisted\nsettings: {}\n", encoding="utf-8")
     assert Workspace.open(workspace.root).schema_version == 1
+
+
+def _triangle_stl() -> str:
+    data = bytearray(84 + 50)
+    struct.pack_into("<I", data, 80, 1)
+    struct.pack_into("<12fH", data, 84, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0)
+    return base64.b64encode(data).decode("ascii")
+
+
+def test_direct_step_payload_builds_links_joints_and_mesh_cache(tmp_path: Path, monkeypatch):
+    monkeypatch.setenv("MORPHOLOGY_STEP_CACHE", str(tmp_path / "cache"))
+    model = import_step_payload(
+        {
+            "source_path": "assembly.step",
+            "name": "Demo Assembly",
+            "parts": [
+                {"name": "Base", "parent": None, "joint_type": "fixed", "stl": _triangle_stl()},
+                {
+                    "name": "Arm",
+                    "parent": 0,
+                    "joint_type": "revolute",
+                    "axis": [0, 0, 1],
+                    "stl": _triangle_stl(),
+                },
+            ],
+        }
+    )
+    assert model.robot_id == "Demo_Assembly"
+    assert set(model.links) == {"Base", "Arm"}
+    assert model.root_links == ["Base"]
+    assert next(iter(model.joints.values())).joint_type == "revolute"
+    assert model.resources[0].resolved_path.is_file()
+    assert model.links["Base"].visuals[0].geometry.scale == (0.001, 0.001, 0.001)
+    assert model.source_path.name == "robot.urdf" and model.source_path.is_file()
+
+
+def test_direct_step_payload_rejects_corrupt_mesh_and_forward_parent(tmp_path: Path, monkeypatch):
+    monkeypatch.setenv("MORPHOLOGY_STEP_CACHE", str(tmp_path / "cache"))
+    with pytest.raises(ValueError, match="truncated"):
+        import_step_payload({"parts": [{"name": "bad", "stl": base64.b64encode(b"bad").decode()}]})
+    with pytest.raises(ValueError, match="earlier solid"):
+        import_step_payload(
+            {"parts": [{"name": "bad", "parent": 0, "joint_type": "fixed", "stl": _triangle_stl()}]}
+        )

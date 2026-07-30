@@ -1,6 +1,6 @@
-"""Optional STEP-to-URDF adapter integration and geometry helpers."""
+"""Embedded STEP-to-URDF geometry and package helpers."""
 
-from .adapter import Step2UrdfAdapter, StepAdapterStatus
+from .direct_importer import import_step_payload
 from .geometry import (
     AxisCandidate,
     GeometryTolerance,
@@ -20,13 +20,12 @@ __all__ = [
     "AxisCandidate",
     "GeometryTolerance",
     "LineFeature",
-    "Step2UrdfAdapter",
     "Step2UrdfPackageImporter",
-    "StepAdapterStatus",
     "classify_arc",
     "classify_cylinder",
     "classify_line",
     "distribute_mass",
+    "import_step_payload",
     "normalize_axis",
     "sanitize_name",
     "stable_part_id",

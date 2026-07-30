@@ -89,8 +89,8 @@ class DirectoryImporter(Importer):
             return Step2UrdfPackageImporter().execute(entry, mode, selection)
         if fmt == "step":
             raise ValueError(
-                "STEP requires interactive link/joint definition. Open the step2urdf adapter, "
-                "export its URDF ZIP, then import that ZIP here."
+                "STEP import is available in the desktop import wizard, where link and joint "
+                "semantics can be confirmed after embedded OpenCascade parsing."
             )
         raise ValueError(f"Execution for directory candidate format {fmt!r} is not available")
 

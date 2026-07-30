@@ -8,5 +8,11 @@ License: Apache-2.0
 
 Files: web/frontend/pnpm-lock.yaml src/morphology_toolkit/static/frontend/* src/morphology_toolkit/static/frontend/assets/*
 Copyright: respective upstream authors
-License: Apache-2.0 and MIT
+License: Apache-2.0 and MIT and LGPL-2.1-only
 Comment: Generated lockfile and bundled output contain metadata or compiled forms of dependencies listed in project/THIRD_PARTY_NOTICES.md.
+
+Files: web/frontend/src/step/StepWorker.ts
+Copyright: 2026 Democratizing Dexterity
+           2026 Morphology Studio maintainers
+License: MIT
+Comment: Reduced and modified from the step2urdf STEP parsing worker at commit 5c67a6768ce6767edf31aaa9e0737561363c315e.

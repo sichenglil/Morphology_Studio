@@ -7,7 +7,7 @@ import math
 import mimetypes
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 from urllib.parse import quote
 
 from morphology_toolkit.assembly import assemble_models
@@ -30,7 +30,7 @@ from morphology_toolkit.morphology import generate_morphology
 from morphology_toolkit.paths import assets_dir, resource_root
 from morphology_toolkit.resources import ResourceResolver, load_package_map
 from morphology_toolkit.services.model_registry import load_registry
-from morphology_toolkit.step import Step2UrdfAdapter, Step2UrdfPackageImporter
+from morphology_toolkit.step import Step2UrdfPackageImporter, import_step_payload
 from morphology_toolkit.validation import validate_model
 
 LOGGER = logging.getLogger(__name__)
@@ -128,7 +128,7 @@ def _apply_target_state(session: EditorSession, target_type: str, entity_id: str
         owner.geometry.scale = scale
 
 
-def _pick_path(kind: str) -> str:
+def _pick_path(kind: str, extension: str = "", filename: str = "") -> str:
     import tkinter as tk
     from tkinter import filedialog
 
@@ -136,13 +136,16 @@ def _pick_path(kind: str) -> str:
     root.withdraw()
     root.attributes("-topmost", True)
     try:
-        value = (
-            filedialog.askdirectory()
-            if kind == "directory"
-            else filedialog.asksaveasfilename(defaultextension=".yaml")
-            if kind == "save"
-            else filedialog.askopenfilename()
-        )
+        if kind == "directory":
+            value = filedialog.askdirectory(mustexist=False)
+        elif kind == "save":
+            normalized_extension = extension if extension.startswith(".") else f".{extension}"
+            value = filedialog.asksaveasfilename(
+                defaultextension=normalized_extension if extension else "",
+                initialfile=filename or None,
+            )
+        else:
+            value = filedialog.askopenfilename()
         return value or ""
     finally:
         root.destroy()
@@ -173,8 +176,8 @@ def _load_model(
         return Step2UrdfPackageImporter().execute(source, ProcessingMode.ASSISTED)
     if fmt == "step":
         raise ValueError(
-            "STEP requires the interactive step2urdf adapter. Launch it, define links and joints, "
-            "export the URDF ZIP, then import that ZIP."
+            "Use the desktop STEP import wizard so the embedded OpenCascade worker can parse "
+            "geometry and collect link/joint semantics."
         )
     raise ValueError(f"Unsupported model format: {fmt}")
 
@@ -342,27 +345,14 @@ def create_app():
             "xacro": xacro_status,
             "ros": "NOT_AVAILABLE_LOCAL",
             "isaac": "NOT_AVAILABLE_LOCAL",
-            "step2urdf": Step2UrdfAdapter().status().public_dict(),
+            "step": {"available": True, "engine": "bundled-opencascade-wasm"},
         }
 
-    @app.get("/api/step-adapter/status")
-    def step_adapter_status():
-        return Step2UrdfAdapter().status().public_dict()
-
-    @app.post("/api/step-adapter/launch")
-    def launch_step_adapter(request: Optional[dict[str, Any]] = None):
-        root = Path(request["path"]) if request and request.get("path") else None
-        try:
-            return Step2UrdfAdapter(root).launch().public_dict()
-        except Exception as exc:
-            LOGGER.exception("Unable to launch step2urdf adapter")
-            raise HTTPException(409, str(exc)) from exc
-
     @app.get("/api/pick")
-    def pick(kind: str = "file"):
+    def pick(kind: str = "file", extension: str = "", filename: str = ""):
         if kind not in {"file", "directory", "save"}:
             raise HTTPException(400, "kind must be file, directory or save")
-        return {"path": _pick_path(kind)}
+        return {"path": _pick_path(kind, extension, filename)}
 
     @app.get("/api/models/analyze")
     def analyze(path: str):
@@ -385,10 +375,30 @@ def create_app():
                 }
                 for item in analysis.entry_candidates
             ],
-            "stepAdapter": Step2UrdfAdapter().status().public_dict()
-            if detect_format(target) == "step"
-            else None,
+            "stepEmbedded": detect_format(target) == "step",
         }
+
+    @app.post("/api/models/import-step")
+    def import_step(request: dict[str, Any] = required_body):
+        try:
+            model = import_step_payload(request)
+        except Exception as exc:
+            LOGGER.exception("Embedded STEP import failed")
+            raise HTTPException(400, str(exc)) from exc
+        session.clear()
+        session.model = model
+        session.source = model.source_path
+        LOGGER.info("Imported %d STEP solid(s) as %s", len(model.links), model.robot_id)
+        return _scene_manifest(session)
+
+    @app.get("/api/models/step-source")
+    def step_source(path: str):
+        source = Path(path).expanduser().resolve()
+        if not source.is_file() or detect_format(source) != "step":
+            raise HTTPException(404, "STEP source file not found")
+        if source.stat().st_size > 500 * 1024 * 1024:
+            raise HTTPException(413, "STEP source exceeds the 500 MiB limit")
+        return FileResponse(source, media_type="application/step")
 
     @app.post("/api/models/load")
     def load_model(request: dict[str, Any] = required_body):

@@ -12,6 +12,9 @@ datas = [
     (str(root / "assets" / "previews" / "ur5e_hx5_right"), "assets/previews/ur5e_hx5_right"),
     (str(root / "assets" / "placeholders"), "assets/placeholders"),
     (str(root / "config"), "config"),
+    (str(root / "project" / "THIRD_PARTY_NOTICES.md"), "licenses"),
+    (str(root / "LICENSES" / "LGPL-2.1-only.txt"), "licenses"),
+    (str(root / "LICENSES" / "MIT.txt"), "licenses"),
 ]
 binaries = []
 hiddenimports = ["morphology_toolkit.webapp", "webview.platforms.edgechromium"]

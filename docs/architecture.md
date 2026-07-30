@@ -1,22 +1,31 @@
 # Architecture
 
-## Optional STEP boundary
+## Embedded STEP boundary
 
-Raw STEP topology is handled by the separately installed step2urdf browser worker. Morphology Studio
-discovers and launches that editor but does not share transient Three.js/OpenCascade objects with it.
-The stable boundary is a URDF ZIP: the backend validates archive paths, extracts into a
-content-addressed user cache, imports the URDF into the canonical `RobotModel`, and resolves meshes
-relative to the extracted URDF. This keeps STEP parsing off the desktop UI thread and preserves one
-model source of truth for editing, validation, workspace persistence and export.
+The desktop frontend bundles OpenCascade.js and loads it only when a `.step` or `.stp` file is
+parsed. Tessellation runs in a Web Worker, so the Vue UI remains responsive. The worker returns typed
+triangle buffers; the import wizard converts each confirmed solid to binary STL and sends it to the
+loopback FastAPI service. The backend validates STL sizes, stores meshes in a content-addressed user
+cache and creates the canonical `RobotModel`. STEP coordinates are millimetres and mesh scale is
+recorded as `0.001` for URDF metres.
 
 ```mermaid
 flowchart LR
-  UI[Vue + Three.js] -->|JSON / local HTTP| API[FastAPI]
+  STEP[Local STEP file] --> Worker[Bundled OpenCascade WASM Worker]
+  Worker --> Wizard[Link and joint confirmation]
+  Wizard --> API[Loopback FastAPI]
+  API --> Cache[Content-addressed STL cache]
   API --> Model[RobotModel in memory]
-  Import[URDF / Xacro / MJCF importers] --> Model
+  Model --> View[Three.js workspace]
   Model --> Validate[Validators]
-  Model --> Export[URDF / MJCF / package exporters]
+  Model --> Export[URDF / MJCF / portable package]
   Desktop[pywebview shell] --> API
 ```
 
-`RobotModel` is the source of truth. Importers normalize external formats, the API exposes controlled operations, and the renderer maintains a runtime index for incremental updates. File selection is isolated in the desktop bridge; no arbitrary command bridge exists.
+`RobotModel` remains the only editable source of truth. OpenCascade objects never cross the Worker
+boundary and are released after parsing. The old external-editor launcher is removed; existing URDF
+ZIP packages exported by step2urdf remain import-compatible.
+
+CAD topology cannot reliably determine robot semantics. The wizard therefore defaults additional
+solids to fixed children of the first solid and requires users to review names, parent relationships,
+joint type and axis before import.

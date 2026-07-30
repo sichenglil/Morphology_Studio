@@ -4,11 +4,14 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
+  assetsInclude: ['**/*.wasm'],
+  optimizeDeps: { exclude: ['opencascade.js'] },
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   build: {
     outDir: '../../src/morphology_toolkit/static/frontend',
     emptyOutDir: true,
   },
+  worker: { format: 'es' },
   server: { proxy: { '/api': 'http://127.0.0.1:8000' } },
   test: { environment: 'jsdom', globals: true, include: ['tests/*.spec.ts', 'tests/performance/*.spec.ts'] },
 })

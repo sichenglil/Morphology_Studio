@@ -1,40 +1,30 @@
 ## Background
 
-Morphology Studio detected STEP files but could neither guide conversion nor load step2urdf output.
+Morphology Studio previously required a separately installed step2urdf editor and a manual URDF ZIP
+round trip. The packaged EXE could detect STEP but could not open it directly.
 
 ## Reference and license
 
-The design was reviewed against `Democratizing-Dexterous/step2urdf` at commit `5c67a67` (MIT). No
-upstream source or assets are vendored.
+The Worker design was reviewed against `Democratizing-Dexterous/step2urdf` commit `5c67a67` (MIT).
+The reduced and modified Worker is attributed in DEP5 and third-party notices. OpenCascade.js is a
+locked `LGPL-2.1-only` runtime dependency whose WASM is bundled for offline operation.
 
 ## Changes
 
-- Optional local adapter discovery, status and launch via CLI/API/UI.
-- Assisted raw STEP workflow and safe step2urdf ZIP round trip.
-- Geometry/axis, unit, naming, stable ID, mass and inertia helpers.
-- Joint dynamics import/validation/export and portable ZIP export.
-- Versioned workspace persistence, tests and architecture/user documentation.
-
-## Compatibility and rollback
-
-Existing URDF/Xacro paths and workspace fields remain valid; missing workspace schema versions map to
-version 1. Roll back by reverting the commits in this PR. The adapter is optional and never bundled.
+- Lazy, embedded OpenCascade.js STEP parsing in a Web Worker.
+- Direct `.step`/`.stp` import with Link, parent, joint type and axis confirmation.
+- Validated binary STL generation and content-addressed user cache.
+- Existing `RobotModel`, viewport, validation and export pipeline reused without a second editor.
+- Old external adapter launcher, CLI command and helper script removed.
+- Existing step2urdf URDF ZIP imports remain backward-compatible.
 
 ## Testing
 
-Local verification completed on Windows/Python 3.9:
-
-- Ruff check and format check: passed.
-- Pytest: 55 passed; coverage 68%.
-- Vue TypeScript and ESLint: passed.
-- Vitest: 20 passed.
-- Vite production build: passed (existing large-chunk warning remains).
-- Playwright: 13 passed, 2 media-capture tests skipped by their existing conditions.
-- Documentation links/format, strict MkDocs, REUSE and repository health: passed.
-
-See `docs/testing.md` and the PR checks.
+Tests cover binary STL validation, name safety, parent ordering, joints, units, cache paths, API routes
+and previous ZIP compatibility. A public 50 KB STEP sample was also parsed through the real local GUI:
+the bundled WASM produced one solid, loaded it into the 3D workspace and emitted no console errors.
 
 ## Known limitations
 
-Raw STEP conversion remains interactive because link/joint semantics cannot safely be inferred from
-CAD topology. UI screenshots are unchanged except for the import/export dialog controls.
+Kinematic semantics are interactive because STEP geometry does not reliably encode them. OpenCascade
+WASM adds about 50 MB uncompressed, loads only on STEP import and remains subject to WebView2 memory.
