@@ -18,13 +18,15 @@ $venv = Join-Path $root "build/onefile-venv"
 if (-not (Test-Path "$venv/Scripts/python.exe")) { python -m venv $venv }
 & "$venv/Scripts/python.exe" -m pip install --disable-pip-version-check -r project/requirements.txt PyInstaller==6.21.0
 New-Item -ItemType Directory -Force release | Out-Null
-& "$venv/Scripts/python.exe" -m PyInstaller scripts/build/packaging/MorphologyStudio.onefile.spec `
-    --noconfirm --clean --distpath release --workpath build/onefile
+& "$venv/Scripts/python.exe" scripts/build/build_native.py
 
-$exe = Join-Path $root "release/MorphologyStudio.exe"
+$versionLine = Select-String -Path pyproject.toml -Pattern '^version\s*=\s*"([^"]+)"' | Select-Object -First 1
+if (-not $versionLine) { throw "Unable to determine project version" }
+$version = $versionLine.Matches[0].Groups[1].Value
+$exeName = "MorphologyStudio-$version-windows-x64.exe"
+$exe = Join-Path $root "release/$exeName"
 if (-not (Test-Path $exe)) { throw "Onefile executable was not generated" }
 $hash = (Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
-"$hash  MorphologyStudio.exe" | Set-Content release/MorphologyStudio.exe.sha256.txt -Encoding ascii
 @(
     "Build time: $((Get-Date).ToString('o'))"
     "Python: $(python --version 2>&1)"

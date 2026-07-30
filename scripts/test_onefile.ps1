@@ -1,4 +1,4 @@
-param([string]$ExePath = "release/MorphologyStudio.exe")
+param([string]$ExePath = "release/MorphologyStudio-0.1.0-windows-x64.exe")
 
 $ErrorActionPreference = "Stop"
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path

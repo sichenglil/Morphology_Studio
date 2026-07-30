@@ -220,7 +220,7 @@ Read [CONTRIBUTING.md](docs/governance/CONTRIBUTING.md), report vulnerabilities 
 <h2 align="center">Windows single-file release</h2>
 
 Build the final onefile edition with `powershell -ExecutionPolicy Bypass -File .\scripts\build_onefile.ps1`.
-The only runtime file users must copy is `release\MorphologyStudio.exe`. It contains Python, the
+The only runtime file users must copy is `release\MorphologyStudio-0.1.0-windows-x64.exe`. It contains Python, the
 frontend, OpenCascade WASM/Worker, configuration and the default robot resources. Python, Node.js,
 pnpm, OpenCascade and the source tree are not needed; Windows must provide Edge WebView2 Runtime.
 
