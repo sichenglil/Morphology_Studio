@@ -16,8 +16,34 @@
 
 <p><strong>版本 0.1.0 · Alpha · 核心功能无需 ROS · ROS 2 与 Isaac 集成规划中</strong></p>
 
+<p><a href="#demo">演示</a> · <a href="#download">下载</a> · <a href="#contents">目录</a></p>
+
 </div>
 
+<a id="demo"></a>
+## 软件内机械臂操作演示
+
+以下动画是在 Morphology Studio 中实际加载 `ur5e_hx5_right`，并操作机械臂关节时录制生成的。
+
+<p align="center"><img src="assets/previews/ur5e_hx5_right/robot.gif" width="960" alt="在 Morphology Studio 中操作 UR5e 与 HX5 Right 组合机械臂"></p>
+
+- GIF 来自真实软件界面，展示模型加载及机械臂关节操作过程。
+- 最终应用和 EXE 使用 `assets/robot_models/ur5e_hx5_right` 中的项目内部副本。
+- 运行程序不需要原始 Morphology-Conditioned 项目。
+- 使用 `python scripts/render/generate_software_demo_gif.py` 可重新录制。
+
+### UR5e 与灵巧手装配过程
+
+以下动画记录真实的软件操作流程：导入独立 UR5e 模型，在装配窗口选择独立
+HX5 灵巧手作为子模型，将灵巧手根节点连接到 UR5e 的 `tool0`，并显示最终的
+40-Link 组合机器人，最后将装配结果导出。动画中的本地模型路径和导出路径
+均已模糊处理，避免暴露个人目录信息。
+
+<p align="center"><img src="assets/previews/ur5e_hx5_right/assembly_workflow.gif" width="960" alt="在 Morphology Studio 中分别导入并装配 UR5e 与 HX5 灵巧手"></p>
+
+使用 `python scripts/render/generate_assembly_demo_gif.py` 可重新录制。
+
+<a id="download"></a>
 ## 下载
 
 各平台安装包均在对应操作系统的原生 GitHub Runner 上构建。正式版本请访问
@@ -47,28 +73,6 @@
 解压耗时采用优化后的 onedir 结构，整个目录都是最小运行单元；macOS 的 `.app` 在 Finder 中看似
 单个应用，实际是不可拆分的目录 Bundle。用户模型、导出的 URDF 和日志属于外部数据，程序启动时
 不要求预先携带这些文件。
-
-## 软件内机械臂操作演示
-
-以下动画是在 Morphology Studio 中实际加载 `ur5e_hx5_right`，并操作机械臂关节时录制生成的。
-
-<p align="center"><img src="assets/previews/ur5e_hx5_right/robot.gif" width="960" alt="在 Morphology Studio 中操作 UR5e 与 HX5 Right 组合机械臂"></p>
-
-- GIF 来自真实软件界面，展示模型加载及机械臂关节操作过程。
-- 最终应用和 EXE 使用 `assets/robot_models/ur5e_hx5_right` 中的项目内部副本。
-- 运行程序不需要原始 Morphology-Conditioned 项目。
-- 使用 `python scripts/render/generate_software_demo_gif.py` 可重新录制。
-
-### UR5e 与灵巧手装配过程
-
-以下动画记录真实的软件操作流程：导入独立 UR5e 模型，在装配窗口选择独立
-HX5 灵巧手作为子模型，将灵巧手根节点连接到 UR5e 的 `tool0`，并显示最终的
-40-Link 组合机器人，最后将装配结果导出。动画中的本地模型路径和导出路径
-均已模糊处理，避免暴露个人目录信息。
-
-<p align="center"><img src="assets/previews/ur5e_hx5_right/assembly_workflow.gif" width="960" alt="在 Morphology Studio 中分别导入并装配 UR5e 与 HX5 灵巧手"></p>
-
-使用 `python scripts/render/generate_assembly_demo_gif.py` 可重新录制。
 
 <a id="contents"></a><h2 align="center">目录</h2>
 <p align="center"><a href="#overview">项目概览</a> · <a href="#features">功能模块</a> · <a href="#formats">格式</a> · <a href="#requirements">运行环境</a> · <a href="#quick-start">快速开始</a> · <a href="#gallery">截图</a> · <a href="#architecture">架构</a> · <a href="#roadmap">路线图</a></p>

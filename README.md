@@ -16,8 +16,34 @@
 
 <p><strong>Version 0.1.0 · Alpha · ROS-free core · Optional ROS 2 and Isaac integrations planned</strong></p>
 
+<p><a href="#demo">Demo</a> · <a href="#download">Download</a> · <a href="#contents">Contents</a></p>
+
 </div>
 
+<a id="demo"></a>
+## Robot operation demo
+
+The animation below records the packaged `ur5e_hx5_right` robot being loaded and operated inside Morphology Studio.
+
+<p align="center"><img src="assets/previews/ur5e_hx5_right/robot.gif" width="960" alt="Operating UR5e with HX5 Right inside Morphology Studio"></p>
+
+- The GIF is captured from the real application while loading the model and moving a joint.
+- The application and EXE use the copied resources under `assets/robot_models/ur5e_hx5_right`.
+- Running the application does not require the original Morphology-Conditioned project.
+- Regenerate with `python scripts/render/generate_software_demo_gif.py`.
+
+### UR5e and dexterous-hand assembly
+
+This recording shows the real assembly workflow: import the standalone UR5e model,
+select the standalone HX5 dexterous hand as the child model, connect its root to
+the UR5e `tool0` link, display the assembled 40-link robot, and export the result.
+Local file and output paths are blurred in the recording for privacy.
+
+<p align="center"><img src="assets/previews/ur5e_hx5_right/assembly_workflow.gif" width="960" alt="Importing and assembling a UR5e robot arm with an HX5 dexterous hand in Morphology Studio"></p>
+
+Regenerate with `python scripts/render/generate_assembly_demo_gif.py`.
+
+<a id="download"></a>
 ## Download
 
 Native packages are built on their matching operating systems. Stable assets appear on the
@@ -49,28 +75,6 @@ The archive itself is a transport/download unit, not always the runtime unit. Wi
 single-file. Linux is an optimized onedir build to avoid repeated extraction and must retain the full
 directory. macOS applications are directory Bundles presented by Finder as one application. User
 models, exported URDF files, and logs are external data and are not required merely to start the app.
-
-## Robot operation demo
-
-The animation below records the packaged `ur5e_hx5_right` robot being loaded and operated inside Morphology Studio.
-
-<p align="center"><img src="assets/previews/ur5e_hx5_right/robot.gif" width="960" alt="Operating UR5e with HX5 Right inside Morphology Studio"></p>
-
-- The GIF is captured from the real application while loading the model and moving a joint.
-- The application and EXE use the copied resources under `assets/robot_models/ur5e_hx5_right`.
-- Running the application does not require the original Morphology-Conditioned project.
-- Regenerate with `python scripts/render/generate_software_demo_gif.py`.
-
-### UR5e and dexterous-hand assembly
-
-This recording shows the real assembly workflow: import the standalone UR5e model,
-select the standalone HX5 dexterous hand as the child model, connect its root to
-the UR5e `tool0` link, display the assembled 40-link robot, and export the result.
-Local file and output paths are blurred in the recording for privacy.
-
-<p align="center"><img src="assets/previews/ur5e_hx5_right/assembly_workflow.gif" width="960" alt="Importing and assembling a UR5e robot arm with an HX5 dexterous hand in Morphology Studio"></p>
-
-Regenerate with `python scripts/render/generate_assembly_demo_gif.py`.
 
 <a id="contents"></a>
 <h2 align="center">Contents</h2>
