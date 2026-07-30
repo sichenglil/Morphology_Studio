@@ -58,9 +58,8 @@ are available from the latest successful
 | macOS | Apple Silicon | [`MorphologyStudio-0.1.0-macos-arm64-unsigned.zip`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-macos-arm64-unsigned.zip) | Unsigned native arm64 application |
 | macOS | Intel | [`MorphologyStudio-0.1.0-macos-x64-unsigned.zip`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-macos-x64-unsigned.zip) | Unsigned native x86_64 application |
 
-> There is no formal tagged release yet. Until the first `v0.1.0` release succeeds, use the Actions
-> link above; the direct asset links become active only after that release is published. Every release
-> includes `SHA256SUMS.txt`. Installation details are in
+> Version `v0.1.0` is published and the direct asset links above are active. Every release includes
+> `SHA256SUMS.txt`. Development builds remain available from Actions. Installation details are in
 > [the cross-platform guide](docs/cross-platform-packaging.md).
 
 ### Package contents and minimum runnable unit

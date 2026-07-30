@@ -57,8 +57,8 @@ HX5 灵巧手作为子模型，将灵巧手根节点连接到 UR5e 的 `tool0`�
 | macOS | Apple Silicon | [`MorphologyStudio-0.1.0-macos-arm64-unsigned.zip`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-macos-arm64-unsigned.zip) | 原生 arm64，当前未签名 |
 | macOS | Intel | [`MorphologyStudio-0.1.0-macos-x64-unsigned.zip`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-macos-x64-unsigned.zip) | 原生 x86_64，当前未签名 |
 
-> 当前尚未创建正式 tag。首次 `v0.1.0` Release 构建成功前，请使用上方 Actions 入口；直接下载链接会在
-> Release 发布后生效。每个正式版本同时提供 `SHA256SUMS.txt`。安装方法参见
+> `v0.1.0` 已正式发布，上方直接下载链接均已生效。每个正式版本同时提供
+> `SHA256SUMS.txt`，开发构建仍可从 Actions 下载。安装方法参见
 > [跨平台安装与打包说明](docs/cross-platform-packaging.md)。
 
 ### 打包内容与最小可执行单元
