@@ -8,12 +8,13 @@ import sys
 import threading
 import time
 import traceback
+from pathlib import Path
 from urllib.error import URLError
 from urllib.request import urlopen
 
 from morphology_toolkit import __version__
 from morphology_toolkit.logging_config import configure_logging
-from morphology_toolkit.paths import bundled_root, resource_root
+from morphology_toolkit.paths import bundled_root, get_cache_dir, resource_root
 
 WEBVIEW2_CLIENT_ID = "{F1E7E1A1-2D57-49A6-9F1C-1F7B4D5F7D5A}"
 
@@ -50,6 +51,15 @@ def webview2_runtime_available() -> bool:
     )
 
 
+def native_webview_backend() -> str:
+    """Select the platform-native pywebview renderer."""
+    if sys.platform == "win32":
+        return "edgechromium"
+    if sys.platform == "darwin":
+        return "cocoa"
+    return "gtk"
+
+
 def available_port() -> int:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.bind(("127.0.0.1", 0))
@@ -84,6 +94,40 @@ def create_server(port: int):
     return uvicorn.Server(config)
 
 
+def frontend_directory():
+    packaged = bundled_root() / "morphology_toolkit" / "static" / "frontend"
+    if packaged.is_dir():
+        return packaged
+    return Path(__file__).resolve().parent / "static" / "frontend"
+
+
+def verify_installation() -> int:
+    """Exercise packaged resources, writable storage, and API creation without opening a GUI."""
+    frontend = frontend_directory()
+    required = [frontend / "index.html"]
+    required.extend(
+        [
+            next((frontend / "assets").glob("opencascade.full-*.wasm"), frontend / "missing.wasm"),
+            next((frontend / "assets").glob("StepWorker-*.js"), frontend / "missing-worker.js"),
+            resource_root() / "config" / "robot_models.json",
+        ]
+    )
+    missing = [str(path) for path in required if not path.is_file() or path.stat().st_size == 0]
+    if missing:
+        raise RuntimeError(f"Packaged resources are missing or empty: {missing}")
+    cache = get_cache_dir()
+    cache.mkdir(parents=True, exist_ok=True)
+    probe = cache / "installation-probe.tmp"
+    probe.write_text("ok", encoding="utf-8")
+    probe.unlink()
+    server = create_server(available_port())
+    route_paths = {route.path for route in server.config.app.routes}
+    if not {"/", "/api/health", "/api/models/import-step", "/api/export"} <= route_paths:
+        raise RuntimeError("Packaged API routes are incomplete")
+    print("INSTALLATION_OK", platform.system(), platform.machine())
+    return 0
+
+
 def show_error(message: str) -> None:
     try:
         import tkinter as tk
@@ -103,10 +147,10 @@ def _run(browser_fallback: bool = False) -> int:
     logger = logging.getLogger(__name__)
     logger.info("Starting Morphology Studio %s", __version__)
     logger.info("Frozen=%s executable=%s", getattr(sys, "frozen", False), sys.executable)
-    logger.info("Windows=%s", platform.platform())
+    logger.info("Platform=%s machine=%s", platform.platform(), platform.machine())
     logger.info("MEIPASS=%s", getattr(sys, "_MEIPASS", None))
     logger.info("Resource root=%s", resource_root())
-    frontend = bundled_root() / "morphology_toolkit" / "static" / "frontend" / "index.html"
+    frontend = frontend_directory() / "index.html"
     logger.info("Frontend entry=%s", frontend)
     frontend_assets = frontend.parent / "assets"
     wasm = next(frontend_assets.glob("opencascade.full-*.wasm"), None)
@@ -133,7 +177,7 @@ def _run(browser_fallback: bool = False) -> int:
         else:
             runtime_available = webview2_runtime_available()
             logger.info("WebView2 runtime available=%s", runtime_available)
-            if not runtime_available:
+            if sys.platform == "win32" and not runtime_available:
                 raise RuntimeError(
                     "未检测到 Microsoft Edge WebView2 Runtime。请从微软官方网站安装后重试。"
                 )
@@ -154,7 +198,9 @@ def _run(browser_fallback: bool = False) -> int:
                 resizable=True,
             )
             logger.info("STARTUP window_created_seconds=%.3f", time.perf_counter() - started)
-            webview.start(gui="edgechromium")
+            backend = native_webview_backend()
+            logger.info("Native webview backend=%s", backend)
+            webview.start(gui=backend)
     finally:
         server.should_exit = True
         thread.join(timeout=5)
@@ -163,6 +209,8 @@ def _run(browser_fallback: bool = False) -> int:
 
 def main(browser_fallback: bool = False) -> int:
     try:
+        if os.environ.get("MORPHOLOGY_VERIFY_INSTALLATION") == "1":
+            return verify_installation()
         return _run(browser_fallback)
     except BaseException as exc:
         log_path = configure_logging()

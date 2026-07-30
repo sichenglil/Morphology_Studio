@@ -18,6 +18,25 @@
 
 </div>
 
+## Download
+
+Native packages are built on their matching operating systems. Stable assets appear on the
+[GitHub Releases page](https://github.com/sichenglil/Morphology_Studio/releases); development builds
+are available from the latest successful
+[Cross-platform Build and Release run](https://github.com/sichenglil/Morphology_Studio/actions/workflows/build-release.yml).
+
+| Operating system | Architecture | Release package | Runtime notes |
+|:--|:--:|:--|:--|
+| Windows 10/11 | x64 | [`MorphologyStudio-0.1.0-windows-x64.exe`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-windows-x64.exe) | Requires Microsoft Edge WebView2 Runtime |
+| Linux | x86_64 | [`MorphologyStudio-0.1.0-linux-x86_64.tar.gz`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-linux-x86_64.tar.gz) | Requires GTK 3 and WebKitGTK 4.1 |
+| macOS | Apple Silicon | [`MorphologyStudio-0.1.0-macos-arm64-unsigned.zip`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-macos-arm64-unsigned.zip) | Unsigned native arm64 application |
+| macOS | Intel | [`MorphologyStudio-0.1.0-macos-x64-unsigned.zip`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-macos-x64-unsigned.zip) | Unsigned native x86_64 application |
+
+> There is no formal tagged release yet. Until the first `v0.1.0` release succeeds, use the Actions
+> link above; the direct asset links become active only after that release is published. Every release
+> includes `SHA256SUMS.txt`. Installation details are in
+> [the cross-platform guide](docs/cross-platform-packaging.md).
+
 ## Robot operation demo
 
 The animation below records the packaged `ur5e_hx5_right` robot being loaded and operated inside Morphology Studio.
@@ -74,7 +93,7 @@ Each module below states its purpose, main action, input, output, maturity, and 
 <tr><td align="center"><strong>Validation</strong></td><td align="left">Check names, topology, limits, resources, and export readiness.</td><td align="left">Current model → actionable errors and warnings</td><td align="center">Beta</td><td align="center"><a href="docs/validation.md">Validation</a></td></tr>
 <tr><td align="center"><strong>Export & Packaging</strong></td><td align="left">Export to an explicit destination, copy resolved assets, and rewrite references without changing the source.</td><td align="left">Model + assets → URDF / MJCF / JSON / portable package</td><td align="center">Beta</td><td align="center"><a href="docs/export.md">Export</a></td></tr>
 <tr><td align="center"><strong>Workspaces</strong></td><td align="left">Save source references, committed edits, poses, and interface settings.</td><td align="left">Session state → workspace YAML</td><td align="center">Beta</td><td align="center"><a href="docs/workspaces.md">Workspaces</a></td></tr>
-<tr><td align="center"><strong>Desktop Application</strong></td><td align="left">Run the local API and editor inside a native Windows pywebview window.</td><td align="left">Packaged app → Windows desktop editor</td><td align="center">Beta</td><td align="center"><a href="docs/desktop_build.md">Desktop build</a></td></tr>
+<tr><td align="center"><strong>Desktop Application</strong></td><td align="left">Run the local API and editor inside the platform-native pywebview window.</td><td align="left">Packaged app → Windows, Linux, or macOS desktop editor</td><td align="center">Beta</td><td align="center"><a href="docs/cross-platform-packaging.md">Desktop build</a></td></tr>
 </tbody></table>
 
 <a id="formats"></a>
@@ -95,14 +114,14 @@ Each module below states its purpose, main action, input, output, maturity, and 
 <tr><td align="center">Python</td><td align="center">3.9–3.13</td><td align="left">CI: 3.9, 3.11, and 3.13</td></tr>
 <tr><td align="center">Node.js</td><td align="center">20–24</td><td align="left">CI: Node.js 22</td></tr>
 <tr><td align="center">pnpm</td><td align="center">10–11</td><td align="left">CI: pnpm 11</td></tr>
-<tr><td align="center">Desktop</td><td align="center">Windows</td><td align="left">Windows pywebview and PyInstaller workflow</td></tr>
+<tr><td align="center">Desktop</td><td align="center">Windows / Linux / macOS</td><td align="left">Native PyInstaller matrix: WebView2, GTK/WebKitGTK, and WKWebView</td></tr>
 <tr><td align="center">Browser development</td><td align="center">Windows / Linux</td><td align="left">Playwright Chromium E2E on Ubuntu</td></tr>
 </tbody></table>
 
 <a id="quick-start"></a>
 <h2 align="center">Quick start from source</h2>
 
-Morphology Studio is currently distributed as an alpha source release; a prebuilt installer is not yet published. The setup script installs the desktop and documentation extras, locked frontend dependencies, and the Playwright browser.
+Morphology Studio is an alpha release. Use the download table for CI-built packages, or use the following steps for source development. The setup script installs the desktop and documentation extras, locked frontend dependencies, and the Playwright browser.
 
 ```powershell
 git clone https://github.com/sichenglil/Morphology_Studio.git

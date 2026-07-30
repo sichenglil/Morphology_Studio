@@ -18,6 +18,23 @@
 
 </div>
 
+## 下载
+
+各平台安装包均在对应操作系统的原生 GitHub Runner 上构建。正式版本请访问
+[GitHub Releases](https://github.com/sichenglil/Morphology_Studio/releases)，开发构建可从最近一次成功的
+[跨平台构建任务](https://github.com/sichenglil/Morphology_Studio/actions/workflows/build-release.yml)下载。
+
+| 操作系统 | 架构 | 下载文件 | 运行说明 |
+|:--|:--:|:--|:--|
+| Windows 10/11 | x64 | [`MorphologyStudio-0.1.0-windows-x64.exe`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-windows-x64.exe) | 需要 Microsoft Edge WebView2 Runtime |
+| Linux | x86_64 | [`MorphologyStudio-0.1.0-linux-x86_64.tar.gz`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-linux-x86_64.tar.gz) | 需要 GTK 3 和 WebKitGTK 4.1 |
+| macOS | Apple Silicon | [`MorphologyStudio-0.1.0-macos-arm64-unsigned.zip`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-macos-arm64-unsigned.zip) | 原生 arm64，当前未签名 |
+| macOS | Intel | [`MorphologyStudio-0.1.0-macos-x64-unsigned.zip`](https://github.com/sichenglil/Morphology_Studio/releases/latest/download/MorphologyStudio-0.1.0-macos-x64-unsigned.zip) | 原生 x86_64，当前未签名 |
+
+> 当前尚未创建正式 tag。首次 `v0.1.0` Release 构建成功前，请使用上方 Actions 入口；直接下载链接会在
+> Release 发布后生效。每个正式版本同时提供 `SHA256SUMS.txt`。安装方法参见
+> [跨平台安装与打包说明](docs/cross-platform-packaging.md)。
+
 ## 软件内机械臂操作演示
 
 以下动画是在 Morphology Studio 中实际加载 `ur5e_hx5_right`，并操作机械臂关节时录制生成的。
@@ -68,7 +85,7 @@ Morphology Studio 在保持源模型只读的前提下，为检查和准备机�
 <tr><td align="center"><strong>验证</strong></td><td align="left">检查名称、拓扑、限位、资源和导出就绪状态。</td><td align="left">当前模型 → 可处理的错误和警告</td><td align="center">测试中</td><td align="center"><a href="docs/validation.md">验证</a></td></tr>
 <tr><td align="center"><strong>导出与资源打包</strong></td><td align="left">导出到明确位置，复制已解析资源并改写引用，全程不修改源文件。</td><td align="left">模型 + 资源 → URDF / MJCF / JSON / 可移植包</td><td align="center">测试中</td><td align="center"><a href="docs/export.md">导出</a></td></tr>
 <tr><td align="center"><strong>工作区</strong></td><td align="left">保存源引用、已提交修改、姿态和界面设置。</td><td align="left">会话状态 → workspace YAML</td><td align="center">测试中</td><td align="center"><a href="docs/workspaces.md">工作区</a></td></tr>
-<tr><td align="center"><strong>桌面应用</strong></td><td align="left">在 Windows pywebview 原生窗口中运行本地 API 和编辑器。</td><td align="left">发行包 → Windows 桌面编辑器</td><td align="center">测试中</td><td align="center"><a href="docs/desktop_build.md">桌面构建</a></td></tr>
+<tr><td align="center"><strong>桌面应用</strong></td><td align="left">通过各系统原生 pywebview 窗口运行本地 API 和编辑器。</td><td align="left">发行包 → Windows、Linux 或 macOS 桌面编辑器</td><td align="center">测试中</td><td align="center"><a href="docs/cross-platform-packaging.md">桌面构建</a></td></tr>
 </tbody></table>
 
 <a id="formats"></a><h2 align="center">支持格式</h2>
@@ -87,13 +104,13 @@ Morphology Studio 在保持源模型只读的前提下，为检查和准备机�
 <tr><td align="center">Python</td><td align="center">3.9–3.13</td><td align="left">CI：3.9、3.11、3.13</td></tr>
 <tr><td align="center">Node.js</td><td align="center">20–24</td><td align="left">CI：Node.js 22</td></tr>
 <tr><td align="center">pnpm</td><td align="center">10–11</td><td align="left">CI：pnpm 11</td></tr>
-<tr><td align="center">桌面应用</td><td align="center">Windows</td><td align="left">Windows pywebview 与 PyInstaller 构建流程</td></tr>
+<tr><td align="center">桌面应用</td><td align="center">Windows / Linux / macOS</td><td align="left">原生 PyInstaller 构建矩阵：WebView2、GTK/WebKitGTK、WKWebView</td></tr>
 <tr><td align="center">浏览器开发</td><td align="center">Windows / Linux</td><td align="left">Ubuntu 上的 Playwright Chromium 端到端测试</td></tr>
 </tbody></table>
 
 <a id="quick-start"></a><h2 align="center">从源码快速开始</h2>
 
-Morphology Studio 当前以 Alpha 源码版本发布，尚未提供预编译安装包。安装脚本会安装桌面与文档依赖、锁定的前端依赖和 Playwright 浏览器。
+Morphology Studio 当前为 Alpha 版本。普通用户可使用下载表中的 CI 构建包；源码开发可按下列步骤安装。安装脚本会安装桌面与文档依赖、锁定的前端依赖和 Playwright 浏览器。
 
 ```powershell
 git clone https://github.com/sichenglil/Morphology_Studio.git

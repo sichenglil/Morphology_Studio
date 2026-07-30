@@ -4,7 +4,12 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from morphology_toolkit.desktop import available_port, create_server
+from morphology_toolkit.desktop import (
+    available_port,
+    create_server,
+    native_webview_backend,
+    verify_installation,
+)
 from morphology_toolkit.logging_config import configure_logging
 from morphology_toolkit.webapp import create_app
 
@@ -35,6 +40,21 @@ def test_desktop_server_has_console_independent_uvicorn_config():
     assert server.config.use_colors is False
 
 
+def test_native_webview_backend_matches_platform(monkeypatch):
+    monkeypatch.setattr("morphology_toolkit.desktop.sys.platform", "win32")
+    assert native_webview_backend() == "edgechromium"
+    monkeypatch.setattr("morphology_toolkit.desktop.sys.platform", "darwin")
+    assert native_webview_backend() == "cocoa"
+    monkeypatch.setattr("morphology_toolkit.desktop.sys.platform", "linux")
+    assert native_webview_backend() == "gtk"
+
+
+def test_installation_verifier_checks_resources_storage_and_routes(monkeypatch, tmp_path):
+    monkeypatch.setenv("MORPHOLOGY_CACHE_DIR", str(tmp_path))
+    assert verify_installation() == 0
+    assert not (tmp_path / "installation-probe.tmp").exists()
+
+
 def test_path_picker_forwards_export_filename_and_extension(monkeypatch, tmp_path):
     captured = {}
     selected = tmp_path / "robot.urdf"
@@ -53,6 +73,8 @@ def test_path_picker_forwards_export_filename_and_extension(monkeypatch, tmp_pat
 
 
 def test_logging_survives_missing_standard_streams(monkeypatch, tmp_path):
+    monkeypatch.setattr("morphology_toolkit.paths.sys.platform", "win32")
+    monkeypatch.setenv("APPDATA", str(tmp_path))
     monkeypatch.setenv("LOCALAPPDATA", str(tmp_path))
     monkeypatch.setattr(sys, "stdout", None)
     monkeypatch.setattr(sys, "stderr", None)

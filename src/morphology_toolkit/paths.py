@@ -6,6 +6,8 @@ import os
 import sys
 from pathlib import Path
 
+APP_NAME = "MorphologyStudio"
+
 
 def executable_root() -> Path:
     if getattr(sys, "frozen", False):
@@ -57,14 +59,30 @@ def get_user_data_dir() -> Path:
     override = os.environ.get("MORPHOLOGY_USER_DATA_DIR")
     if override:
         return Path(override).expanduser().resolve()
-    local = os.environ.get("LOCALAPPDATA")
-    if local:
-        return Path(local).resolve() / "MorphologyStudio"
-    return Path.home() / "AppData" / "Local" / "MorphologyStudio"
+    if sys.platform == "win32":
+        base = os.environ.get("APPDATA") or os.environ.get("LOCALAPPDATA")
+        root = Path(base).resolve() if base else Path.home() / "AppData" / "Roaming"
+    elif sys.platform == "darwin":
+        root = Path.home() / "Library" / "Application Support"
+    else:
+        base = os.environ.get("XDG_DATA_HOME")
+        root = Path(base).expanduser() if base else Path.home() / ".local" / "share"
+    return root / APP_NAME
 
 
 def get_cache_dir() -> Path:
-    return get_user_data_dir() / "cache"
+    override = os.environ.get("MORPHOLOGY_CACHE_DIR")
+    if override:
+        return Path(override).expanduser().resolve()
+    if sys.platform == "win32":
+        base = os.environ.get("LOCALAPPDATA")
+        root = Path(base).resolve() if base else Path.home() / "AppData" / "Local"
+        return root / APP_NAME / "Cache"
+    if sys.platform == "darwin":
+        return Path.home() / "Library" / "Caches" / APP_NAME
+    base = os.environ.get("XDG_CACHE_HOME")
+    root = Path(base).expanduser() if base else Path.home() / ".cache"
+    return root / APP_NAME
 
 
 def get_log_dir() -> Path:

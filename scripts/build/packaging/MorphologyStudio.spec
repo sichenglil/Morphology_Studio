@@ -1,5 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
+import sys
 from pathlib import Path
 
 from PyInstaller.utils.hooks import collect_all
@@ -17,7 +18,8 @@ datas = [
     (str(root / "LICENSES" / "MIT.txt"), "licenses"),
 ]
 binaries = []
-hiddenimports = ["morphology_toolkit.webapp", "webview.platforms.edgechromium"]
+backend = "edgechromium" if sys.platform == "win32" else "cocoa" if sys.platform == "darwin" else "gtk"
+hiddenimports = ["morphology_toolkit.webapp", f"webview.platforms.{backend}"]
 for package in ("xacro", "fastapi", "uvicorn", "webview"):
     package_datas, package_binaries, package_hidden = collect_all(package)
     datas += package_datas
@@ -32,3 +34,10 @@ a = Analysis(
 pyz = PYZ(a.pure)
 exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name="MorphologyStudio", console=mode == "debug")
 coll = COLLECT(exe, a.binaries, a.datas, strip=False, upx=True, name="MorphologyStudio")
+if sys.platform == "darwin":
+    app = BUNDLE(
+        coll,
+        name="MorphologyStudio.app",
+        bundle_identifier="io.github.sichenglil.morphologystudio",
+        info_plist={"NSHighResolutionCapable": True, "LSMinimumSystemVersion": "12.0"},
+    )

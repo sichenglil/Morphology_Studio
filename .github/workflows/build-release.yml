@@ -1,0 +1,107 @@
+name: Cross-platform Build and Release
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/build-release.yml'
+      - 'scripts/build/**'
+      - 'scripts/validation/verify_native_build.py'
+      - 'src/**'
+      - 'web/frontend/**'
+      - 'pyproject.toml'
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.platform }}-${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows
+            arch: x64
+          - os: ubuntu-24.04
+            platform: linux
+            arch: x86_64
+          - os: macos-15-intel
+            platform: macos
+            arch: x64
+          - os: macos-15
+            platform: macos
+            arch: arm64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: web/frontend/pnpm-lock.yaml
+      - name: Install Linux WebKit dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libcairo2-dev pkg-config gir1.2-webkit2-4.1
+          python -m pip install pycairo PyGObject
+      - name: Install Python dependencies
+        run: python -m pip install -e ".[dev,desktop]" "pyinstaller==6.21.0"
+      - name: Install frontend dependencies
+        run: pnpm --dir web/frontend install --frozen-lockfile
+      - name: Verify source and frontend
+        run: |
+          python -m pytest tests/unit/test_resource_paths.py tests/unit/test_desktop.py
+          pnpm --dir web/frontend type-check
+          pnpm --dir web/frontend test
+          pnpm --dir web/frontend build
+        env:
+          PYTEST_DISABLE_PLUGIN_AUTOLOAD: '1'
+      - name: Build native package
+        run: python scripts/build/build_native.py
+      - name: Verify packaged application
+        run: python scripts/validation/verify_native_build.py
+      - name: Upload native artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MorphologyStudio-${{ matrix.platform }}-${{ matrix.arch }}
+          path: release/MorphologyStudio-*
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: MorphologyStudio-*
+          path: artifacts
+          merge-multiple: true
+      - name: Generate combined SHA-256 file
+        run: python scripts/build/generate_checksums.py artifacts SHA256SUMS.txt
+      - name: Publish immutable release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: |
+            artifacts/*.exe
+            artifacts/*.tar.gz
+            artifacts/*.zip
+            SHA256SUMS.txt
