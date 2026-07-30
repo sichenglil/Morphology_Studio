@@ -13,6 +13,16 @@ PyInstaller bundles those resources, while pywebview selects the native renderer
 The build embeds the compiled frontend, OpenCascade WASM and Worker, configuration, licenses, and
 the packaged example model. It never resolves resources from the current working directory.
 
+## Minimum runnable unit
+
+- **Windows:** one versioned `.exe`; all application resources are extracted internally at startup.
+- **Linux:** the complete extracted `MorphologyStudio/` directory, including `_internal/`.
+- **macOS:** the complete `MorphologyStudio.app` Bundle. Finder displays it as one application, but
+  its `Contents` directory must remain intact.
+
+The `.tar.gz` and `.zip` files are download containers. They must be extracted before use. User
+models and export results are not part of the minimum runnable unit.
+
 ## Install and run
 
 ### Windows

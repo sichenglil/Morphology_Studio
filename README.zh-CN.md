@@ -35,6 +35,19 @@
 > Release 发布后生效。每个正式版本同时提供 `SHA256SUMS.txt`。安装方法参见
 > [跨平台安装与打包说明](docs/cross-platform-packaging.md)。
 
+### 打包内容与最小可执行单元
+
+| 平台安装包 | 内置内容 | 最小可执行单元 | 必须一起保留的文件 |
+|:--|:--|:--|:--|
+| Windows `.exe` | Python 运行时、后端、编译后前端、OpenCascade WASM/Worker、配置、许可证和示例资源 | **单个 `MorphologyStudio-0.1.0-windows-x64.exe` 文件** | 无需携带其他项目文件；WebView2 属于 Windows 系统运行时依赖 |
+| Linux `.tar.gz` | `MorphologyStudio/` 主程序及其 Python 库、前端、WASM/Worker、配置、许可证和资源 | **完整解压后的 `MorphologyStudio/` 文件夹** | 不能只复制 `MorphologyStudio/MorphologyStudio`；旁边的 `_internal/` 必须保留 |
+| macOS `.zip` | 原生 `.app` Bundle，包含主程序、Python 库、前端、WASM/Worker、配置、许可证和资源 | **完整的 `MorphologyStudio.app` 应用包** | 不能只提取或复制 `Contents/MacOS/MorphologyStudio` |
+
+压缩包是下载和传输单元，不一定是运行单元。Windows 版本是真正的单文件；Linux 为减少每次启动
+解压耗时采用优化后的 onedir 结构，整个目录都是最小运行单元；macOS 的 `.app` 在 Finder 中看似
+单个应用，实际是不可拆分的目录 Bundle。用户模型、导出的 URDF 和日志属于外部数据，程序启动时
+不要求预先携带这些文件。
+
 ## 软件内机械臂操作演示
 
 以下动画是在 Morphology Studio 中实际加载 `ur5e_hx5_right`，并操作机械臂关节时录制生成的。

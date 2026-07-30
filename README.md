@@ -37,6 +37,19 @@ are available from the latest successful
 > includes `SHA256SUMS.txt`. Installation details are in
 > [the cross-platform guide](docs/cross-platform-packaging.md).
 
+### Package contents and minimum runnable unit
+
+| Platform package | Bundled content | Minimum runnable unit | Files that must stay together |
+|:--|:--|:--|:--|
+| Windows `.exe` | Python runtime, backend, compiled frontend, OpenCascade WASM/Worker, configuration, licenses, and example resources | **One `MorphologyStudio-0.1.0-windows-x64.exe` file** | None; WebView2 is a Windows runtime dependency |
+| Linux `.tar.gz` | `MorphologyStudio/` executable plus bundled Python libraries, frontend, WASM/Worker, configuration, licenses, and resources | **The complete extracted `MorphologyStudio/` directory** | Do not move only `MorphologyStudio/MorphologyStudio`; keep its `_internal/` directory beside it |
+| macOS `.zip` | A native `.app` Bundle containing the executable, Python libraries, frontend, WASM/Worker, configuration, licenses, and resources | **The complete `MorphologyStudio.app` Bundle** | Do not extract or copy only `Contents/MacOS/MorphologyStudio` |
+
+The archive itself is a transport/download unit, not always the runtime unit. Windows is genuinely
+single-file. Linux is an optimized onedir build to avoid repeated extraction and must retain the full
+directory. macOS applications are directory Bundles presented by Finder as one application. User
+models, exported URDF files, and logs are external data and are not required merely to start the app.
+
 ## Robot operation demo
 
 The animation below records the packaged `ur5e_hx5_right` robot being loaded and operated inside Morphology Studio.
