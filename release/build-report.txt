@@ -1,0 +1,7 @@
+﻿Build time: 2026-07-30T12:28:23.5159373+08:00
+Python: Python 3.9.13
+PyInstaller: 6.21.0
+EXE: G:\Code_Programs\VscodeProjects\Robot\Morphology_Studio\release\MorphologyStudio.exe
+Bytes: 45448008
+SHA-256: 8be600c98afd94847ea2cfb322be1bfbd0b411a57f65d9ad18d38e1645c9a934
+UPX: disabled for startup speed and compatibility
