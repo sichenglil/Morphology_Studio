@@ -15,7 +15,7 @@
 
 <p><strong>Version 0.1.0 · Alpha · ROS-free core · Optional ROS 2 and Isaac integrations planned</strong></p>
 
-<p><a href="#demo">Demo</a> · <a href="#download">Download</a> · <a href="#contents">Contents</a></p>
+<p><a href="#demo">Demo</a> · <a href="#download">Download</a></p>
 
 </div>
 
@@ -73,11 +73,6 @@ The archive itself is a transport/download unit, not always the runtime unit. Wi
 single-file. Linux is an optimized onedir build to avoid repeated extraction and must retain the full
 directory. macOS applications are directory Bundles presented by Finder as one application. User
 models, exported URDF files, and logs are external data and are not required merely to start the app.
-
-<a id="contents"></a>
-## Contents
-
-[Overview](#overview) · [Features](#features) · [Formats](#formats) · [Requirements](#requirements) · [Quick start](#quick-start) · [Architecture](#architecture) · [Roadmap](#roadmap)
 
 <a id="overview"></a>
 ## Overview

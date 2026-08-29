@@ -25,19 +25,8 @@ SECTION_ANCHORS = (
     "requirements",
     "quick-start",
     "five-minute-workflow",
-    "gallery",
     "architecture",
     "repository-structure",
-    "roadmap",
-)
-CONTENTS_ANCHORS = (
-    "overview",
-    "features",
-    "formats",
-    "requirements",
-    "quick-start",
-    "gallery",
-    "architecture",
     "roadmap",
 )
 
@@ -49,10 +38,10 @@ def check() -> list[str]:
     for name, text in (("README.md", english), ("README.zh-CN.md", chinese)):
         if not text.startswith('<div align="center">'):
             errors.append(f"{name}: centered hero missing")
-        if text.count('<h2 align="center">') < 9:
-            errors.append(f"{name}: centered section headings missing")
-        if '<table align="center">' not in text or '<th align="center">' not in text:
-            errors.append(f"{name}: centered table markup missing")
+        if '<h2 align="center">' in text or re.search(r"<h[1-6][^>]*>", text):
+            errors.append(f"{name}: section headings must use standard Markdown")
+        if "<table" in text:
+            errors.append(f"{name}: tables must use native Markdown syntax")
         if re.search(r"[A-Za-z]:\\", text):
             errors.append(f"{name}: local absolute path")
         if re.search(r"\b(TODO|TBD)\b|根据实际", text, re.I):
@@ -63,9 +52,6 @@ def check() -> list[str]:
     for anchor in SECTION_ANCHORS:
         if f'<a id="{anchor}"></a>' not in english:
             errors.append(f"README.md: missing section anchor {anchor}")
-    for anchor in CONTENTS_ANCHORS:
-        if f'href="#{anchor}"' not in english:
-            errors.append(f"README.md: missing contents link {anchor}")
     return errors
 
 
