@@ -31,7 +31,7 @@
 - 运行程序不需要原始 Morphology-Conditioned 项目。
 - 使用 `python scripts/render/generate_software_demo_gif.py` 可重新录制。
 
-### UR5e 与灵巧手装配过程
+## UR5e 与灵巧手装配过程
 
 以下动画记录真实的软件操作流程：导入独立 UR5e 模型，在装配窗口选择独立
 HX5 灵巧手作为子模型，将灵巧手根节点连接到 UR5e 的 `tool0`，并显示最终的
@@ -60,7 +60,7 @@ HX5 灵巧手作为子模型，将灵巧手根节点连接到 UR5e 的 `tool0`�
 > `SHA256SUMS.txt`，开发构建仍可从 Actions 下载。安装方法参见
 > [跨平台安装与打包说明](docs/cross-platform-packaging.md)。
 
-### 打包内容与最小可执行单元
+## 打包内容与最小可执行单元
 
 | 平台安装包 | 内置内容 | 最小可执行单元 | 必须一起保留的文件 |
 |:--|:--|:--|:--|
@@ -139,7 +139,7 @@ python project/desktop_entry.py
 
 使用 `./scripts/validation/test_all.ps1` 运行完整本地验收。
 
-### 直接导入 STEP
+## 直接导入 STEP
 
 在桌面应用的“导入模型”中直接选择 `.step` 或 `.stp`。内置 OpenCascade WebAssembly Worker
 会离线解析并三角化实体；随后在同一向导中确认 Link 名称、父实体、关节类型和关节轴，点击

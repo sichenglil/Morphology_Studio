@@ -31,7 +31,7 @@ The animation below records the packaged `ur5e_hx5_right` robot being loaded and
 - Running the application does not require the original Morphology-Conditioned project.
 - Regenerate with `python scripts/render/generate_software_demo_gif.py`.
 
-### UR5e and dexterous-hand assembly
+## UR5e and dexterous-hand assembly
 
 This recording shows the real assembly workflow: import the standalone UR5e model,
 select the standalone HX5 dexterous hand as the child model, connect its root to
@@ -61,7 +61,7 @@ are available from the latest successful
 > `SHA256SUMS.txt`. Development builds remain available from Actions. Installation details are in
 > [the cross-platform guide](docs/cross-platform-packaging.md).
 
-### Package contents and minimum runnable unit
+## Package contents and minimum runnable unit
 
 | Platform package | Bundled content | Minimum runnable unit | Files that must stay together |
 |:--|:--|:--|:--|
@@ -140,7 +140,7 @@ Open `assets/robot_models/ur5e_hx5_right/robot.urdf`. Browser development uses `
 
 Run the complete local verification suite with `./scripts/validation/test_all.ps1`.
 
-### STEP import and URDF export
+## STEP import and URDF export
 
 Select a `.step` or `.stp` file directly in the desktop import dialog. The bundled OpenCascade
 WebAssembly worker tessellates solids offline; confirm link names, parent links, joint types and axes
