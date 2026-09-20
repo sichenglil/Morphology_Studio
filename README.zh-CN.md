@@ -13,7 +13,7 @@
   <a href="LICENSE"><img alt="Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue.svg"></a>
 </p>
 
-<p><strong>版本 0.1.0 · Alpha · 核心功能无需 ROS · ROS 2 与 Isaac 集成规划中</strong></p>
+<p><strong>版本 0.1.1 · Alpha · 核心功能无需 ROS · ROS 2 与 Isaac 集成规划中</strong></p>
 
 <p><a href="#demo">演示</a> · <a href="#download">下载</a></p>
 

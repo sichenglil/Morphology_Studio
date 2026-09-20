@@ -1,0 +1,7 @@
+Build time: 2026-09-20T15:35:20.9296083+08:00
+Python: Python 3.9.13
+PyInstaller: 6.21.0
+EXE: release\v0.1.1\MorphologyStudio-0.1.1-windows-x64.exe
+Bytes: 45450635
+SHA-256: d544225ef228552226e75731aa824742555c729a84ce6cca56e4fbc44994bd56
+UPX: disabled for startup speed and compatibility

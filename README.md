@@ -13,7 +13,7 @@
   <a href="LICENSE"><img alt="Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue.svg"></a>
 </p>
 
-<p><strong>Version 0.1.0 · Alpha · ROS-free core · Optional ROS 2 and Isaac integrations planned</strong></p>
+<p><strong>Version 0.1.1 · Alpha · ROS-free core · Optional ROS 2 and Isaac integrations planned</strong></p>
 
 <p><a href="#demo">Demo</a> · <a href="#download">Download</a></p>
 
@@ -202,7 +202,7 @@ Read [CONTRIBUTING.md](docs/governance/CONTRIBUTING.md), report vulnerabilities 
 ## Windows single-file release
 
 Build the final onefile edition with `powershell -ExecutionPolicy Bypass -File .\scripts\build_onefile.ps1`.
-The only runtime file users must copy is `release\MorphologyStudio-0.1.0-windows-x64.exe`. It contains Python, the
+The only runtime file users must copy is `release\v0.1.1\MorphologyStudio-0.1.1-windows-x64.exe`. It contains Python, the
 frontend, OpenCascade WASM/Worker, configuration and the default robot resources. Python, Node.js,
 pnpm, OpenCascade and the source tree are not needed; Windows must provide Edge WebView2 Runtime.
 

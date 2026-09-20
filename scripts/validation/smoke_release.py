@@ -4,13 +4,17 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import time
 from pathlib import Path
 from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[2]
-EXE = ROOT / "release" / "MorphologyStudio" / "MorphologyStudio.exe"
+VERSION = re.search(
+    r'^version\s*=\s*"([^"]+)"', (ROOT / "pyproject.toml").read_text(encoding="utf-8"), re.MULTILINE
+).group(1)
+EXE = ROOT / "release" / f"v{VERSION}" / "MorphologyStudio" / "MorphologyStudio.exe"
 WORKING_DIRECTORY = ROOT / "artifacts" / "temporary" / "中文 启动目录"
 PORT = 48765
 

@@ -13,7 +13,11 @@ def main() -> int:
     root = Path(sys.argv[1])
     output = Path(sys.argv[2])
     artifacts = sorted(
-        path for path in root.iterdir() if path.is_file() and not path.name.endswith(".sha256")
+        path
+        for path in root.iterdir()
+        if path.is_file()
+        and not path.name.endswith(".sha256")
+        and path.resolve() != output.resolve()
     )
     if not artifacts:
         raise RuntimeError(f"No release artifacts found in {root}")

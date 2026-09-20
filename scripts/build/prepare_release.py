@@ -2,14 +2,18 @@
 
 from __future__ import annotations
 
+import re
 import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "dist" / "MorphologyStudio"
-RELEASE = ROOT / "release" / "MorphologyStudio"
+VERSION = re.search(
+    r'^version\s*=\s*"([^"]+)"', (ROOT / "pyproject.toml").read_text(encoding="utf-8"), re.MULTILINE
+).group(1)
+RELEASE = ROOT / "release" / f"v{VERSION}" / "MorphologyStudio"
 
-README = """Morphology Studio 0.1.0
+README = f"""Morphology Studio {VERSION}
 
 双击 MorphologyStudio.exe 启动。
 请勿单独移动 EXE；_internal、assets 和 config 必须与 EXE 一起复制。
@@ -35,7 +39,7 @@ def main() -> int:
             shutil.move(str(bundled), str(external))
     (RELEASE / "logs").mkdir(exist_ok=True)
     (RELEASE / "README_RUN.txt").write_text(README, encoding="utf-8")
-    (RELEASE / "VERSION").write_text("0.1.0\n", encoding="ascii")
+    (RELEASE / "VERSION").write_text(f"{VERSION}\n", encoding="ascii")
     print(RELEASE)
     return 0
 

@@ -7,7 +7,7 @@ Two PyInstaller 6.21.0 configurations are retained:
 
 Build with `scripts/build_onedir.ps1` or `scripts/build_onefile.ps1`. The onefile script validates the
 Vite production output, OpenCascade WASM, STEP Worker and bundled robot before packaging. It writes
-`release/MorphologyStudio.exe`, an optional SHA-256 file and a build report. Only the EXE is needed at
+`release/v0.1.1/MorphologyStudio-0.1.1-windows-x64.exe`, an optional SHA-256 file and a build report. Only the EXE is needed at
 runtime.
 
 Read-only resources resolve from the source root, onedir root, or `sys._MEIPASS`. No resource lookup
