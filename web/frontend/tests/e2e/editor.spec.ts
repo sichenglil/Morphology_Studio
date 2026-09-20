@@ -27,8 +27,29 @@ test('loads the generic portable URDF into tree and viewport', async ({page}) =>
   await expect(page.getByTestId('structure-tree-panel')).toBeVisible()
   await expect(page.getByTestId('structure-tree-panel')).toContainText('robot.urdf')
   await expect(page.getByTestId('structure-tree-panel').locator('.structure-link')).toHaveCount(40)
+  const panelBefore=await page.getByTestId('structure-tree-panel').boundingBox();expect(panelBefore).not.toBeNull()
+  const titlebar=await page.getByTestId('structure-tree-titlebar').boundingBox();expect(titlebar).not.toBeNull()
+  await page.mouse.move(titlebar!.x+80,titlebar!.y+20);await page.mouse.down();await page.mouse.move(titlebar!.x+150,titlebar!.y+55);await page.mouse.up()
+  const panelMoved=await page.getByTestId('structure-tree-panel').boundingBox();expect(panelMoved!.x).toBeGreaterThan(panelBefore!.x+50)
+  const resizer=await page.getByTestId('structure-tree-resizer').boundingBox();expect(resizer).not.toBeNull()
+  await page.mouse.move(resizer!.x+8,resizer!.y+8);await page.mouse.down();await page.mouse.move(resizer!.x+68,resizer!.y+48);await page.mouse.up()
+  const panelResized=await page.getByTestId('structure-tree-panel').boundingBox();expect(panelResized!.width).toBeGreaterThan(panelMoved!.width+40)
+  await page.getByRole('button',{name:'放大结构树'}).click();await expect(page.getByRole('button',{name:'重置结构树视图'})).toHaveText('115%')
   await page.getByRole('button',{name:'关闭结构树'}).click()
   await expect(page.getByTestId('structure-tree-panel')).toHaveCount(0)
+})
+
+test('imports a model directly from the native file-drop event', async ({page}) => {
+  await page.setViewportSize({width:1440,height:900})
+  await page.goto('/')
+  await page.getByTestId('editor-layout').dispatchEvent('dragenter')
+  await expect(page.getByTestId('file-drop-overlay')).toBeVisible()
+  await page.getByTestId('editor-layout').dispatchEvent('drop')
+  await expect(page.getByTestId('file-drop-overlay')).toHaveCount(0)
+  const model=path.resolve('../../assets/robot_models/ur5e_hx5_right/robot.urdf')
+  await page.evaluate(droppedPath=>window.dispatchEvent(new CustomEvent('morphology-files-dropped',{detail:{paths:[droppedPath]}})),model)
+  await expect(page.getByText('40 Links')).toBeVisible()
+  await expect(page.getByText('39 Joints')).toBeVisible()
 })
 
 test('mouse selection and transform toolbar acceptance', async ({page}) => {
@@ -62,5 +83,4 @@ for (const model of [
   const canvas=page.locator('[data-testid="robot-viewport"] canvas');await canvas.evaluate(element=>element.dataset.runtimeIdentity='stable');const handle=page.locator('.joint-row .el-slider__button-wrapper').first(),box=await handle.boundingBox();expect(box).not.toBeNull();await page.mouse.move(box!.x+box!.width/2,box!.y+box!.height/2);await page.mouse.down();await page.mouse.move(box!.x+box!.width/2+120,box!.y+box!.height/2,{steps:30});expect(commits).toBe(0);await page.mouse.up();await page.waitForTimeout(150);if(commits===0){await handle.focus();await page.keyboard.press('ArrowRight')}await expect.poll(()=>commits).toBe(1);await expect(canvas).toHaveAttribute('data-runtime-identity','stable');await expect(page.getByTestId('performance-panel')).toContainText('Rebuilds 1');
   console.log(`PERF ${model.name}: ${JSON.stringify(benchmark)} | ${await page.getByTestId('performance-panel').innerText()}`)
 })
-
 

@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { analyzePath, pickPath } from '@/api/models'
 import { useEditorStore } from '@/stores/editor'
@@ -103,7 +103,7 @@ interface ConfiguredSolid extends StepSolid {
   axis: number[]
 }
 
-defineProps<{ modelValue: boolean }>()
+const props = defineProps<{ modelValue: boolean; initialPath?: string }>()
 const emit = defineEmits(['update:modelValue'])
 const store = useEditorStore()
 const path = ref('')
@@ -115,6 +115,12 @@ const format = ref('')
 const parsing = ref(false)
 const progress = ref('')
 const solids = ref<ConfiguredSolid[]>([])
+
+watch(() => [props.modelValue, props.initialPath] as const, ([open, initialPath]) => {
+  if (!open || !initialPath || path.value === initialPath) return
+  path.value = initialPath
+  void inspect()
+}, { immediate: true })
 
 function close() { emit('update:modelValue', false) }
 

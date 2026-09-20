@@ -1,5 +1,5 @@
 <template>
-  <main ref="studioElement" class="studio" data-testid="editor-layout" :style="{ '--bottom-dock-height': `${bottomHeight}px` }">
+  <main ref="studioElement" class="studio" data-testid="editor-layout" :style="{ '--bottom-dock-height': `${bottomHeight}px` }" @dragenter.prevent="enterDropOverlay" @dragover.prevent="dropActive = true" @dragleave.prevent="hideDropOverlay" @drop.prevent="handleBrowserDrop">
     <AppToolbar @import="run('file.importModel')" @validate="run('tools.validate')" @assemble="run('tools.assemble')" @export="run('file.export')" @command="run" />
     <section ref="workbenchElement" class="workbench" :style="{ gridTemplateColumns: `${leftWidth}px 6px minmax(360px, 1fr) 6px ${rightWidth}px` }">
       <LeftSidebar />
@@ -11,14 +11,15 @@
     <div class="pane-resizer pane-resizer--horizontal" data-testid="bottom-resizer" role="separator" aria-label="调整下部面板高度" aria-orientation="horizontal" :aria-valuenow="bottomHeight" :aria-valuemin="BOTTOM_MIN" :aria-valuemax="BOTTOM_MAX" tabindex="0" @pointerdown="startResize('bottom', $event)" @keydown="resizeWithKeyboard('bottom', $event)" @dblclick="resetSize('bottom')" />
     <BottomDock />
     <StatusBar />
-    <ImportWizard v-model="importOpen" />
+    <div v-if="dropActive" class="file-drop-overlay" data-testid="file-drop-overlay"><div><b>释放以导入模型</b><span>支持 URDF、Xacro、MJCF、STEP 及模型目录</span></div></div>
+    <ImportWizard v-model="importOpen" :initial-path="pendingImportPath" />
     <AssemblyWizard v-model="assemblyOpen" />
     <ExportDialog v-model="exportOpen" />
   </main>
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useEditorStore } from '@/stores/editor'
 import AppToolbar from './AppToolbar.vue'
@@ -31,7 +32,7 @@ import ImportWizard from '@/components/dialogs/ImportWizard.vue'
 import AssemblyWizard from '@/components/dialogs/AssemblyWizard.vue'
 import ExportDialog from '@/components/dialogs/ExportDialog.vue'
 import type { CommandId } from '@/config/menuCommands'
-import { pickPath } from '@/api/models'
+import { analyzePath, pickPath } from '@/api/models'
 import { clearWorkspace, openWorkspace, saveWorkspace } from '@/api/workspace'
 
 type ResizeTarget = 'left' | 'right' | 'bottom'
@@ -39,6 +40,8 @@ const LEFT_DEFAULT = 270, RIGHT_DEFAULT = 310, BOTTOM_DEFAULT = 218
 const LEFT_MIN = 190, LEFT_MAX = 480, RIGHT_MIN = 220, RIGHT_MAX = 520
 const BOTTOM_MIN = 120, BOTTOM_MAX = 480, VIEWPORT_MIN = 360, WORKBENCH_MIN = 240, SPLITTERS_WIDTH = 12
 const store = useEditorStore(), importOpen = ref(false), assemblyOpen = ref(false), exportOpen = ref(false)
+const dropActive = ref(false), pendingImportPath = ref('')
+let dragDepth = 0
 const studioElement = ref<HTMLElement>(), workbenchElement = ref<HTMLElement>()
 const leftWidth = ref(LEFT_DEFAULT), rightWidth = ref(RIGHT_DEFAULT), bottomHeight = ref(BOTTOM_DEFAULT)
 let stopActiveResize: (() => void) | undefined
@@ -84,11 +87,44 @@ function resetSize(target: ResizeTarget) {
   else if (target === 'right') setSideWidth('right', RIGHT_DEFAULT)
   else setBottomHeight(BOTTOM_DEFAULT)
 }
-onBeforeUnmount(() => stopActiveResize?.())
+function enterDropOverlay() { dragDepth++; dropActive.value = true }
+function hideDropOverlay() { dragDepth = Math.max(0, dragDepth - 1); if (!dragDepth) dropActive.value = false }
+function browserDropPaths(event: DragEvent) {
+  const files = [...(event.dataTransfer?.files || [])]
+  const paths = files.map(file => (file as File & { path?: string }).path).filter((value): value is string => Boolean(value))
+  const uri = event.dataTransfer?.getData('text/uri-list')?.split(/\r?\n/).find(value => value.startsWith('file://'))
+  if (!paths.length && uri) paths.push(decodeURIComponent(uri.replace(/^file:\/\/\/?/, '')))
+  return paths
+}
+async function importDroppedPath(path: string) {
+  try {
+    const result = await analyzePath(path)
+    if (result.format === 'step') {
+      pendingImportPath.value = path
+      importOpen.value = true
+      return
+    }
+    await store.open({ path })
+    ElMessage.success('拖入的模型已载入三维工作区')
+  } catch (error) { ElMessage.error(`无法导入拖入的文件：${error instanceof Error ? error.message : String(error)}`) }
+}
+function receiveDroppedFiles(event: Event) {
+  const paths = (event as CustomEvent<{ paths?: string[] }>).detail?.paths || []
+  if (!paths.length) return
+  if (paths.length > 1) ElMessage.warning('一次仅导入一个模型，已选择第一个文件')
+  void importDroppedPath(paths[0])
+}
+function handleBrowserDrop(event: DragEvent) {
+  dragDepth = 0; dropActive.value = false
+  const paths = browserDropPaths(event)
+  if (paths.length) receiveDroppedFiles(new CustomEvent('morphology-files-dropped', { detail: { paths } }))
+}
+onMounted(() => window.addEventListener('morphology-files-dropped', receiveDroppedFiles))
+onBeforeUnmount(() => { stopActiveResize?.(); window.removeEventListener('morphology-files-dropped', receiveDroppedFiles) })
 function dispatch(id: CommandId) { window.dispatchEvent(new CustomEvent('morphology-command', { detail: id })) }
 async function run(id: CommandId) {
   try {
-    if (id === 'file.importModel') { importOpen.value = true; return }
+    if (id === 'file.importModel') { pendingImportPath.value = ''; importOpen.value = true; return }
     if (id === 'file.export' || id === 'tools.exportUrdf') { exportOpen.value = true; return }
     if (id === 'tools.assemble') { assemblyOpen.value = true; return }
     if (id === 'tools.validate') { await store.validate(); ElMessage.success('模型验证完成'); return }
@@ -101,3 +137,7 @@ async function run(id: CommandId) {
   } catch (error) { ElMessage.error(String(error)) }
 }
 </script>
+
+<style scoped>
+.file-drop-overlay{position:fixed;z-index:10000;inset:12px;display:grid;place-items:center;border:2px dashed #55b8f3;border-radius:16px;background:#0a1725d9;pointer-events:none;color:#edf8ff}.file-drop-overlay>div{display:grid;gap:8px;padding:28px 42px;border-radius:12px;background:#14283a;text-align:center;box-shadow:0 16px 48px #0008}.file-drop-overlay b{font-size:20px}.file-drop-overlay span{color:#a9c8dc;font-size:12px}
+</style>

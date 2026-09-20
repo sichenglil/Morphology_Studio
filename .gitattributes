@@ -3,3 +3,4 @@
 *.png binary
 *.webp binary
 *.exe binary
+src/morphology_toolkit/static/frontend/assets/*.js -whitespace

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import logging
 import os
 import platform
@@ -17,6 +18,29 @@ from morphology_toolkit.logging_config import configure_logging
 from morphology_toolkit.paths import bundled_root, get_cache_dir, resource_root
 
 WEBVIEW2_CLIENT_ID = "{F1E7E1A1-2D57-49A6-9F1C-1F7B4D5F7D5A}"
+
+
+def _dispatch_dropped_files(window, event: dict) -> None:
+    """Forward native file-drop paths from pywebview to the frontend."""
+    files = event.get("dataTransfer", {}).get("files", [])
+    paths = [item.get("pywebviewFullPath") for item in files if item.get("pywebviewFullPath")]
+    if not paths:
+        return
+    detail = json.dumps({"paths": paths}, ensure_ascii=False)
+    window.run_js(
+        f"window.dispatchEvent(new CustomEvent('morphology-files-dropped',{{detail:{detail}}}));"
+    )
+
+
+def _bind_native_file_drop(window) -> None:
+    """Enable full-path drag and drop in the native pywebview window."""
+    from webview.dom import DOMEventHandler
+
+    window.dom.document.on("dragover", DOMEventHandler(lambda _event: None, prevent_default=True))
+    window.dom.document.on(
+        "drop",
+        DOMEventHandler(lambda event: _dispatch_dropped_files(window, event), prevent_default=True),
+    )
 
 
 def webview2_runtime_available() -> bool:
@@ -189,7 +213,7 @@ def _run(browser_fallback: bool = False) -> int:
                     "Install morphology-toolkit[desktop] or use --browser. "
                     f"Log: {log_path}"
                 ) from exc
-            webview.create_window(
+            window = webview.create_window(
                 "Morphology Studio",
                 url,
                 width=1440,
@@ -197,6 +221,7 @@ def _run(browser_fallback: bool = False) -> int:
                 min_size=(1100, 700),
                 resizable=True,
             )
+            window.events.loaded += lambda: _bind_native_file_drop(window)
             logger.info("STARTUP window_created_seconds=%.3f", time.perf_counter() - started)
             backend = native_webview_backend()
             logger.info("Native webview backend=%s", backend)
