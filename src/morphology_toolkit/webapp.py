@@ -267,6 +267,7 @@ def _scene_manifest(session: EditorSession) -> dict[str, Any]:
     return {
         "robotId": model.robot_id,
         "displayName": model.display_name,
+        "sourceName": model.source_path.name,
         "rootLinks": model.root_links,
         "links": links,
         "joints": joints,

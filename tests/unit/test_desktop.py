@@ -102,6 +102,7 @@ def test_scene_and_registered_resource_api(tmp_path):
     assert response.status_code == 200
     scene = response.json()
     assert scene["robotId"] == "test"
+    assert scene["sourceName"] == "robot.urdf"
     assert scene["links"][0]["visuals"][0]["resource"].startswith("/api/resources/")
     resource = client.get(scene["links"][0]["visuals"][0]["resource"])
     assert resource.status_code == 200

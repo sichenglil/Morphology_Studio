@@ -2,6 +2,7 @@ import { createPinia, setActivePinia } from 'pinia'
 import { mount } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import ModelTree from '@/components/model/ModelTree.vue'
+import StructureTreePanel from '@/components/model/StructureTreePanel.vue'
 import JointControlPanel from '@/components/joints/JointControlPanel.vue'
 import ValidationPanel from '@/components/validation/ValidationPanel.vue'
 import EditorLayout from '@/components/layout/EditorLayout.vue'
@@ -31,6 +32,18 @@ describe('editor stores and panels', () => {
     store.validation={errors:0,warnings:1,exportReady:true,diagnostics:[{severity:'WARNING',code:'test',message:'review'}]}
     const validation=mount(ValidationPanel,{global:{stubs:{ElButton:true}}})
     expect(validation.text()).toContain('1 警告'); expect(validation.text()).toContain('review')
+  })
+
+  it('shows the imported file as an interactive kinematic structure tree', async () => {
+    const store=useEditorStore(); store.scene={...sampleScene,sourceName:'sample.urdf'}
+    const wrapper=mount(StructureTreePanel)
+    expect(wrapper.text()).toContain('sample.urdf')
+    expect(wrapper.findAll('.structure-link').map(node=>node.text())).toEqual(['base','tool'])
+    expect(wrapper.get('.structure-joint').text()).toContain('hinge · revolute')
+    await wrapper.get('.structure-joint').trigger('click')
+    expect(store.selectedType).toBe('joint'); expect(store.selectedId).toBe('hinge')
+    await wrapper.get('[aria-label="关闭结构树"]').trigger('click')
+    expect(wrapper.emitted('close')).toHaveLength(1)
   })
 
   it('renders the viewport-first application regions', () => {
