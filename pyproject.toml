@@ -14,7 +14,7 @@ keywords = ["robotics", "urdf", "xacro", "threejs", "robot-model"]
 dependencies = ["PyYAML>=6.0"]
 
 [project.optional-dependencies]
-dev = ["pytest>=7,<9", "pytest-cov>=4,<7", "ruff>=0.5,<1", "httpx>=0.27", "httpx2>=0.3", "xacro>=2,<3", "Pillow>=11,<12"]
+dev = ["pytest>=7,<9", "pytest-cov>=4,<8", "ruff>=0.5,<1", "httpx>=0.27", "httpx2>=0.3", "xacro>=2,<3", "Pillow>=11,<12"]
 docs = ["mkdocs>=1.6,<2"]
 web = ["fastapi>=0.110", "uvicorn>=0.27"]
 desktop = ["fastapi>=0.110", "uvicorn>=0.27", "pywebview>=5.4"]
