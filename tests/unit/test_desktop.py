@@ -5,6 +5,7 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 
 from morphology_toolkit.desktop import (
+    _dispatch_dropped_files,
     available_port,
     create_server,
     native_webview_backend,
@@ -47,6 +48,23 @@ def test_native_webview_backend_matches_platform(monkeypatch):
     assert native_webview_backend() == "cocoa"
     monkeypatch.setattr("morphology_toolkit.desktop.sys.platform", "linux")
     assert native_webview_backend() == "gtk"
+
+
+def test_native_file_drop_dispatches_full_paths_to_frontend():
+    class Window:
+        script = ""
+
+        def run_js(self, script):
+            self.script = script
+
+    window = Window()
+    _dispatch_dropped_files(
+        window,
+        {"dataTransfer": {"files": [{"pywebviewFullPath": "fixtures/机械臂.urdf"}]}},
+    )
+    assert "morphology-files-dropped" in window.script
+    assert "机械臂.urdf" in window.script
+    assert '"paths"' in window.script
 
 
 def test_installation_verifier_checks_resources_storage_and_routes(monkeypatch, tmp_path):
