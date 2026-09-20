@@ -22,6 +22,13 @@ test('loads the generic portable URDF into tree and viewport', async ({page}) =>
   await page.getByRole('button',{name:'导入并显示',exact:true}).click()
   await expect(page.getByText('40 Links')).toBeVisible()
   await expect(page.getByText('39 Joints')).toBeVisible()
+  await expect(page.getByTestId('structure-tree-panel')).toHaveCount(0)
+  await page.getByTestId('open-structure-tree').click()
+  await expect(page.getByTestId('structure-tree-panel')).toBeVisible()
+  await expect(page.getByTestId('structure-tree-panel')).toContainText('robot.urdf')
+  await expect(page.getByTestId('structure-tree-panel').locator('.structure-link')).toHaveCount(40)
+  await page.getByRole('button',{name:'关闭结构树'}).click()
+  await expect(page.getByTestId('structure-tree-panel')).toHaveCount(0)
 })
 
 test('mouse selection and transform toolbar acceptance', async ({page}) => {
