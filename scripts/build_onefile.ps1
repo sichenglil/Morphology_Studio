@@ -23,17 +23,19 @@ New-Item -ItemType Directory -Force release | Out-Null
 $versionLine = Select-String -Path pyproject.toml -Pattern '^version\s*=\s*"([^"]+)"' | Select-Object -First 1
 if (-not $versionLine) { throw "Unable to determine project version" }
 $version = $versionLine.Matches[0].Groups[1].Value
+$versionDir = Join-Path $root "release/v$version"
+New-Item -ItemType Directory -Force $versionDir | Out-Null
 $exeName = "MorphologyStudio-$version-windows-x64.exe"
-$exe = Join-Path $root "release/$exeName"
+$exe = Join-Path $versionDir $exeName
 if (-not (Test-Path $exe)) { throw "Onefile executable was not generated" }
 $hash = (Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
 @(
     "Build time: $((Get-Date).ToString('o'))"
     "Python: $(python --version 2>&1)"
     "PyInstaller: 6.21.0"
-    "EXE: $exe"
+    "EXE: release\v$version\$exeName"
     "Bytes: $((Get-Item $exe).Length)"
     "SHA-256: $hash"
     "UPX: disabled for startup speed and compatibility"
-) | Set-Content release/build-report.txt -Encoding utf8
+) | Set-Content (Join-Path $versionDir "build-report.txt") -Encoding utf8
 Write-Host "ONEFILE_OK $exe $hash"

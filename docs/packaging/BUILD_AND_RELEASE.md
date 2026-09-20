@@ -8,7 +8,7 @@ Regenerate the real-model preview with `python scripts/render/generate_urdf_gifs
 
 ## Windows build
 
-Use `project/build_exe.bat release` for a windowed build or `project/build_exe.bat debug` for a console build. The script builds the frontend, validates the model and GIF, runs tests, executes `scripts/build/packaging/MorphologyStudio.spec`, and prepares `release/MorphologyStudio`.
+Use `project/build_exe.bat release` for a windowed build or `project/build_exe.bat debug` for a console build. The script builds the frontend, validates the model and GIF, runs tests, executes `scripts/build/packaging/MorphologyStudio.spec`, and prepares `release/v<version>/MorphologyStudio`.
 
 This is an onedir release, not a single-file EXE. Keep `MorphologyStudio.exe`, `_internal`, `assets`, and `config` together. Models and configuration are external beside the EXE so resource lookup is independent of the launch working directory. Logs are written to `logs/MorphologyStudio.log`.
 

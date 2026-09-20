@@ -4,6 +4,13 @@ All notable changes are documented here. The project follows Semantic Versioning
 
 ## Unreleased
 
+## 0.1.1 - 2026-09-20
+
+- Added the optional interactive kinematic structure-tree panel.
+- Organized local and CI build artifacts under versioned `release/v<version>/` directories.
+
+## 0.1.0 - 2026-07-30
+
 ### Added
 
 - Open-source governance, security, CI, documentation, and generic example assets.

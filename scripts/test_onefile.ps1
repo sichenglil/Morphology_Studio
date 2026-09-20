@@ -1,7 +1,13 @@
-param([string]$ExePath = "release/MorphologyStudio-0.1.0-windows-x64.exe")
+param([string]$ExePath = "")
 
 $ErrorActionPreference = "Stop"
 $root = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+if (-not $ExePath) {
+    $versionLine = Select-String -Path (Join-Path $root "pyproject.toml") -Pattern '^version\s*=\s*"([^"]+)"' | Select-Object -First 1
+    if (-not $versionLine) { throw "Unable to determine project version" }
+    $version = $versionLine.Matches[0].Groups[1].Value
+    $ExePath = "release/v$version/MorphologyStudio-$version-windows-x64.exe"
+}
 $sourceExe = (Resolve-Path (Join-Path $root $ExePath)).Path
 $chineseName = -join ([char[]](0x5355, 0x6587, 0x4EF6, 0x6D4B, 0x8BD5))
 $testRoot = Join-Path $env:TEMP ("Morphology Studio $chineseName " + (Get-Date -Format "yyyyMMdd-HHmmss"))

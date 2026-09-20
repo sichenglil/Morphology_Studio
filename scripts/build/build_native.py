@@ -13,12 +13,12 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-RELEASE = ROOT / "release"
 DIST = ROOT / "build" / "native-dist"
 WORK = ROOT / "build" / "native-work"
 VERSION = re.search(
     r'^version\s*=\s*"([^"]+)"', (ROOT / "pyproject.toml").read_text(encoding="utf-8"), re.MULTILINE
 ).group(1)
+RELEASE = ROOT / "release" / f"v{VERSION}"
 
 
 def run(*args: str) -> None:

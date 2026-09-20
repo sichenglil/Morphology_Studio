@@ -1,0 +1,5 @@
+48680234f6e20380f63b9619c654194a4fc912c5b9b88e53c56ef6dba1065870  build-report.txt
+0a5fab66a233007666b4419ef1a20583e6d2fab04cbad3b290031170585d86b7  MorphologyStudio-0.1.0-linux-x86_64.tar.gz
+5ebab73ad0d10eab61a0f004e2ea53f219c180ea9794af29a1d3825d3f37fddc  MorphologyStudio-0.1.0-macos-arm64-unsigned.zip
+db25ed93685596709bb63e98234dee72629db44e26105e82f0bfe8a703644425  MorphologyStudio-0.1.0-macos-x64-unsigned.zip
+465b30c4f07f611724c77aee9d086348e318effa2ca87a3914720d98bd940eef  MorphologyStudio-0.1.0-windows-x64.exe
